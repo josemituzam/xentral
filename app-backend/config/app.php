@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         //Providers de paquetes
+        App\Providers\TenancyServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class
     ],

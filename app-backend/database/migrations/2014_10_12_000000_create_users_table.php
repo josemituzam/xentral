@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->timestamp('last_login_at')->nullable();
-            $table->uuid('status_id')->nullable(false);
+            //$table->uuid('status_id')->nullable(false);
             $table->string('confirm_account_token')->nullable();
             $table->string('confirm_account_token_time')->nullable();
             $table->string('reset_password_token')->nullable();
@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
             $table->uuid('created_by')->nullable(true);
             $table->uuid('updated_by')->nullable(true);
             $table->uuid('deleted_by')->nullable(true);
-            $table->index('status_id', 'status_id_index');
+            //$table->index('status_id', 'status_id_index');
             $table->softDeletes();
             $table->timestamps();
         });

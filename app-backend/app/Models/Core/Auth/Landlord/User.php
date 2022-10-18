@@ -4,15 +4,34 @@ namespace App\Models\Core\Auth\Landlord;
 
 use App\Models\Core\Traits\JwtTrait;
 use App\Models\Traits\Uuids;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, JwtTrait, Uuids;
+    use HasFactory,
+        Notifiable,
+        Uuids,
+        JwtTrait,
+        LogsActivity,
+        CausesActivity,
+        SoftDeletes,
+        HasRoles,
+        HasPermissions;
+
+
+    protected $guard = 'apiLandlord';
+
+    public function guardName()
+    {
+        return 'apiLandlord';
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -20,9 +39,14 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'confirm_account_token',
+        'confirm_account_token_time',
+        'reset_password_token',
+        'reset_password_token_time',
+        'force_password_change',
+        'last_login_at'
     ];
 
     /**
@@ -43,4 +67,5 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
 }

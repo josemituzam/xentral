@@ -14,8 +14,11 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'apiLandlord',
+        'passwords' => 'usersLandlord',
+
+        /*'guard' => 'apiTenant',
+        'passwords' => 'usersTenant',*/
     ],
 
     /*
@@ -36,9 +39,15 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
+        'apiLandlord' => [
+            'driver' => 'jwt',
+            'provider' => 'usersLandlord',
+            'hash' => true,
+        ],
+        'apiTenant' => [
+            'driver' => 'jwt',
+            'provider' => 'usersTenant',
+            'hash' => true,
         ],
     ],
 
@@ -60,15 +69,14 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'usersLandlord' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Core\Auth\Landlord\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'usersTenant' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Core\Auth\Tenant\User::class,
+        ],
     ],
 
     /*
@@ -87,7 +95,13 @@ return [
     */
 
     'passwords' => [
-        'users' => [
+        'userslandlord' => [
+            'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'userstenant' => [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
