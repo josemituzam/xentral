@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
-import { AuthenticationService } from 'app/auth/service';
-
+import { map, catchError } from 'rxjs/operators';
+import { AuthenticationService, UserService } from 'app/auth/service';
+import { Observable, of } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   /**
@@ -10,26 +10,27 @@ export class AuthGuard implements CanActivate {
    * @param {Router} _router
    * @param {AuthenticationService} _authenticationService
    */
-  constructor(private _router: Router, private _authenticationService: AuthenticationService) {}
+  constructor(private _router: Router, private _authenticationService: AuthenticationService, private _userService: UserService) { }
 
   // canActivate
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentUser = this._authenticationService.currentUserValue;
-
-    if (currentUser) {
-      // check if route is restricted by role
-      if (route.data.roles && route.data.roles.indexOf(currentUser.role) === -1) {
-        // role not authorised so redirect to not-authorized page
-        this._router.navigate(['/pages/miscellaneous/not-authorized']);
-        return false;
-      }
-
-      // authorised so return true
-      return true;
+    //const currentUser = this._authenticationService.currentUserValue;
+    // const userToken: any = localStorage.getItem("token");
+    const userSignIn: any = JSON.parse(localStorage.getItem("currentUser"));
+    if (!userSignIn) {
+      this._router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
+      return of(false);
     }
-
-    // not logged in so redirect to login page with the return url
-    this._router.navigate(['/pages/authentication/login-v2'], { queryParams: { returnUrl: state.url } });
-    return false;
+    return this._userService.getAuthUser(userSignIn.user?.id).pipe(
+      map(() => {
+        return true;
+      }),
+      catchError(err => {
+        console.log(err);
+        this._router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
+        return of(false);
+      })
+    );
   }
+
 }

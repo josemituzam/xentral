@@ -1,0 +1,326 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="myModalLabel1">{{ title }}</h4>
+  <button
+    type="button"
+    class="close"
+    (click)="modal.dismiss('Cross click')"
+    aria-label="Close"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" tabindex="0" ngbAutofocus>
+  <form [formGroup]="editForm">
+    <div class="form-group">
+      <label for="company-icon">Compañía</label>
+
+      <input
+        type="text"
+        formControlName="company_name"
+        id="company-icon"
+        class="form-control"
+        name="cy-icon"
+        placeholder="Compañía"
+        [ngClass]="{
+          'is-invalid': isControlInvalid('company_name'),
+          'is-valid': isControlValid('company_name')
+        }"
+      />
+      <div class="valid-feedback" *ngIf="isControlValid('company_name')">
+        Compañia ingresada correctamente
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('required', 'company_name')"
+      >
+        {{ "El elemento es requerido" }}
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('maxlength', 'company_name')"
+      >
+        {{ "Máximo: " }} 100
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="editForm.get('company_name')?.errors?.serverError"
+      >
+        {{ editForm.get("company_name")?.errors?.serverError }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="first-name-icon">Propietario</label>
+
+      <input
+        type="text"
+        id="first-name-icon"
+        class="form-control"
+        formControlName="fullname"
+        name="fname-icon"
+        placeholder="Propietario"
+        [ngClass]="{
+          'is-invalid': isControlInvalid('fullname'),
+          'is-valid': isControlValid('fullname')
+        }"
+      />
+      <div class="valid-feedback" *ngIf="isControlValid('fullname')">
+        Nombres ingresados correctamente
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('required', 'fullname')"
+      >
+        {{ "El elemento es requerido" }}
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('maxlength', 'fullname')"
+      >
+        {{ "Máximo: " }} 100
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="editForm.get('fullname')?.errors?.serverError"
+      >
+        {{ editForm.get("fullname")?.errors?.serverError }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="domain-icon">Dominio</label>
+      <div class="input-group input-group-merge">
+        <input
+          type="text"
+          id="domain-icon"
+          class="form-control"
+          name="dmain-icon"
+          placeholder="Dominio"
+          formControlName="domain_name"
+          [ngClass]="{
+            'is-invalid': isControlInvalid('domain_name'),
+            'is-valid': isControlValid('domain_name')
+          }"
+        />
+        <div class="input-group-append">
+          <span class="input-group-text" id="basic-addon2">@example.com</span>
+        </div>
+        <div class="valid-feedback" *ngIf="isControlValid('domain_name')">
+          Dominio ingresado correctamente
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="controlHasError('required', 'domain_name')"
+        >
+          {{ "El elemento es requerido" }}
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="controlHasError('maxlength', 'domain_name')"
+        >
+          {{ "Máximo: " }} 100
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="editForm.get('domain_name')?.errors?.serverError"
+        >
+          {{ editForm.get("domain_name")?.errors?.serverError }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email-id-icon">Correo electrónico</label>
+
+      <input
+        type="email"
+        id="email-id-icon"
+        class="form-control"
+        name="email-id-icon"
+        placeholder="Email"
+        formControlName="email"
+        [ngClass]="{
+          'is-invalid': isControlInvalid('email'),
+          'is-valid': isControlValid('email')
+        }"
+      />
+      <div class="valid-feedback" *ngIf="isControlValid('email')">
+        Correo ingresado correctamente
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('required', 'email')"
+      >
+        {{ "El elemento es requerido" }}
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('maxlength', 'email')"
+      >
+        {{ "Máximo: " }} 100
+      </div>
+      <div class="invalid-feedback" *ngIf="controlHasError('email', 'email')">
+        El correo ingresado no es válido
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="editForm.get('email')?.errors?.serverError"
+      >
+        {{ editForm.get("email")?.errors?.serverError }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password-icon">Password</label>
+      <div class="input-group input-group-merge">
+        <div class="input-group-prepend">
+          <span class="input-group-text"
+            ><span [data-feather]="'lock'"></span
+          ></span>
+        </div>
+        <input
+          [type]="mergedPwdShow ? 'text' : 'password'"
+          class="form-control"
+          id="basic-default-password1"
+          formControlName="password"
+          placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+          aria-describedby="basic-default-password1"
+          [ngClass]="{
+            'is-invalid': isControlInvalid('password'),
+            'is-valid': isControlValid('password')
+          }"
+        />
+        <div
+          class="input-group-append"
+          (click)="mergedPwdShow = !mergedPwdShow"
+        >
+          <span class="input-group-text cursor-pointer"
+            ><i
+              class="feather"
+              [ngClass]="{
+                'icon-eye-off': mergedPwdShow,
+                'icon-eye': !mergedPwdShow
+              }"
+            ></i
+          ></span>
+        </div>
+        <div class="valid-feedback" *ngIf="isControlValid('password')">
+          Contraseña ingresada correctamente
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="controlHasError('required', 'password')"
+        >
+          {{ "El elemento es requerido" }}
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="controlHasError('maxlength', 'password')"
+        >
+          {{ "Máximo: " }} 100
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="editForm.get('password')?.errors?.serverError"
+        >
+          {{ editForm.get("password")?.errors?.serverError }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="basic-table">
+      <div class="col-6">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Servicio</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let item of serviceList">
+                <tr>
+                  <td>
+                    {{ item.name }}
+
+                    ( {{ item.max_users }} )
+                  </td>
+                  <td>
+                    <div
+                      class="custom-control custom-switch custom-switch-success"
+                    >
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="customSwitch{{ item.id }}"
+                        [checked]="false"
+                        (change)="
+                          getStatus($event, item.id, item.name, item.max_users)
+                        "
+                      />
+                      <label
+                        class="custom-control-label"
+                        for="customSwitch{{ item.id }}"
+                      >
+                        <span class="switch-icon-left"
+                          ><i data-feather="check"></i
+                        ></span>
+                        <span class="switch-icon-right"
+                          ><i data-feather="x"></i
+                        ></span>
+                      </label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Servicio</th>
+                  <th>Usuarios</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let item of setCantUserService">
+                <tr>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <core-touchspin
+                      (onChange)="getCantUser($event, item.service_id)"
+                      [minValue]="0"
+                      [maxValue]="item.max_user"
+                      [disable]="item.is_active == 0 ? true : false"
+                    ></core-touchspin>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-light" (click)="modal.close()">
+    Cancelar
+  </button>
+  <button
+    [disabled]="loading"
+    type="submit"
+    class="btn btn-primary mr-1"
+    (click)="submit()"
+    rippleEffect
+  >
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span
+    >Guardar
+  </button>
+</div>

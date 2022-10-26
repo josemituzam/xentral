@@ -20,13 +20,6 @@ export class UserService {
   }
 
   /**
-   * Get all users
-   */
-  getAll() {
-    return this._http.get<User[]>(`${environment.apiUrl}/users`);
-  }
-
-  /**
    * Get user by id
    */
   getAuthUser(userId: string): Observable<User> {

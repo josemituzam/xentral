@@ -1,0 +1,111 @@
+<div class="slideout-content">
+  <!-- Modal to add new starts-->
+  <div class="modalsd modal-slide-in sdfade new-modal" id="modals-slide-in">
+    <div class="modal-dialog">
+      <form class="add-new modal-content pt-0" [formGroup]="editForm">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="toggleSidebar('new-sidebar')"
+        >
+          ×
+        </button>
+        <div class="modal-header mb-1">
+          <h5 class="modal-title" id="exampleModalLabel">Nuevo</h5>
+        </div>
+        <div class="modal-body flex-grow-1">
+          <div class="form-group">
+            <label for="name-input">Nombre</label>
+            <input
+              type="text"
+              id="name-input"
+              class="form-control"
+              formControlName="name"
+              name="fname-input"
+              placeholder="Nombre del servicio"
+              [ngClass]="{
+                'is-invalid': isControlInvalid('name'),
+                'is-valid': isControlValid('name')
+              }"
+            />
+            <div class="valid-feedback" *ngIf="isControlValid('name')">
+              Nombre ingresado correctamente
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="controlHasError('required', 'name')"
+            >
+              {{ "El elemento es requerido" }}
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="controlHasError('maxlength', 'name')"
+            >
+              {{ "Máximo: " }} 100
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="editForm.get('name')?.errors?.serverError"
+            >
+              {{ editForm.get("name")?.errors?.serverError }}
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description-input">Descripción</label>
+            <textarea
+              class="form-control"
+              id="description-input"
+              formControlName="description"
+              rows="3"
+              placeholder="Descripción del servicio"
+              [ngClass]="{
+                'is-invalid': isControlInvalid('description'),
+                'is-valid': isControlValid('description')
+              }"
+            ></textarea>
+            <div class="valid-feedback" *ngIf="isControlValid('description')">
+              Descripción ingresada correctamente
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="controlHasError('maxlength', 'description')"
+            >
+              {{ "Máximo: " }} 300
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="editForm.get('description')?.errors?.serverError"
+            >
+              {{ editForm.get("description")?.errors?.serverError }}
+            </div>
+          </div>
+
+          <button
+            [disabled]="loading"
+            type="submit"
+            class="btn btn-primary mr-1"
+            (click)="submit()"
+            rippleEffect
+          >
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span
+            >Guardar
+          </button>
+          <button
+            type="reset"
+            class="btn btn-outline-secondary"
+            (click)="toggleSidebar('new-sidebar')"
+            rippleEffect
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Modal to add new user Ends-->
+</div>

@@ -25,21 +25,10 @@ const routes = [
   {
     path: 'analytics',
     component: AnalyticsComponent,
-    canActivate: [AuthGuard],
-    data: { roles: [Role.Admin], animation: 'danalytics' },
-    resolve: {
-      css: DashboardService,
-      inv: InvoiceListService
-    }
   },
   {
     path: 'ecommerce',
     component: EcommerceComponent,
-    canActivate: [AuthGuard],
-    resolve: {
-      css: DashboardService
-    },
-    data: { animation: 'decommerce' }
   }
 ];
 
@@ -58,4 +47,4 @@ const routes = [
   providers: [DashboardService, InvoiceListService],
   exports: [EcommerceComponent]
 })
-export class DashboardModule {}
+export class DashboardModule { }

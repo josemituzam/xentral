@@ -76,8 +76,8 @@ export class EcommerceComponent implements OnInit {
     private _coreTranslationService: CoreTranslationService
   ) {
     this._authenticationService.currentUser.subscribe(x => (this.currentUser = x));
-    this.isAdmin = this._authenticationService.isAdmin;
-    this.isClient = this._authenticationService.isClient;
+   // this.isAdmin = this._authenticationService.isAdmin;
+   // this.isClient = this._authenticationService.isClient;
 
     this._coreTranslationService.translate(english, french, german, portuguese);
     // Statistics Bar Chart

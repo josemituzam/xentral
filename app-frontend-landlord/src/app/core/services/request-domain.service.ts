@@ -23,15 +23,29 @@ export class RequestDomainService {
   /**
    * Get all users
    */
-   create(data: RequestDomain): Observable<RequestDomain> {
+  create(data: RequestDomain): Observable<any> {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set("Content-Type", "application/json");
-    return this._http.post<any>(this.API_REQUEST_DOMAIN_URL + '/store', data,  {
+    return this._http.post<any>(`${this.API_REQUEST_DOMAIN_URL}/store`, data, {
       headers: httpHeaders,
     });
   }
-  /*
-  getById(id: number) {
-    return this._http.get<User>(`${environment.apiUrl}/users/${id}`);
-  }*/
+
+  update(data: RequestDomain): Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set("Content-Type", "application/json");
+    return this._http.put(
+      `${this.API_REQUEST_DOMAIN_URL}/${data.id}/update`,
+      data,
+      { headers: httpHeaders }
+    );
+  }
+
+  delete(id: string): Observable<any> {
+    return this._http.delete<any>(`${this.API_REQUEST_DOMAIN_URL}/${id}`);
+  }
+
+  getRequestDomainById(id: string): Observable<any> {
+    return this._http.get<any>(`${this.API_REQUEST_DOMAIN_URL}/${id}/edit`);
+  }
 }

@@ -1,32 +1,32 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { CoreCommonModule } from '@core/common.module';
-
-import { AuthForgotPasswordV1Component } from 'app/main/pages/authentication/auth-forgot-password-v1/auth-forgot-password-v1.component';
-import { AuthForgotPasswordV2Component } from 'app/main/pages/authentication/auth-forgot-password-v2/auth-forgot-password-v2.component';
-
-import { AuthLoginV1Component } from 'app/main/pages/authentication/auth-login-v1/auth-login-v1.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthLoginV2Component } from 'app/main/pages/authentication/auth-login-v2/auth-login-v2.component';
+import { AuthenticationService } from 'app/auth/service';
+import { AuthGuard, JwtInterceptor } from 'app/auth/helpers';
 
-import { AuthRegisterV1Component } from 'app/main/pages/authentication/auth-register-v1/auth-register-v1.component';
-import { AuthRegisterV2Component } from 'app/main/pages/authentication/auth-register-v2/auth-register-v2.component';
-
-import { AuthResetPasswordV1Component } from 'app/main/pages/authentication/auth-reset-password-v1/auth-reset-password-v1.component';
-import { AuthResetPasswordV2Component } from 'app/main/pages/authentication/auth-reset-password-v2/auth-reset-password-v2.component';
 
 // routing
 const routes: Routes = [
   {
+    path: 'login',
+    component: AuthLoginV2Component,
+    data: { animation: 'auth' }
+  },
+  /*{
     path: 'authentication/login-v1',
+    canActivate: [LoginGuard],
     component: AuthLoginV1Component
   },
   {
     path: 'authentication/login-v2',
+    canActivate: [LoginGuard],
     component: AuthLoginV2Component
   },
   {
@@ -52,20 +52,33 @@ const routes: Routes = [
   {
     path: 'authentication/forgot-password-v2',
     component: AuthForgotPasswordV2Component
-  }
+  }*/
 ];
 
 @NgModule({
-  declarations: [
-    AuthLoginV1Component,
-    AuthRegisterV1Component,
-    AuthLoginV2Component,
-    AuthRegisterV2Component,
-    AuthForgotPasswordV1Component,
-    AuthForgotPasswordV2Component,
-    AuthResetPasswordV1Component,
-    AuthResetPasswordV2Component
+  declarations: [AuthLoginV2Component],
+  imports: [CommonModule, RouterModule.forChild(routes), NgbModule, FormsModule, ReactiveFormsModule, CoreCommonModule],
+  exports: [AuthLoginV2Component],
+  providers: [
+    JwtInterceptor,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
   ],
-  imports: [CommonModule, RouterModule.forChild(routes), NgbModule, FormsModule, ReactiveFormsModule, CoreCommonModule]
 })
-export class AuthenticationModule {}
+
+
+
+export class AuthenticationModule {
+  static forRoot(): ModuleWithProviders<any> {
+    return {
+      ngModule: AuthenticationModule,
+      providers: [
+        AuthenticationService,
+        AuthGuard
+      ]
+    };
+  }
+}

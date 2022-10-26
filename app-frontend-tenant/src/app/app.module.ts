@@ -20,7 +20,7 @@ import { CardSnippetModule } from '@core/components/card-snippet/card-snippet.mo
 
 import { coreConfig } from 'app/app-config';
 import { AuthGuard } from 'app/auth/helpers/auth.guards';
-import { fakeBackendProvider } from 'app/auth/helpers'; // used to create fake backend
+//import { fakeBackendProvider } from 'app/auth/helpers'; // used to create fake backend
 import { JwtInterceptor, ErrorInterceptor } from 'app/auth/helpers';
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
@@ -30,7 +30,11 @@ import { ContextMenuComponent } from 'app/main/extensions/context-menu/context-m
 import { AnimatedCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/animated-custom-context-menu/animated-custom-context-menu.component';
 import { BasicCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/basic-custom-context-menu/basic-custom-context-menu.component';
 import { SubMenuCustomContextMenuComponent } from './main/extensions/context-menu/custom-context-menu/sub-menu-custom-context-menu/sub-menu-custom-context-menu.component';
+import { AuthenticationService } from './auth/service';
+import { AppRoutingModule } from './app-routing.module';
+import { AuthenticationModule } from './main/pages/authentication/authentication.module';
 
+/*
 const appRoutes: Routes = [
   {
     path: 'dashboard',
@@ -85,45 +89,41 @@ const appRoutes: Routes = [
     redirectTo: '/pages/miscellaneous/error' //Error 404 - Page not found
   }
 ];
+*/
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        ContextMenuComponent,
-        BasicCustomContextMenuComponent,
-        AnimatedCustomContextMenuComponent,
-        SubMenuCustomContextMenuComponent
-    ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        HttpClientInMemoryWebApiModule.forRoot(FakeDbService, {
-            delay: 0,
-            passThruUnknownUrl: true
-        }),
-        RouterModule.forRoot(appRoutes, {
-            scrollPositionRestoration: 'enabled',
-            relativeLinkResolution: 'legacy'
-        }),
-        NgbModule,
-        ToastrModule.forRoot(),
-        TranslateModule.forRoot(),
-        ContextMenuModule,
-        CoreModule.forRoot(coreConfig),
-        CoreCommonModule,
-        CoreSidebarModule,
-        CoreThemeCustomizerModule,
-        CardSnippetModule,
-        LayoutModule,
-        ContentHeaderModule
-    ],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-        // ! IMPORTANT: Provider used to create fake backend, comment while using real API
-        fakeBackendProvider
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    ContextMenuComponent,
+    BasicCustomContextMenuComponent,
+    AnimatedCustomContextMenuComponent,
+    SubMenuCustomContextMenuComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    /* HttpClientInMemoryWebApiModule.forRoot(FakeDbService, {
+       delay: 0,
+       passThruUnknownUrl: true
+     }), */
+    AppRoutingModule,
+    NgbModule,
+    AuthenticationModule.forRoot(),
+    ToastrModule.forRoot(),
+    TranslateModule.forRoot(),
+    ContextMenuModule,
+    CoreModule.forRoot(coreConfig),
+    CoreCommonModule,
+    CoreSidebarModule,
+    CoreThemeCustomizerModule,
+    CardSnippetModule,
+    LayoutModule,
+    ContentHeaderModule
+  ],
+  providers: [
+    AuthenticationService,
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

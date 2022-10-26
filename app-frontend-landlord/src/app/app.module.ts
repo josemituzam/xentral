@@ -16,7 +16,7 @@ import { coreConfig } from 'app/app-config';
 
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
-import { SampleModule } from 'app/main/sample/sample.module';
+//import { SampleModule } from 'app/main/sample/sample.module';
 import { JwtInterceptor } from './auth/helpers';
 import { AuthenticationService } from './auth/service';
 import { AppRoutingModule } from './app-routing.module';
@@ -60,7 +60,7 @@ const appRoutes: Routes = [
     AuthenticationModule.forRoot(),
     // App modules
     LayoutModule,
-    SampleModule
+    //SampleModule
   ],
   providers: [
     AuthenticationService,

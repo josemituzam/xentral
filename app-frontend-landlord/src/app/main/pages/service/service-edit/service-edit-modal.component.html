@@ -1,0 +1,177 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="myModalLabel1">{{ title }}</h4>
+  <button
+    type="button"
+    class="close"
+    (click)="modal.dismiss('Cross click')"
+    aria-label="Close"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" tabindex="0" ngbAutofocus>
+  <form [formGroup]="editForm">
+    <div class="form-group">
+      <label for="name-input">Nombre</label>
+      <input
+        type="text"
+        id="name-input"
+        class="form-control"
+        formControlName="name"
+        name="fname-input"
+        placeholder="Nombre del servicio"
+        [ngClass]="{
+          'is-invalid': isControlInvalid('name'),
+          'is-valid': isControlValid('name')
+        }"
+      />
+      <div class="valid-feedback" *ngIf="isControlValid('name')">
+        Nombre ingresado correctamente
+      </div>
+      <div class="invalid-feedback" *ngIf="controlHasError('required', 'name')">
+        {{ "El elemento es requerido" }}
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('maxlength', 'name')"
+      >
+        {{ "Máximo: " }} 100
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="editForm.get('name')?.errors?.serverError"
+      >
+        {{ editForm.get("name")?.errors?.serverError }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="description-input">Descripción</label>
+      <textarea
+        class="form-control"
+        id="description-input"
+        formControlName="description"
+        rows="3"
+        placeholder="Descripción del servicio"
+        [ngClass]="{
+          'is-invalid': isControlInvalid('description'),
+          'is-valid': isControlValid('description')
+        }"
+      ></textarea>
+      <div class="valid-feedback" *ngIf="isControlValid('description')">
+        Descripción ingresada correctamente
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="controlHasError('maxlength', 'description')"
+      >
+        {{ "Máximo: " }} 300
+      </div>
+      <div
+        class="invalid-feedback"
+        *ngIf="editForm.get('description')?.errors?.serverError"
+      >
+        {{ editForm.get("description")?.errors?.serverError }}
+      </div>
+
+      <div class="row" id="basic-table">
+        <div class="col-12">
+          <div class="card-header">
+            <div
+              class="col-md-12 col-12 d-flex justify-content-start justify-content-md-end"
+            >
+              <button
+                class="btn btn-icon btn-primary"
+                type="button"
+                rippleEffect
+                (click)="addRecord()"
+              >
+                <i
+                  data-feather="plus"
+                  class="d-sm-none d-inline-block mr-0 mr-sm-1"
+                ></i
+                ><span class="d-none d-sm-inline-block">Agregar</span>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Usuarios mínimos</th>
+                    <th>Usuarios máximos</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="service_detail" @heightIn>
+                  <tr
+                    *ngFor="let item of service_detail.controls; let i = index"
+                  >
+                    <td [formGroupName]="i">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="min-user-input"
+                        formControlName="min_users"
+                        name="min-user-input"
+                        disabled
+                        placeholder="Usuarios mínimos"
+                      />
+                    </td>
+                    <td [formGroupName]="i">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="max-user-input"
+                        formControlName="max_users"
+                        name="max-user-input"
+                        placeholder="Usuarios máximos"
+                      />
+                    </td>
+                    <td [formGroupName]="i">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="price_monthly-input"
+                        name="fprice_monthly-input"
+                        formControlName="price_monthly"
+                        placeholder="Precio"
+                      />
+                    </td>
+                    <td [formGroupName]="i">
+                      <button
+                        *ngIf="i > 0"
+                        type="button"
+                        class="btn btn-icon btn-danger"
+                        (click)="removeRecord(i)"
+                        rippleEffect
+                      >
+                        <span [data-feather]="'trash-2'"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-light" (click)="modal.close()">
+    Cancelar
+  </button>
+  <button
+    [disabled]="loading"
+    type="submit"
+    class="btn btn-primary mr-1"
+    (click)="submit()"
+    rippleEffect
+  >
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span
+    >Guardar
+  </button>
+</div>

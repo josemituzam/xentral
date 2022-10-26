@@ -300,14 +300,14 @@ export class AnalyticsComponent implements OnInit {
      * For example purpose
      */
     this.loading = true;
-    this._userService
-      .getAll()
-      .pipe(first())
-      .subscribe(users => {
-        this.loading = false;
-        this.users = users;
-      });
-
+    /* this._userService
+       .getAll()
+       .pipe(first())
+       .subscribe(users => {
+         this.loading = false;
+         this.users = users;
+       });
+  */
     // Get the dashboard service data
     this._dashboardService.onApiDataChanged.subscribe(response => {
       this.data = response;

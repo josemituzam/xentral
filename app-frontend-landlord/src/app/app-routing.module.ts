@@ -6,6 +6,11 @@ import { LoginGuard } from './auth/helpers/login.guards';
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/auth/login',
+    pathMatch: 'full'
+  },
+  {
     path: 'auth',
     canActivate: [LoginGuard],
     loadChildren: () =>
@@ -13,18 +18,25 @@ export const routes: Routes = [
   },
   {
     path: 'misc',
-    loadChildren: () => import('./main/pages/pages.module').then(m => m.PagesModule)
+    loadChildren: () => import('./main/pages/miscellaneous/miscellaneous.module').then(m => m.MiscellaneousModule)
   },
+  /* {
+     path: 'page',
+     canActivate: [AuthGuard],
+     loadChildren: () =>
+       import('./main/sample/sample.module').then((m) => m.SampleModule),
+   }, */
   {
-    path: '',
-    redirectTo: '/auth/login',
-    pathMatch: 'full'
-  },
-  {
-    path: 'page',
+    path: 'request-domain',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./main/sample/sample.module').then((m) => m.SampleModule),
+      import('./main/pages/requestdomain/requestdomain.module').then((m) => m.RequestDomainModule),
+  },
+  {
+    path: 'service',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./main/pages/service/service.module').then((m) => m.ServiceModule),
   },
   {
     path: '**',

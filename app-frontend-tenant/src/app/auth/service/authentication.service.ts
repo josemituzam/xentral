@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -9,18 +9,28 @@ import { ToastrService } from 'ngx-toastr';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+
+  //Api String
+  API_AUTH_URL: string;
+  API_AUTH_LOGOUT_URL: string;
+
   //public
   public currentUser: Observable<User>;
 
   //private
   private currentUserSubject: BehaviorSubject<User>;
 
+  protected readonly REST_API: string = environment.apiUrl;
   /**
    *
    * @param {HttpClient} _http
    * @param {ToastrService} _toastrService
    */
   constructor(private _http: HttpClient, private _toastrService: ToastrService) {
+
+    this.API_AUTH_URL = `${this.REST_API}/auth/login`;
+    this.API_AUTH_LOGOUT_URL = `${this.REST_API}/auth/logout`;
+
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -33,16 +43,16 @@ export class AuthenticationService {
   /**
    *  Confirms if user is admin
    */
-  get isAdmin() {
-    return this.currentUser && this.currentUserSubject.value.role === Role.Admin;
-  }
+  /* get isAdmin() {
+     return this.currentUser && this.currentUserSubject.value.role === Role.Admin;
+   }*/
 
   /**
    *  Confirms if user is client
    */
-  get isClient() {
-    return this.currentUser && this.currentUserSubject.value.role === Role.Client;
-  }
+  /*  get isClient() {
+      return this.currentUser && this.currentUserSubject.value.role === Role.Client;
+    } */
 
   /**
    * User login
@@ -53,7 +63,7 @@ export class AuthenticationService {
    */
   login(email: string, password: string) {
     return this._http
-      .post<any>(`${environment.apiUrl}/users/authenticate`, { email, password })
+      .post<any>(`${this.API_AUTH_URL}`, { email, password })
       .pipe(
         map(user => {
           // login successful if there's a jwt token in the response
@@ -62,20 +72,18 @@ export class AuthenticationService {
             localStorage.setItem('currentUser', JSON.stringify(user));
 
             // Display welcome toast!
-            setTimeout(() => {
-              this._toastrService.success(
-                'You have successfully logged in as an ' +
-                  user.role +
-                  ' user to Vuexy. Now you can start to explore. Enjoy! 🎉',
-                '👋 Welcome, ' + user.firstName + '!',
-                { toastClass: 'toast ngx-toastr', closeButton: true }
-              );
-            }, 2500);
-
+            /*   setTimeout(() => {
+                 this._toastrService.success(
+                   'You have successfully logged in as an ' +
+                   'Root' +
+                   ' user to Vuexy. Now you can start to explore. Enjoy! 🎉',
+                   '👋 Welcome, ' + user.email + '!',
+                   { toastClass: 'toast ngx-toastr', closeButton: true }
+                 );
+               }, 1000); */
             // notify
             this.currentUserSubject.next(user);
           }
-
           return user;
         })
       );
@@ -87,8 +95,10 @@ export class AuthenticationService {
    */
   logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
-    // notify
-    this.currentUserSubject.next(null);
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set("Content-Type", "application/json");
+    return this._http.post<any>(this.API_AUTH_LOGOUT_URL, {
+      headers: httpHeaders,
+    });
   }
 }

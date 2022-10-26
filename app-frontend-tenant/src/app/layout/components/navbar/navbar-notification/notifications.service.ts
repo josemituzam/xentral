@@ -25,11 +25,11 @@ export class NotificationsService {
    */
   getNotificationsData(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/notifications-data').subscribe((response: any) => {
-        this.apiData = response;
+      /* this._httpClient.get('api/notifications-data').subscribe((response: any) => {
+        this.apiData = [];
         this.onApiDataChange.next(this.apiData);
         resolve(this.apiData);
-      }, reject);
+      }, reject); */
     });
   }
 }

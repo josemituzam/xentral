@@ -42,11 +42,11 @@ export class InvoicePreviewService implements Resolve<any> {
     const url = `api/invoice-data/${id}`;
 
     return new Promise((resolve, reject) => {
-      this._httpClient.get(url).subscribe((response: any) => {
+      /*this._httpClient.get(url).subscribe((response: any) => {
         this.apiData = response;
         this.onInvoicPreviewChanged.next(this.apiData);
         resolve(this.apiData);
-      }, reject);
+      }, reject); */
     });
   }
 }

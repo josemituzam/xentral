@@ -41,11 +41,11 @@ export class InvoiceAddService implements Resolve<any> {
     const url = `api/invoice-data`;
 
     return new Promise((resolve, reject) => {
-      this._httpClient.get(url).subscribe((response: any) => {
+      /*this._httpClient.get(url).subscribe((response: any) => {
         this.apiData = response;
         this.onInvoicAddChanged.next(this.apiData);
         resolve(this.apiData);
-      }, reject);
+      }, reject);*/
     });
   }
 }

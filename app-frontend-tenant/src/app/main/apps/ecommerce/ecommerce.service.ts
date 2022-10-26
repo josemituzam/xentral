@@ -72,11 +72,11 @@ export class EcommerceService implements Resolve<any> {
    */
   getProducts(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/ecommerce-products').subscribe((response: any) => {
+      /*this._httpClient.get('api/ecommerce-products').subscribe((response: any) => {
         this.productList = response;
         this.sortProduct('featured'); // Default shorting
         resolve(this.productList);
-      }, reject);
+      }, reject); */
     });
   }
 
@@ -85,11 +85,11 @@ export class EcommerceService implements Resolve<any> {
    */
   getWishlist(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/ecommerce-userWishlist').subscribe((response: any) => {
-        this.wishlist = response;
-        this.onWishlistChange.next(this.wishlist);
-        resolve(this.wishlist);
-      }, reject);
+      /* this._httpClient.get('api/ecommerce-userWishlist').subscribe((response: any) => {
+         this.wishlist = response;
+         this.onWishlistChange.next(this.wishlist);
+         resolve(this.wishlist);
+       }, reject); */
     });
   }
 
@@ -98,12 +98,12 @@ export class EcommerceService implements Resolve<any> {
    */
   getCartList(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/ecommerce-userCart').subscribe((response: any) => {
-        this.cartList = response;
-
-        this.onCartListChange.next(this.cartList);
-        resolve(this.cartList);
-      }, reject);
+      /* this._httpClient.get('api/ecommerce-userCart').subscribe((response: any) => {
+         this.cartList = response;
+ 
+         this.onCartListChange.next(this.cartList);
+         resolve(this.cartList);
+       }, reject); */
     });
   }
 
@@ -112,11 +112,11 @@ export class EcommerceService implements Resolve<any> {
    */
   getSelectedProduct(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/ecommerce-products?id=' + this.idHandel).subscribe((response: any) => {
-        this.selectedProduct = response;
-        this.onSelectedProductChange.next(this.selectedProduct);
-        resolve(this.selectedProduct);
-      }, reject);
+      /* this._httpClient.get('api/ecommerce-products?id=' + this.idHandel).subscribe((response: any) => {
+         this.selectedProduct = response;
+         this.onSelectedProductChange.next(this.selectedProduct);
+         resolve(this.selectedProduct);
+       }, reject);*/
     });
   }
 
@@ -125,11 +125,11 @@ export class EcommerceService implements Resolve<any> {
    */
   getRelatedProducts(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this._httpClient.get('api/ecommerce-relatedProducts').subscribe((response: any) => {
-        this.relatedProducts = response;
-        this.onRelatedProductsChange.next(this.relatedProducts);
-        resolve(this.relatedProducts);
-      }, reject);
+      /*  this._httpClient.get('api/ecommerce-relatedProducts').subscribe((response: any) => {
+          this.relatedProducts = response;
+          this.onRelatedProductsChange.next(this.relatedProducts);
+          resolve(this.relatedProducts);
+        }, reject); */
     });
   }
 

@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { takeUntil, first } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-
-import { AuthenticationService } from 'app/auth/service';
+import { catchError, takeUntil } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { Router } from '@angular/router';
 import { CoreConfigService } from '@core/services/config.service';
+import { AuthenticationService } from 'app/auth/service';
+import { User } from 'app/auth/models';
+
 
 @Component({
   selector: 'app-auth-login-v2',
@@ -14,6 +16,11 @@ import { CoreConfigService } from '@core/services/config.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AuthLoginV2Component implements OnInit {
+  defaultAuth: any = {
+    email: 'admin@admin.com',
+    password: 'admin',
+  };
+
   //  Public
   public coreConfig: any;
   public loginForm: UntypedFormGroup;
@@ -33,16 +40,11 @@ export class AuthLoginV2Component implements OnInit {
    */
   constructor(
     private _coreConfigService: CoreConfigService,
+    private _authService: AuthenticationService,
     private _formBuilder: UntypedFormBuilder,
     private _route: ActivatedRoute,
-    private _router: Router,
-    private _authenticationService: AuthenticationService
+    private _router: Router
   ) {
-    // redirect to home if already logged in
-    if (this._authenticationService.currentUserValue) {
-      this._router.navigate(['/']);
-    }
-
     this._unsubscribeAll = new Subject();
 
     // Configure the layout
@@ -85,18 +87,34 @@ export class AuthLoginV2Component implements OnInit {
 
     // Login
     this.loading = true;
-    this._authenticationService
+
+
+
+    this._authService
       .login(this.f.email.value, this.f.password.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          this._router.navigate([this.returnUrl]);
-        },
-        error => {
-          this.error = error;
-          this.loading = false;
+      .pipe(catchError((errorMessage) => {
+        this.loading = false;
+        if (errorMessage.status == 422) {
+          this.error = errorMessage.error.errors.email;
         }
-      );
+        return of(null);
+      }))
+      .subscribe((user: User) => {
+        if (user) {
+          //this._router.navigate(['/dashboard/analytics']);
+          this._router.navigate(['/dashboard/analytics']);
+        }
+      });
+
+
+
+
+    // redirect to home page
+    /*
+    setTimeout(() => {
+      this._router.navigate(['/']);
+    }, 100);
+    */
   }
 
   // Lifecycle Hooks
@@ -107,8 +125,8 @@ export class AuthLoginV2Component implements OnInit {
    */
   ngOnInit(): void {
     this.loginForm = this._formBuilder.group({
-      email: ['admin@demo.com', [Validators.required, Validators.email]],
-      password: ['admin', Validators.required]
+      email: [this.defaultAuth.email, [Validators.required, Validators.email]],
+      password: [this.defaultAuth.password, Validators.required]
     });
 
     // get return url from route parameters or default to '/'

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { takeUntil, first } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { CoreConfigService } from '@core/services/config.service';
 import { AuthenticationService } from 'app/auth/service';
@@ -89,15 +89,20 @@ export class AuthLoginV2Component implements OnInit {
     this.loading = true;
 
     this._authService
-      .login(this.f.email.value, this.f.password.value)
-      .pipe(first())
-      .subscribe((user: User) => {
-        if (user) {
-          this._router.navigate(['/page/home']);
-        } else {
-
-        }
-      });
+    .login(this.f.email.value, this.f.password.value)
+    .pipe(catchError((errorMessage) => {
+      this.loading = false;
+      if (errorMessage.status == 422) {
+        this.error = errorMessage.error.errors.email;
+      }
+      return of(null);
+    }))
+    .subscribe((user: User) => {
+      if (user) {
+        //this._router.navigate(['/dashboard/analytics']);
+        this._router.navigate(['/request-domain/list']);
+      }
+    });
 
 
 
