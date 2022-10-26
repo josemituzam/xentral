@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
+use App\Models\Landlord\Service\ServiceDetail;
 
 class Service extends Model
 {
@@ -35,4 +36,9 @@ class Service extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function serviceDetail()
+    {
+        return $this->hasMany(ServiceDetail::class);
+    }
 }

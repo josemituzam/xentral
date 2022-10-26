@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
-
 class DomainService extends Model
 {
     use HasFactory,
@@ -39,4 +38,5 @@ class DomainService extends Model
         'deleted_by'
     ];
 
+    
 }

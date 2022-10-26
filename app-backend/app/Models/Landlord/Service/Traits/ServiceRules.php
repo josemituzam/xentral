@@ -13,11 +13,7 @@ trait ServiceRules
             'name.required' => 'El :attribute es requerido.',
             'name.unique' => 'El :attribute ya se encuentra registrado.',
             'name.max' => 'El :attribute no debe ser mayor a :max',
-
             'description.max' => 'El :attribute no debe ser mayor a :max',
-
-            'max_users.required' => 'El :attribute es requerido.',
-            'max_users.max' => 'El :attribute no debe ser mayor a :max',
         ];
 
         return Validator::make(
@@ -30,7 +26,6 @@ trait ServiceRules
                     Rule::unique('services', 'name')->whereNull('deleted_at'),
                 ],
                 'description' => 'max:300',
-                'max_users' => 'required|max:11',
             ],
             $messages
         );
@@ -43,11 +38,7 @@ trait ServiceRules
             'name.required' => 'El :attribute es requerido.',
             'name.unique' => 'El :attribute ya se encuentra registrado.',
             'name.max' => 'El :attribute no debe ser mayor a :max',
-
             'description.max' => 'El :attribute no debe ser mayor a :max',
-
-            'max_users.required' => 'El :attribute es requerido.',
-            'max_users.max' => 'El :attribute no debe ser mayor a :max',
         ];
 
         return Validator::make(
@@ -59,7 +50,6 @@ trait ServiceRules
                     Rule::unique('services', 'name')->whereNull('deleted_at')->whereNot('id', $service["id"]),
                 ],
                 'description' => 'max:250',
-                'max_users' => 'required|max:11',
             ],
             $messages
         );

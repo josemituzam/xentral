@@ -6,6 +6,7 @@ use App\Models\Landlord\Service\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Helpers;
+use App\Models\Landlord\Service\ServiceDetail;
 use Carbon\Carbon;
 
 class ServiceController extends Controller
@@ -40,13 +41,12 @@ class ServiceController extends Controller
                 $param = array(0 => '=');
                 $type = 0;
             }
-            $service = Service::where('deleted_at', '=', null);
+            $service = Service::with(['serviceDetail'])->where('deleted_at', '=', null);
 
             $Filtred = $helpers->filter($service, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
                     return $query->when($request->filled('q'), function ($query) use ($request) {
                         return $query->where('name', 'LIKE', "%{$request->q}%")
-                            ->orWhere('max_users', 'LIKE', "%{$request->q}%")
                             ->orWhere('description', 'LIKE', "%{$request->q}%");
                     });
                 })->paginate(
@@ -75,16 +75,31 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
+        //  return $request->all();
         $validator = Service::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
         }
 
+        $objServiceDetail = $request->service_details;
+
+
         $input['name'] = $request->name;
         $input['description'] = $request->description;
-        $input['max_users'] = $request->max_users;
-
         $obj = Service::create($input);
+
+        for ($i = 0; $i < count($objServiceDetail); $i++) {
+            $objData = [
+                'service_id' => $obj->id,
+                "min_users" =>  $objServiceDetail[$i]["min_users"],
+                'max_users' =>  $objServiceDetail[$i]["max_users"],
+                'price_monthly' => $objServiceDetail[$i]["price_monthly"],
+                'created_by' =>  auth()->user()->id,
+            ];
+            ServiceDetail::create($objData);
+        }
+
+
 
         return response()->json([
             'obj'  => $obj
@@ -119,8 +134,20 @@ class ServiceController extends Controller
         $obj = Service::find($id);
         $obj->name = $request->name;
         $obj->description = $request->description;
-        $obj->max_users = $request->max_users;
         $obj->save();
+
+        $objServiceDetail = $request->service_details;
+        ServiceDetail::where('service_id', $id)->delete();
+        for ($i = 0; $i < count($objServiceDetail); $i++) {
+            $objData = [
+                'service_id' => $obj->id,
+                "min_users" =>  $objServiceDetail[$i]["min_users"],
+                'max_users' =>  $objServiceDetail[$i]["max_users"],
+                'price_monthly' => $objServiceDetail[$i]["price_monthly"],
+                'created_by' =>  auth()->user()->id,
+            ];
+            ServiceDetail::create($objData);
+        }
 
         return response()->json([
             'obj'  => $obj
