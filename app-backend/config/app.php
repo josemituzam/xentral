@@ -52,7 +52,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost:8080'),
+    'url_frontend_landlord' => env('APP_URL_FRONTEND_LANDLORD', '.localhost:4000/'),
+    'url_frontend_tenant' => env('APP_URL_FRONTEND_TENANT', '.localhost:4100/'),
 
     'asset_url' => env('ASSET_URL', null),
 

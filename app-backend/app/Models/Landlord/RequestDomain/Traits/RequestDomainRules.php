@@ -9,10 +9,8 @@ trait RequestDomainRules
     public static function createdRules($requestDomain)
     {
         $messages = [
-            'firstname.required' => 'El :attribute es requerido.',
-            'lastname.required' => 'El :attribute es requerido.',
-            'firstname.max' => 'El :attribute no debe ser mayor a :max',
-            'lastname.max' => 'El :attribute no debe ser mayor a :max',
+            'fullname.required' => 'El :attribute es requerido.',
+            'fullname.max' => 'El :attribute no debe ser mayor a :max',
             'email.required' => 'El :attribute es requerido.',
             'email.email' => 'El :attribute no es válido.',
             'email.max' => 'El :attribute no debe ser mayor a :max',
@@ -28,8 +26,7 @@ trait RequestDomainRules
         return Validator::make(
             $requestDomain,
             [
-                'firstname' => 'max:200|required:request_domains,firstname',
-                'lastname' => 'max:200|required:request_domains,lastname',
+                'fullname' => 'max:200|required:request_domains,fullname',
                 'email' => 'max:200|required|email|unique:request_domains,email',
                 'domain_name' => 'max:200|required|unique:request_domains,domain_name',
                 'company_name' => 'max:200|required|unique:request_domains,company_name',

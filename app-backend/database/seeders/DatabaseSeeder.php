@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\ServiceSeeder;
 use Illuminate\Database\Eloquent\Model;
 use Database\Seeders\Traits\TruncateTable;
 use Database\Seeders\PermissionRoleSeeder;
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->disableForeignKeys();
         $this->call(PermissionRoleSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(ServiceSeeder::class);
         $this->enableForeignKeys();
         Model::reguard();
     }

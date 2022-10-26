@@ -4,7 +4,6 @@ namespace App\Models\Landlord\RequestDomain;
 
 use App\Models\Landlord\RequestDomain\Traits\RequestDomainRules;
 use App\Models\Traits\Uuids;
-use App\Models\Landlord\Service\Service;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
 
-class RequestDomain extends Model
+class DomainService extends Model
 {
     use HasFactory,
         Notifiable,
@@ -24,19 +23,20 @@ class RequestDomain extends Model
     // use BelongsToTenant;
     // protected $guard_name = 'api';
     protected $fillable = [
-        'fullname',
-        'email',
-        'password',
+        'request_domain_id',
+        'service_id',
+        'price_monthly',
+        'price_yearly',
+        'max_users',
+        'max_users',
         'type',
-        'tenant_id',
-        'domain_name',
-        'company_name',
+        'short_code',
+        'long_code',
+        'order',
         'is_active',
-        'is_approved'
+        'created_by',
+        'updated_by',
+        'deleted_by'
     ];
 
-    public function service()
-    {
-        return $this->belongsToMany(Service::class, 'domain_services');
-    }
 }

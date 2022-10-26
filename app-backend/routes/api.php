@@ -4,6 +4,7 @@
 use App\Http\Controllers\Core\AuthController;
 use App\Http\Controllers\Core\User\UserController;
 use App\Http\Controllers\Landlord\RequestDomain\RequestDomainController;
+use App\Http\Controllers\Landlord\Service\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,5 +33,14 @@ Route::group([
         Route::get('request-domain/index', [RequestDomainController::class, 'index']);
         Route::get('request-domain/{id}/edit', [RequestDomainController::class, 'edit']);
         Route::delete('request-domain/{id}', [RequestDomainController::class, 'destroy']);
+        Route::put('request-domain/active/{id}', [RequestDomainController::class, 'activeRecord']);
+        Route::put('request-domain/approved/{id}', [RequestDomainController::class, 'approvedRecord']);
+        // Servicio
+        Route::post('service/store', [ServiceController::class, 'store']);
+        Route::put('service/{id}/update', [ServiceController::class, 'update']);
+        Route::get('service/index', [ServiceController::class, 'index']);
+        Route::get('service/{id}/edit', [ServiceController::class, 'edit']);
+        Route::delete('service/{id}', [ServiceController::class, 'destroy']);
+        Route::put('service/active/{id}', [ServiceController::class, 'activeRecord']);
     });
 });

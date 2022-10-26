@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Http\Controllers\Core\User;
 use App\Http\Controllers\Controller;
 use App\Models\Core\Auth\Landlord\User;

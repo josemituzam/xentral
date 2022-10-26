@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Core\AuthController;
+use App\Http\Controllers\Core\User\UserController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-
 /*
 |--------------------------------------------------------------------------
 | Tenant Routes
@@ -17,13 +18,22 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 | Feel free to customize them however you want. Good luck!
 |
 */
-
 Route::middleware([
-    'apitenant',
+    'apiTenant',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    Route::get('/', function () {
-        return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
+
+    Route::group([
+        'prefix' => 'api/v1'
+    ], function () {
+        Route::post('auth/login', [AuthController::class, 'loginInLandlord']);
+        Route::group(['middleware' => ['jwt.verify']], function () {
+            // Auth Routes
+            Route::post('auth/logout',  [AuthController::class, 'logout']);
+            // User Routes
+            Route::get('user/auth/{id}', [UserController::class, 'show']);
+            // Request Domains Routes
+        });
     });
 });
