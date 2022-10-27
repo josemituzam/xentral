@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\Core\Api\ApiCloudfareController;
 use App\Http\Controllers\Core\AuthController;
 use App\Http\Controllers\Core\User\UserController;
 use App\Http\Controllers\Landlord\RequestDomain\RequestDomainController;
@@ -23,6 +23,8 @@ Route::group([
 ], function () {
     Route::post('auth/login', [AuthController::class, 'loginInLandlord']);
     Route::group(['middleware' => ['jwt.verify']], function () {
+        //Prueba Cloudfare
+        Route::post('domain/cloud', [ApiCloudfareController::class, 'createSubDomainDemo']);
         // Auth Routes
         Route::post('auth/logout',  [AuthController::class, 'logout']);
         // User Routes

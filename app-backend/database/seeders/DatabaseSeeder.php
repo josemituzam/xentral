@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\ServiceSeeder;
+use Database\Seeders\ApiCloudfareSeeder;
 use Illuminate\Database\Eloquent\Model;
 use Database\Seeders\Traits\TruncateTable;
 use Database\Seeders\PermissionRoleSeeder;
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionRoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ServiceSeeder::class);
+        $this->call(ApiCloudfareSeeder::class);
         $this->enableForeignKeys();
         Model::reguard();
     }

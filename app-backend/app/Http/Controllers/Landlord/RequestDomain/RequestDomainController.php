@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Landlord\RequestDomain;
 
+use App\Http\Controllers\ApiCloudFareController;
 use App\Models\Core\Tenant;
 use Illuminate\Http\Request;
 use App\Models\Core\Auth\Tenant\User;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Helpers;
+use App\Models\Core\Api\ApiCloudfare\ApiCloudfare;
 use App\Models\Landlord\RequestDomain\DomainService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
@@ -131,8 +133,11 @@ class RequestDomainController extends Controller
         $input['tenant_id'] = $tenant->id;
         $input['domain_name'] = $urlTenant;
 
+        $obj = ApiCloudfare::where('long_code', 'ROOT')->where('type', 'Zone')->first();
+
         Domain::create([
-            'domain' => $request->domain_name . '.' . $request->getHost(),
+            // 'domain' => $request->domain_name . '.' . $request->getHost(),
+            'domain' => $request->domain_name . '.' . $obj->domain,
             //'domain' => $request->domain_name . '.' . $request->getHttpHost(),
             'tenant_id' => $tenant->id,
         ]);
@@ -161,6 +166,9 @@ class RequestDomainController extends Controller
         if (auth()->user()->hasrole('Root')) {
             $objUserLandlord = User::where('id', '=', auth()->user()->id)->first();
         }
+
+        $methods = new ApiCloudFareController();
+        $methods->createSubDomain($request->domain_name, $obj);
 
         //Se inicializa el inquilino para correr las migraciones y crear el usuario root
 
