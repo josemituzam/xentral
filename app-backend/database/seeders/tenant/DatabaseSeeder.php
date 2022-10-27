@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Tenant;
+namespace Database\Seeders;
 
 use Database\Seeders\Traits\DisableForeignKeys;
 use Database\Seeders\Traits\TruncateTable;
