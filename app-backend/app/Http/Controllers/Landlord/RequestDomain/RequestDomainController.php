@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Core\Auth\Tenant\User;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Helpers;
-use App\Models\Core\Api\ApiCloudfare\ApiCloudfare;
+use App\Models\Core\Api\ApiCloudfare;
 use App\Models\Landlord\RequestDomain\DomainService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
