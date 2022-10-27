@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Landlord\RequestDomain;
 
-use App\Http\Controllers\ApiCloudFareController;
+
 use App\Models\Core\Tenant;
 use Illuminate\Http\Request;
 use App\Models\Core\Auth\Tenant\User;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Core\Api\ApiCloudfareController;
 use App\Http\Utils\Helpers;
 use App\Models\Core\Api\ApiCloudfare;
 use App\Models\Landlord\RequestDomain\DomainService;
@@ -167,7 +168,7 @@ class RequestDomainController extends Controller
             $objUserLandlord = User::where('id', '=', auth()->user()->id)->first();
         }
 
-        $methods = new ApiCloudFareController();
+        $methods = new ApiCloudfareController();
         $methods->createSubDomain($request->domain_name, $obj);
 
         //Se inicializa el inquilino para correr las migraciones y crear el usuario root
