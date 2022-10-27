@@ -138,7 +138,7 @@ class RequestDomainController extends Controller
 
         Domain::create([
             // 'domain' => $request->domain_name . '.' . $request->getHost(),
-            'domain' => $request->domain_name . '.' . $obj->domain,
+            'domain' => $request->domain_name . $obj->domain,
             //'domain' => $request->domain_name . '.' . $request->getHttpHost(),
             'tenant_id' => $tenant->id,
         ]);
