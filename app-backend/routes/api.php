@@ -23,8 +23,6 @@ Route::group([
 ], function () {
     Route::post('auth/login', [AuthController::class, 'loginInLandlord']);
     Route::group(['middleware' => ['jwt.verify']], function () {
-        //Prueba Cloudfare
-        Route::post('domain/cloud', [ApiCloudfareController::class, 'createSubDomainDemo']);
         // Auth Routes
         Route::post('auth/logout',  [AuthController::class, 'logout']);
         // User Routes
