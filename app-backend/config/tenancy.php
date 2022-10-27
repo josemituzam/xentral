@@ -24,7 +24,7 @@ return [
     'central_domains' => [
         'https://api.ispxentral.app',
         'http://local_api.ispxentral.app',
-        //'https://api.ispxentral.app',
+        'https://ispxentral.app',
     ],
 
     /**
