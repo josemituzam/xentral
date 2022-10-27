@@ -18,6 +18,7 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 | Feel free to customize them however you want. Good luck!
 |
 */
+
 Route::middleware([
     'apiTenant',
     InitializeTenancyByDomain::class,
@@ -25,7 +26,7 @@ Route::middleware([
 ])->group(function () {
 
     Route::group([
-        'prefix' => 'api/v1'
+        'prefix' => 'api/v2'
     ], function () {
         Route::post('auth/login', [AuthController::class, 'loginInLandlord']);
         Route::group(['middleware' => ['jwt.verify']], function () {
