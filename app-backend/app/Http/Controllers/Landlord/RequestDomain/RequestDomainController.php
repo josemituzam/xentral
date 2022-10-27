@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
 use Stancl\Tenancy\Database\Models\Domain;
 use App\Models\Landlord\RequestDomain\RequestDomain as RequestDomainLandlord;
-use Database\Seeders\Tenant\DatabaseSeeder;
+use Database\Seeders\tenant\DatabaseSeeder;
 
 class RequestDomainController extends Controller
 {
