@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Tenant\RequestDomain;
+namespace App\Http\Controllers\Tenant\CloudFare;
 
 use App\Http\Controllers\Controller;
 
