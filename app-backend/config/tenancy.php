@@ -16,16 +16,16 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-    'central_domains' => [
+    /*'central_domains' => [
         '127.0.0.1',
         'localhost',
-    ],
-    /*
+    ],*/
+
     'central_domains' => [
         'https://api.ispxentral.app',
         //'https://api.ispxentral.app',
     ],
-*/
+
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
      * Their responsibility is making Laravel features tenant-aware.
