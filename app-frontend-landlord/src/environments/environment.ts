@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   hmr: false,
   //apiUrl: `http://${baseUrl}:8080/api/v1`
-  apiUrl: `https://api.ispxentral.app`
+  apiUrl: `http://local_api.ispxentral.app/api/v1`
 };
 
 /*
