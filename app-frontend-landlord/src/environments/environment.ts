@@ -1,12 +1,11 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-const parsedUrl = new URL(window.location.href);
-const baseUrl = parsedUrl.hostname
+//const parsedUrl = new URL(window.location.href);
+//const baseUrl = parsedUrl.hostname
 export const environment = {
   production: false,
   hmr: false,
-  //apiUrl: `http://${baseUrl}:8080/api/v1`
   apiUrl: `https://api.ispxentral.app/api/v1`
 };
 
