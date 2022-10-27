@@ -1,13 +1,13 @@
 <?php
 
-namespace Database\Seeders\tenant;
+namespace Database\Seeders\Tenant;
 
 use Database\Seeders\Traits\DisableForeignKeys;
 use Database\Seeders\Traits\TruncateTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
-use Database\Seeders\tenant\UserSeeder;
-use Database\Seeders\tenant\PermissionRoleSeeder;
+use Database\Seeders\Tenant\UserSeeder;
+use Database\Seeders\Tenant\PermissionRoleSeeder;
 
 class DatabaseSeeder extends Seeder
 {
