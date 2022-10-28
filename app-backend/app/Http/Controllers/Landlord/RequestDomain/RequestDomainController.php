@@ -109,8 +109,6 @@ class RequestDomainController extends Controller
      */
     public function store(Request $request)
     {
-        $objDomainService = $request->maxUserService;
-
         $validator = RequestDomainLandlord::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
@@ -122,32 +120,11 @@ class RequestDomainController extends Controller
         $input['type'] = 'Admin';
         $input['company_name'] = $request->company_name;
         $request->domain_name = strtolower(substr(str_replace(' ', '', $request->domain_name), 0, 50));
-        $urlTenant =  "http://" . $request->domain_name . config('app.url_frontend_tenant');
-        //Si comento el ID se crea el tenant con uuid
-
-        $tenant = Tenant::create([
-            //'id' => $request->domain_name,
-            'tenancy_db_name' => config('tenancy.database.prefix') . $request->domain_name . config('tenancy.database.suffix'),
-            'tenancy_db_username' => 'us_' . $request->domain_name . config('tenancy.database.suffix'),
-            'tenancy_db_password' => bcrypt($request->domain_name . $this->random_str_generator(16)),
-        ]);
-        $input['tenant_id'] = $tenant->id;
-        $input['domain_name'] = $urlTenant;
-
-        $obj = ApiCloudfare::where('long_code', 'ROOT')->where('type', 'Zone')->first();
-
-        Domain::create([
-            // 'domain' => $request->domain_name . '.' . $request->getHost(),
-            'domain' => $request->domain_name . $obj->domain,
-            //'domain' => $request->domain_name . '.' . $request->getHttpHost(),
-            'tenant_id' => $tenant->id,
-        ]);
+        $input['domain_name'] = $request->domain_name;
+        $objDomainService = $request->maxUserService;
 
         $objRequestDomain = RequestDomainLandlord::create($input);
-
-
         // Aqui se crea el servicio para el dominio específico
-
         for ($i = 0; $i < count($objDomainService); $i++) {
             if ($objDomainService[$i]["service_id"] == null) {
                 return response()->json(['errors' => [
@@ -164,42 +141,51 @@ class RequestDomainController extends Controller
             DomainService::create($objDataLet);
         }
 
-        if (auth()->user()->hasrole('Root')) {
-            $objUserLandlord = User::where('id', '=', auth()->user()->id)->first();
-        }
+        // Se envia la url del nuevo inquilino creado
+        return  response()->json([
+            'obj' =>  $objRequestDomain
+        ], 200);
+    }
 
+
+    protected function createTenant($objRequestDomain)
+    {
+        //Si comento el ID se crea el tenant con uuid
+        $objTenant = Tenant::create([
+            //'id' => $request->domain_name,
+            'tenancy_db_name' => config('tenancy.database.prefix') . $objRequestDomain->domain_name . config('tenancy.database.suffix'),
+            'tenancy_db_username' => 'us_' . $objRequestDomain->domain_name . config('tenancy.database.suffix'),
+            'tenancy_db_password' => bcrypt($objRequestDomain->domain_name . $this->random_str_generator(16)),
+        ]);
+
+        $this->runMigrateTenant($objTenant, $objRequestDomain);
+
+        Domain::create([
+            // 'domain' => $request->domain_name . '.' . $request->getHost(),
+            'domain' => $objRequestDomain->domain_name . $objRequestDomain->domain,
+            //'domain' => $request->domain_name . '.' . $request->getHttpHost(),
+            'tenant_id' => $objTenant->id,
+        ]);
+
+        $objApi = ApiCloudfare::where('long_code', 'ROOT')->where('type', 'Zone')->first();
         $methods = new ApiCloudfareController();
-        $methods->createSubDomain($request->domain_name, $obj);
+        //$methods->createSubDomain($objRequestDomain, $objApi);
+        return $objTenant;
+    }
 
-        //Se inicializa el inquilino para correr las migraciones y crear el usuario root
 
-        tenancy()->initialize($tenant);
+    protected function runMigrateTenant($objTenant, $objRequestDomain)
+    {
+        tenancy()->initialize($objTenant);
 
-        $this->runMigrationsSeeders($tenant);
+        $this->runMigrationsSeeders($objTenant);
 
-        /* $objUser = [
-            [
-                'email' => $objUserLandlord->email,
-                'password' =>  $objUserLandlord->password,
-            ],
-            [
-                'email' => $objRequestDomain->email,
-                'password' =>  $objRequestDomain->password,
-            ]
-        ]; */
         User::create([
             'email' => $objRequestDomain->email,
             'password' =>  $objRequestDomain->password,
         ]);
 
         tenancy()->end();
-
-
-        // Se envia la url del nuevo inquilino creado
-        return  response()->json([
-            'url_tenant' =>  $urlTenant,
-            'url_parse' =>  parse_url($urlTenant)
-        ], 200);
     }
 
     /*
@@ -222,8 +208,16 @@ class RequestDomainController extends Controller
     {
         $obj = RequestDomainLandlord::find($id);
         $obj->is_approved  = $request->is_approved;
+        $objTenant = $this->createTenant($obj);
+        $urlTenant =  "http://" . $obj->domain_name . config('app.url_frontend_tenant');
+        $obj->tenant_id  = $objTenant->id;
+        $obj->url  = $urlTenant;
         $obj->save();
-        return response()->json(['success' => true]);
+
+        return  response()->json([
+            'url_tenant' =>   $obj->url,
+            'url_parse' =>  parse_url($obj->url)
+        ], 200);
     }
 
     /*
