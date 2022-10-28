@@ -106,12 +106,19 @@ export class ServiceListComponent implements OnInit {
   edit(obj: Service) {
     const modalRef = this.modalService.open(ServiceEditModalComponent, {
       centered: true,
+      backdrop : 'static',
       size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
     });
-    console.log(obj.service_detail);
+    console.log(obj);
+    modalRef.componentInstance.id = obj.id;
     modalRef.componentInstance.name = obj.name;
     modalRef.componentInstance.description = obj.description;
-    modalRef.componentInstance.service_detail = obj.service_detail;
+    if (obj.service_detail.length > 0) {
+      modalRef.componentInstance.service_details = obj.service_detail;
+    }else{
+      modalRef.componentInstance.service_details = [];
+    }
+    //modalRef.componentInstance.service_detail = obj.service_detail;
     modalRef.result.then(
       () => this.getRowData(),
       () => { }

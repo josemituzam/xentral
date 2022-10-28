@@ -26,11 +26,12 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
   id: string;
   name: string;
   description: string;
+  service_details: [];
   // max_users: number;
   title: string;
   itemModel: Service;
   editForm: FormGroup;
-  arrCantUsers: FormArray;
+  // arrCantUsers: FormArray;
   public loading = false;
   subscriptions: Subscription[] = [];
   errorMessage = '';
@@ -47,15 +48,17 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     this.itemModel = new Service();
     this.itemModel.clear();
     this.initForm();
-    this.addRecord();
+    if (this.id) {
+      this.updateForm();
+    } else {
+      this.title = "Nuevo";
+    }
+   // this.addRecord();
   }
-
   /**
    * Init form
    */
   initForm() {
-    //this.arrCantUsers = this.fb.array(this.add().map(items => this.fb.group(items)));
-
     //console.log(this.fb.array(this.add().map(items => this.fb.group(items))));
     this.editForm = this.fb.group({
       name: [
@@ -66,15 +69,24 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
         this.itemModel.description,
         Validators.compose([Validators.maxLength(300)]),
       ],
-      service_detail: this.fb.array([])
+      service_detail: new FormArray([])
     });
-    if (this.id) {
-      this.title = "Editar";
-      this.editForm.controls['name'].setValue(this.name)
-      this.editForm.controls['description'].setValue(this.description)
-      this.editForm.controls['service_detail'].setValue(this.description)
-    } else {
-      this.title = "Nuevo";
+  }
+
+  updateForm() {
+    this.title = "Editar";
+    this.editForm.controls['name'].patchValue(this.name)
+    this.editForm.controls['description'].patchValue(this.description)
+    if (this.service_details.length > 0) {
+      this.service_details.map((item: any) => {
+        const itemForm = this.fb.group({
+          min_users: item.min_users,
+          max_users: item.max_users,
+          price_monthly: item.price_monthly,
+        });
+
+        this.service_detail.push(itemForm);
+      });
     }
   }
 
@@ -92,11 +104,6 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     })
 
     return this.fb.group({
-      /* min_users: [
-         numA == 0 ? 1 : numA,
-         Validators.compose([Validators.required, Validators.maxLength(100)]),
-       ], */
-
       min_users: numA == 0 ? 1 : numA,
       max_users: 0,
       price_monthly: 0
@@ -140,12 +147,7 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     for (let item of this.editForm.get("service_detail").value) {
       if (item["max_users"] < item["min_users"]) {
         this.loading = false;
-        Swal.fire({
-          icon: 'error',
-          title: `Redistribuir los usuarios`,
-          showConfirmButton: false,
-          timer: 1500
-        })
+        this.setMessageError(`Redistribuir los usuarios`)
         this.cdr.detectChanges();
         return;
       }
@@ -186,7 +188,7 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     ).subscribe((res: any) => {
       if (res) {
         this.loading = false;
-        this.setMessage("Guardado Correctamente")
+        this.setMessageSuccess("Guardado Correctamente")
         this.modal.close()
       }
     });
@@ -218,14 +220,23 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     ).subscribe((res: any) => {
       if (res) {
         this.loading = false;
-        this.setMessage("Actualizado Correctamente")
+        this.setMessageSuccess("Actualizado Correctamente")
         this.modal.close()
       }
     });
     this.subscriptions.push(sbUpdate);
   }
 
-  setMessage(message: string) {
+  setMessageError(message: string) {
+    Swal.fire({
+      icon: 'error',
+      title: `${message}`,
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
+
+  setMessageSuccess(message: string) {
     Swal.fire({
       icon: 'success',
       title: `${message}`,

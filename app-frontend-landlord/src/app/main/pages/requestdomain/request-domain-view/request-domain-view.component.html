@@ -5,7 +5,7 @@
       <!-- User Card & Plan Starts -->
       <div class="row">
         <!-- User Card starts-->
-        <div class="col-xl-8 col-lg-7 col-md-6">
+        <div class="col-xl-12 col-lg-11 col-md-7">
           <div class="card user-card">
             <div class="card-body">
               <div class="row">
@@ -14,7 +14,7 @@
                 >
                   <div class="user-avatar-section">
                     <div class="d-flex justify-content-start">
-                      <!--  <div *ngIf="data.avatar.length > 0; else customAvatar">
+                      <!-- <div *ngIf="data.avatar.length > 0; else customAvatar">
                         <img
                           class="img-fluid rounded"
                           [src]="data.avatar"
@@ -23,27 +23,7 @@
                           alt="User avatar"
                         />
                       </div> -->
-                      <!-- <ng-template #customAvatar>
-                        <div class="mr-1 ml-0">
-                          <div
-                            [ngClass]="{
-                              'bg-light-success': data.status == 'active',
-                              'bg-light-secondary': data.status == 'inactive',
-                              'bg-light-warning': data.status == 'pending'
-                            }"
-                            class="rounded p-3"
-                          >
-                            <h2
-                              [ngClass]="{
-                                'text-success': data.status == 'active',
-                                'text-secondary': data.status == 'inactive',
-                                'text-warning': data.status == 'pending'
-                              }"
-                              class="m-0"
-                            ></h2>
-                          </div>
-                        </div>
-                      </ng-template> -->
+
                       <!--  <div class="d-flex flex-column ml-1">
                         <div class="user-info mb-1">
                           <h4 class="mb-0"></h4>
@@ -91,9 +71,13 @@
                 <div class="col-xl-6 col-lg-12 mt-2 mt-xl-0" *ngIf="itemModel">
                   <div class="user-info-wrapper">
                     <div class="d-flex flex-wrap">
-                      <a class="nav-link" href="itemModel.domain_name)">{{
-                        itemModel.domain_name
-                      }}</a>
+                      <a
+                        [class]="
+                          itemModel.url == null ? 'class_a_href' : 'nav-link'
+                        "
+                        href="{{ itemModel.url }}"
+                        >{{ itemModel.company_name }}</a
+                      >
                     </div>
                     <div class="d-flex flex-wrap">
                       <div class="user-info-title">
@@ -115,16 +99,16 @@
                       </div>
 
                       <div
-                        class="badge badge-success"
+                        class="badge badge-danger"
                         *ngIf="itemModel.is_active == 0"
                       >
-                        Activo
+                        Inactivo
                       </div>
                       <div
-                        class="badge badge-danger"
+                        class="badge badge-success"
                         *ngIf="itemModel.is_active == 1"
                       >
-                        Inactivo
+                        Activo
                       </div>
                     </div>
                     <div class="d-flex flex-wrap my-50">
@@ -156,19 +140,19 @@
         <!-- /User Card Ends-->
 
         <!-- Plan Card starts-->
-        <div class="col-xl-4 col-lg-5 col-md-6">
+        <!--   <div class="col-xl-4 col-lg-5 col-md-6">
           <div class="card plan-card border-primary">
             <div
               class="card-header d-flex justify-content-between align-items-center pt-75 pb-1"
             >
               <h5 class="mb-0">Servicio activo</h5>
-              <!-- <span
+             <span
                 class="badge badge-light-secondary"
                 data-toggle="tooltip"
                 data-placement="top"
                 title="Expiry Date"
                 >July 22, 2020 <span class="nextYear"></span>
-              </span> -->
+              </span>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -189,15 +173,14 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- /Plan CardEnds -->
       </div>
       <!-- User Card & Plan Ends -->
 
       <!-- User Timeline & Permissions Starts -->
       <div class="row">
-        <!-- information starts -->
-        <div class="col-md-6">
+        <!--   <div class="col-md-6">
           <div class="card">
             <div class="card-header">
               <h4 class="card-title mb-2">User Timeline</h4>
@@ -270,11 +253,10 @@
               </ul>
             </div>
           </div>
-        </div>
-        <!-- information Ends -->
+        </div> -->
 
         <!-- User Permissions Starts -->
-        <div class="col-md-6">
+        <div class="col-md-12">
           <!-- User Permissions -->
           <div class="card">
             <div class="card-header">

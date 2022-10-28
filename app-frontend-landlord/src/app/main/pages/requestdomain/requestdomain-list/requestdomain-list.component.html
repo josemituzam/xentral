@@ -98,7 +98,7 @@
         <ngx-datatable
           (sort)="onSort($event)"
           [rows]="rows"
-          [rowHeight]="50"
+          [rowHeight]="75"
           class="bootstrap core-bootstrap"
           [limit]="selectedOption"
           [columnMode]="ColumnMode.force"
@@ -109,21 +109,23 @@
           <ngx-datatable-column
             name="Propietario"
             prop="fullname"
-            [width]="100"
+            [width]="75"
           ></ngx-datatable-column>
-          <ngx-datatable-column name="Dominio" prop="domain_name" [width]="150">
+          <ngx-datatable-column name="Empresa" prop="domain_name" [width]="75">
             <ng-template
               ngx-datatable-cell-template
               let-rowIndex="rowIndex"
               let-value="value"
               let-row="row"
             >
-              <a class="nav-link" href="{{ row.domain_name }}">{{
-                row.domain_name
-              }}</a>
+              <a
+                [class]="row.url == null ? 'class_a_href' : 'nav-link'"
+                href="{{ row.url }}"
+                >{{ row.company_name }}</a
+              >
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Servicio" prop="service" [width]="50">
+          <ngx-datatable-column name="Servicio" prop="service" [width]="75">
             <ng-template
               ngx-datatable-cell-template
               let-rowIndex="rowIndex"
@@ -133,7 +135,7 @@
               <ng-template #htmlContent>
                 <table>
                   <tr *ngFor="let item of row.service">
-                    <td>{{ item.name }} - ({{ item.max_users }})</td>
+                    <td>{{ item.name }}</td>
                   </tr>
                 </table>
               </ng-template>
@@ -149,7 +151,7 @@
               </button>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Activo" prop="is_active" [width]="50">
+          <ngx-datatable-column name="Activo" prop="is_active" [width]="75">
             <ng-template
               ngx-datatable-cell-template
               let-rowIndex="rowIndex"

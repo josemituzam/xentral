@@ -4,6 +4,7 @@ export class RequestDomain {
     email!: string;
     password!: string;
     domain_name!: string;
+    url!: string;
     company_name!: string;
     maxUserService!: any[];
     service!: any[];
@@ -11,6 +12,7 @@ export class RequestDomain {
         this.id = '';
         this.fullname = '';
         this.email = '';
+        this.url = '';
         this.password = '';
         this.domain_name = '';
         this.company_name = '';

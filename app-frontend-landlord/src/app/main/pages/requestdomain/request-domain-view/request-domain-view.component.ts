@@ -47,6 +47,7 @@ export class RequestDomainViewComponent implements OnInit, OnDestroy {
     this.load();
   }
 
+
   load() {
     const sb = this.route.paramMap.pipe(
       switchMap(params => {

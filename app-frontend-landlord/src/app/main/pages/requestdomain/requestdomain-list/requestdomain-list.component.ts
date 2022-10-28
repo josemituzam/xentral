@@ -115,6 +115,7 @@ export class RequestDomainListComponent implements OnInit {
   // actions
   add() {
     const modalRef = this.modalService.open(RequestDomainEditModalComponent, {
+      backdrop: 'static',
       centered: true,
       size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
     });
@@ -125,6 +126,7 @@ export class RequestDomainListComponent implements OnInit {
   }
   edit(obj: RequestDomain) {
     const modalRef = this.modalService.open(RequestDomainEditModalComponent, {
+      backdrop: 'static',
       centered: true,
       size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
     });
@@ -141,9 +143,10 @@ export class RequestDomainListComponent implements OnInit {
   putSweetAccept(id) {
     Swal.fire({
       title: '¿Desea aprobar la solicitud?',
-      text: "Este aprobación creará un nuevo inquilino",
+      text: "Este aprobación creará una nueva base de datos y se asignarán los DNS correspondientes al nuevo cliente",
       icon: 'warning',
       showCancelButton: true,
+      allowOutsideClick: false,
       confirmButtonColor: '#7367F0',
       cancelButtonColor: '#E42728',
       confirmButtonText: 'Aceptar',
@@ -158,17 +161,28 @@ export class RequestDomainListComponent implements OnInit {
           id: id,
           is_approved: 1,
         };
-        Swal.fire({
-          icon: 'success',
-          title: 'Inquilino creado',
-          text: 'Tu nuevo cliente ha sido aprobado',
-          customClass: {
-            confirmButton: 'btn btn-success'
-          }
-        });
         this._service.putApproved(obj).subscribe(
           (item: any) => {
             if (item) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Inquilino creado',
+                text: 'Tu nuevo cliente ha sido aprobado',
+                showCancelButton: true,
+                confirmButtonColor: '#7367F0',
+                allowOutsideClick: false,
+                cancelButtonColor: '#E42728',
+                confirmButtonText: 'Ir a la página',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                  confirmButton: 'btn btn-primary',
+                  cancelButton: 'btn btn-danger ml-1'
+                }
+              }).then((result) => {
+                if (result.value) {
+                  window.open(item.url_tenant);
+                }
+              });
               this.getRowData();
             }
           },
@@ -176,7 +190,6 @@ export class RequestDomainListComponent implements OnInit {
           }
         );
       }
-
     });
   }
   // Public Methods

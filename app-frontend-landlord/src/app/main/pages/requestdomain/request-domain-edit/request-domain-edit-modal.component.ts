@@ -225,9 +225,8 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
       })
     ).subscribe((res: any) => {
       if (res) {
-        window.open(res.url_tenant);
         this.loading = false;
-        this.setMessage("Tenant creado correctamente")
+        this.setMessage("Cliente por aprobar")
         this.modal.close()
       }
     });

@@ -72,88 +72,86 @@
       >
         {{ editForm.get("description")?.errors?.serverError }}
       </div>
+    </div>
 
-      <div class="row" id="basic-table">
-        <div class="col-12">
-          <div class="card-header">
-            <div
-              class="col-md-12 col-12 d-flex justify-content-start justify-content-md-end"
+    <div class="row" id="basic-table">
+      <div class="col-12">
+        <div class="card-header">
+          <div
+            class="col-md-12 col-12 d-flex justify-content-start justify-content-md-end"
+          >
+            <button
+              class="btn btn-icon btn-primary"
+              type="button"
+              rippleEffect
+              (click)="addRecord()"
             >
-              <button
-                class="btn btn-icon btn-primary"
-                type="button"
-                rippleEffect
-                (click)="addRecord()"
-              >
-                <i
-                  data-feather="plus"
-                  class="d-sm-none d-inline-block mr-0 mr-sm-1"
-                ></i
-                ><span class="d-none d-sm-inline-block">Agregar</span>
-              </button>
-            </div>
+              <i
+                data-feather="plus"
+                class="d-sm-none d-inline-block mr-0 mr-sm-1"
+              ></i
+              ><span class="d-none d-sm-inline-block">Agregar</span>
+            </button>
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Usuarios mínimos</th>
-                    <th>Usuarios máximos</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody formArrayName="service_detail" @heightIn>
-                  <tr
-                    *ngFor="let item of service_detail.controls; let i = index"
-                  >
-                    <td [formGroupName]="i">
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="min-user-input"
-                        formControlName="min_users"
-                        name="min-user-input"
-                        disabled
-                        placeholder="Usuarios mínimos"
-                      />
-                    </td>
-                    <td [formGroupName]="i">
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="max-user-input"
-                        formControlName="max_users"
-                        name="max-user-input"
-                        placeholder="Usuarios máximos"
-                      />
-                    </td>
-                    <td [formGroupName]="i">
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="price_monthly-input"
-                        name="fprice_monthly-input"
-                        formControlName="price_monthly"
-                        placeholder="Precio"
-                      />
-                    </td>
-                    <td [formGroupName]="i">
-                      <button
-                        *ngIf="i > 0"
-                        type="button"
-                        class="btn btn-icon btn-danger"
-                        (click)="removeRecord(i)"
-                        rippleEffect
-                      >
-                        <span [data-feather]="'trash-2'"></span>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Usuarios mínimos</th>
+                  <th>Usuarios máximos</th>
+                  <th>Precio</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="service_detail" @heightIn>
+                <tr *ngFor="let item of service_detail.controls; let i = index">
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="min-user-input"
+                      formControlName="min_users"
+                      name="min-user-input"
+                      disabled
+                      placeholder="Usuarios mínimos"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="max-user-input"
+                      formControlName="max_users"
+                      name="max-user-input"
+                      placeholder="Usuarios máximos"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="price_monthly-input"
+                      name="fprice_monthly-input"
+                      formControlName="price_monthly"
+                      placeholder="Precio"
+                    />
+                  </td>
+                  <td [formGroupName]="i">
+                    <button
+                      *ngIf="i > 0"
+                      type="button"
+                      class="btn btn-icon btn-danger"
+                      (click)="removeRecord(i)"
+                      rippleEffect
+                    >
+                      <span [data-feather]="'trash-2'"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
