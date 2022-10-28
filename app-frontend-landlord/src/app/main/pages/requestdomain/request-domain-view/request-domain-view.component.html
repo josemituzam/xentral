@@ -70,16 +70,26 @@
                 </div>
                 <div class="col-xl-6 col-lg-12 mt-2 mt-xl-0" *ngIf="itemModel">
                   <div class="user-info-wrapper">
-                    <div class="d-flex flex-wrap">
-                      <a
-                        [class]="
-                          itemModel.url == null ? 'class_a_href' : 'nav-link'
-                        "
-                        href="{{ itemModel.url }}"
-                        >{{ itemModel.company_name }}</a
-                      >
+                    <div class="d-flex flex-wrap mb-1">
+                      <div class="user-info-title">
+                        <i data-feather="globe" class="mr-1"></i>
+                        <span
+                          class="card-text user-info-title font-weight-bold mb-0"
+                          >Compañía</span
+                        >
+                      </div>
+                      <p class="card-text mb-0">
+                        <a
+                          [class]="
+                            itemModel.url == null ? 'class_a_href' : 'nav-link'
+                          "
+                          style="padding: 0%"
+                          href="{{ itemModel.url }}"
+                          >{{ itemModel.company_name }}</a
+                        >
+                      </p>
                     </div>
-                    <div class="d-flex flex-wrap">
+                    <div class="d-flex flex-wrap mb-1">
                       <div class="user-info-title">
                         <i data-feather="user" class="mr-1"></i>
                         <span
@@ -89,7 +99,7 @@
                       </div>
                       <p class="card-text mb-0">{{ itemModel.fullname }}</p>
                     </div>
-                    <div class="d-flex flex-wrap my-50">
+                    <div class="d-flex flex-wrap">
                       <div class="user-info-title">
                         <i data-feather="check" class="mr-1"></i>
                         <span
@@ -97,7 +107,6 @@
                           >Estado</span
                         >
                       </div>
-
                       <div
                         class="badge badge-danger"
                         *ngIf="itemModel.is_active == 0"
@@ -111,22 +120,12 @@
                         Activo
                       </div>
                     </div>
-                    <div class="d-flex flex-wrap my-50">
-                      <div class="user-info-title">
-                        <i data-feather="flag" class="mr-1"></i>
-                        <span
-                          class="card-text user-info-title font-weight-bold mb-0"
-                          >Compañía</span
-                        >
-                      </div>
-                      <p class="card-text mb-0">{{ itemModel.company_name }}</p>
-                    </div>
-                    <div class="d-flex flex-wrap">
+                    <div class="d-flex flex-wrap mb-1">
                       <div class="user-info-title">
                         <i data-feather="phone" class="mr-1"></i>
                         <span
                           class="card-text user-info-title font-weight-bold mb-0"
-                          >Correo electrónico</span
+                          >Correo</span
                         >
                       </div>
                       <p class="card-text mb-0">{{ itemModel.email }}</p>

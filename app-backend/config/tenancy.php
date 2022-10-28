@@ -16,16 +16,28 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
+
+    //Dominios centrales para desarrollo
     /* 'central_domains' => [
         '127.0.0.1',
         'localhost',
     ], */
 
-    'central_domains' => [
+    //Dominios centrales de producción
+    /* 'central_domains' => [
         'api.ispxentral.app',
         // 'local_api.ispxentral.app',
         'ispxentral.app',
     ],
+    */
+
+    //Dominios centrales de QA
+    'central_domains' => [
+        'api.ispxentral.com',
+        // 'local_api.ispxentral.app',
+        'ispxentral.com',
+    ],
+
 
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
