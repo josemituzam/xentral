@@ -96,7 +96,10 @@ class RequestDomainController extends Controller
     public function edit($id)
     {
         return RequestDomainLandlord::where('id', $id)
-            ->with(['service'])
+            ->with([
+                'domainService',
+                'service',
+            ])
             ->firstOrFail();
     }
 
