@@ -69,8 +69,21 @@ return [
          * Tenant database names are created like this:
          * prefix + tenant_id + suffix.
          */
+        //Ambiente prod
+        /*
         'prefix' => 'tenant_',
-        'suffix' => '_demo',
+        'suffix' => '_prod',
+        */
+        //Ambiente dev
+        /*
+        'prefix' => 'tenant_',
+        'suffix' => '_dev',
+        */
+        //Ambiente qa
+
+        'prefix' => 'tenant_',
+        'suffix' => '_qa',
+
 
         /**
          * TenantDatabaseManagers are classes that handle the creation & deletion of tenant databases.
