@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([
-    'prefix' => 'v1'
+    'prefix' => 'v1/admin'
 ], function () {
     Route::post('auth/login', [AuthController::class, 'loginInLandlord']);
     Route::group(['middleware' => ['jwt.verify']], function () {

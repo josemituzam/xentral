@@ -15,7 +15,7 @@ class CreateDomainServicesTable extends Migration
     {
         Schema::create('domain_services', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('request_domain_id')->nullable(true);
+            $table->uuid('tenant_id')->nullable(true);
             $table->uuid('service_id')->nullable(true);
             $table->float('price_monthly', 15, 4)->default(0);
             $table->float('price_yearly', 15, 4)->default(0);

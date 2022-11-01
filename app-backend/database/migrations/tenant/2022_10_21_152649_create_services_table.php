@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDomainServicesTable extends Migration
+class CreateServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateDomainServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('domain_services', function (Blueprint $table) {
+        Schema::create('services', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('request_domain_id')->nullable(true);
-            $table->uuid('service_id')->nullable(true);
-            $table->float('price_monthly', 15, 4)->default(0);
-            $table->float('price_yearly', 15, 4)->default(0);
-            $table->integer('max_contracts')->default(0);
+            $table->string('name', 100)->nullable(false);
             //
-            $table->string('type', 10)->default('USER'); // USER, COMPANY, CUSTOM
+            $table->string('description', 300)->nullable(true);
             $table->string('short_code', 5)->nullable(true);
             $table->string('long_code', 10)->nullable(true);
             $table->integer('order')->nullable(true);
@@ -43,6 +39,6 @@ class CreateDomainServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('domain_services');
+        Schema::dropIfExists('services');
     }
 }

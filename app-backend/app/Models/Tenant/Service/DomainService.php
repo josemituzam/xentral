@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Landlord\RequestDomain;
+namespace App\Models\Tenant\Service;
 
 use App\Models\Landlord\RequestDomain\Traits\RequestDomainRules;
 use App\Models\Traits\Uuids;
@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
+
 class DomainService extends Model
 {
     use HasFactory,
@@ -22,7 +23,7 @@ class DomainService extends Model
     // use BelongsToTenant;
     // protected $guard_name = 'api';
     protected $fillable = [
-        'request_domain_id',
+        'tenant_id',
         'service_id',
         'price_monthly',
         'price_yearly',
@@ -36,6 +37,4 @@ class DomainService extends Model
         'updated_by',
         'deleted_by'
     ];
-
-    
 }

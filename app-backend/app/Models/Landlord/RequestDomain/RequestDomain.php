@@ -5,6 +5,7 @@ namespace App\Models\Landlord\RequestDomain;
 use App\Models\Landlord\RequestDomain\Traits\RequestDomainRules;
 use App\Models\Traits\Uuids;
 use App\Models\Landlord\Service\Service;
+use App\Models\Landlord\RequestDomain\DomainService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -21,8 +22,7 @@ class RequestDomain extends Model
         SoftDeletes,
         LogsActivity,
         CausesActivity;
-    // use BelongsToTenant;
-    // protected $guard_name = 'api';
+
     protected $fillable = [
         'fullname',
         'email',
@@ -30,13 +30,21 @@ class RequestDomain extends Model
         'type',
         'tenant_id',
         'domain_name',
+        'url',
         'company_name',
         'is_active',
         'is_approved'
     ];
 
+    protected $hidden = ['updated_at', 'created_at', 'deleted_at', 'password', 'type'];
+
     public function service()
     {
         return $this->belongsToMany(Service::class, 'domain_services');
+    }
+
+    public function domainService()
+    {
+        return $this->hasMany(DomainService::class);
     }
 }

@@ -10,11 +10,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Core\Api\ApiCloudfareController;
 use App\Http\Utils\Helpers;
 use App\Models\Core\Api\ApiCloudfare;
-use App\Models\Landlord\RequestDomain\DomainService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
 use Stancl\Tenancy\Database\Models\Domain;
-use App\Models\Landlord\RequestDomain\RequestDomain as RequestDomainLandlord;
+use App\Models\Landlord\RequestDomain\RequestDomain;
+use App\Models\Landlord\RequestDomain\DomainService as DomainServiceLandlord;
+use App\Models\Tenant\Service\DomainService as DomainServiceTenant;
+use App\Models\Landlord\Service\Service  as ServiceLandlord;
+use App\Models\Tenant\Service\Service as ServiceTenant;
 use Database\Seeders\tenant\DatabaseSeeder;
 
 class RequestDomainController extends Controller
@@ -48,7 +51,7 @@ class RequestDomainController extends Controller
                 $param = array(0 => '=', 1 => '=');
                 $type = 0;
             }
-            $requestDomains = RequestDomainLandlord::with(['service'])->where('deleted_at', '=', null);
+            $requestDomains = RequestDomain::with(['service'])->where('deleted_at', '=', null);
 
             $Filtred = $helpers->filter($requestDomains, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
@@ -95,7 +98,7 @@ class RequestDomainController extends Controller
      */
     public function edit($id)
     {
-        return RequestDomainLandlord::where('id', $id)
+        return RequestDomain::where('id', $id)
             ->with([
                 'domainService',
                 'service',
@@ -112,7 +115,7 @@ class RequestDomainController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = RequestDomainLandlord::createdRules($request->all());
+        $validator = RequestDomain::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
         }
@@ -124,9 +127,9 @@ class RequestDomainController extends Controller
         $input['company_name'] = $request->company_name;
         $request->domain_name = strtolower(substr(str_replace(' ', '', $request->domain_name), 0, 50));
         $input['domain_name'] = $request->domain_name;
-        $objDomainService = $request->maxUserService;
+        $objDomainService = $request->maxContractService;
 
-        $objRequestDomain = RequestDomainLandlord::create($input);
+        $objRequestDomain = RequestDomain::create($input);
         // Aqui se crea el servicio para el dominio específico
         for ($i = 0; $i < count($objDomainService); $i++) {
             if ($objDomainService[$i]["service_id"] == null) {
@@ -139,9 +142,9 @@ class RequestDomainController extends Controller
                 "service_id" =>  $objDomainService[$i]["service_id"],
                 'price_monthly' => 0,
                 'price_yearly' => 0,
-                'max_users' =>  $objDomainService[$i]["max_users"]
+                'max_contracts' =>  $objDomainService[$i]["max_contracts"]
             ];
-            DomainService::create($objDataLet);
+            DomainServiceLandlord::create($objDataLet);
         }
 
         // Se envia la url del nuevo inquilino creado
@@ -179,6 +182,14 @@ class RequestDomainController extends Controller
 
     protected function runMigrateTenant($objTenant, $objRequestDomain)
     {
+        // Tomo el servicio
+        $objDomainService = DomainServiceLandlord::where('request_domain_id', '=', $objRequestDomain->id)->get();
+        foreach ($objDomainService as $s) :
+            $serviceId[] = $s->service_id;
+        endforeach;
+
+        $objService = ServiceLandlord::whereIn('id', $serviceId)->get();
+
         tenancy()->initialize($objTenant);
 
         $this->runMigrationsSeeders($objTenant);
@@ -187,6 +198,21 @@ class RequestDomainController extends Controller
             'email' => $objRequestDomain->email,
             'password' =>  $objRequestDomain->password,
         ]);
+
+        for ($i = 0; $i < $objService->count(); $i++) {
+            $objServiceTenant =  ServiceTenant::create([
+                'name' => $objService[$i]->name,
+                'description' => $objService[$i]->description
+            ]);
+
+            DomainServiceTenant::create([
+                'tenant_id' => $objTenant['id'],
+                "service_id" =>  $objServiceTenant->id,
+                'price_monthly' => 0,
+                'price_yearly' => 0,
+                'max_contracts' =>  $objDomainService[$i]["max_contracts"],
+            ]);
+        }
 
         tenancy()->end();
     }
@@ -197,7 +223,7 @@ class RequestDomainController extends Controller
 
     public function activeRecord(Request $request, $id)
     {
-        $obj = RequestDomainLandlord::find($id);
+        $obj = RequestDomain::find($id);
         $obj->is_active  = $request->is_active;
         $obj->save();
         return response()->json(['success' => true]);
@@ -209,7 +235,8 @@ class RequestDomainController extends Controller
 
     public function approvedRecord(Request $request, $id)
     {
-        $obj = RequestDomainLandlord::find($id);
+        $obj = RequestDomain::find($id);
+
         $obj->is_approved  = $request->is_approved;
         $objTenant = $this->createTenant($obj);
         $urlTenant =  "http://" . $obj->domain_name . config('app.url_frontend_tenant');

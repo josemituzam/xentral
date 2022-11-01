@@ -18,6 +18,7 @@ class CreateRequestDomainsTable extends Migration
             $table->string('fullname');
             $table->string('email');
             $table->string('domain_name');
+            $table->string('photo');
             $table->string('company_name');
             $table->string('url');
             $table->string('password');

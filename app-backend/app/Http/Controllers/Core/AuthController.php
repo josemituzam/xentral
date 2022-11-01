@@ -77,7 +77,7 @@ class AuthController extends Controller
         }
 
         $credentials = request(['email', 'password']);
-        return "hola tenant";
+
         $token = auth()->guard('apiTenant')->attempt($credentials);
         if (!$token) {
             return response()->json(['errors' => [
@@ -99,11 +99,22 @@ class AuthController extends Controller
      */
     protected function respondWithTokenTenant($token)
     {
+        //return auth('apiTenant')->user();
+        return response()->json([
+            'token' => $token,
+            'user' => [
+                'id' => auth('apiTenant')->user()->id,
+                'email' => auth('apiTenant')->user()->email
+            ],
+            'expires_in' => auth()->factory()->getTTL() * 1,
+        ]);
+        /*
         return response()->json([
             'access_token' => $token,
             'authUser' => auth('apiTenant')->user(),
             'expires_in' => auth()->factory()->getTTL() * 1,
         ]);
+        */
     }
 
     protected function respondWithTokenLandlord($token)

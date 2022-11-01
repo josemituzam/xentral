@@ -26,9 +26,9 @@ Route::middleware([
 ])->group(function () {
 
     Route::group([
-        'prefix' => 'api/v2'
+        'prefix' => 'api/v1/client'
     ], function () {
-        Route::post('auth/login', [AuthController::class, 'loginInLandlord']);
+        Route::post('auth/login', [AuthController::class, 'loginInTenant']);
         Route::group(['middleware' => ['jwt.verify']], function () {
             // Auth Routes
             Route::post('auth/logout',  [AuthController::class, 'logout']);

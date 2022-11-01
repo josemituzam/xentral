@@ -16,8 +16,8 @@ class CreateServiceDetailsTable extends Migration
         Schema::create('service_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('service_id')->nullable(true);
-            $table->integer('min_users')->default(0);
-            $table->integer('max_users')->default(0);
+            $table->integer('min_contracts')->default(0);
+            $table->integer('max_contracts')->default(0);
             $table->float('price_monthly', 15, 4)->default(0);
             $table->uuid('created_by')->nullable(true);
             $table->timestamps();
