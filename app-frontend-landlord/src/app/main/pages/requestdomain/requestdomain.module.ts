@@ -19,6 +19,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { RequestDomainEditModalComponent } from './request-domain-edit/request-domain-edit-modal.component';
 import { CoreTouchspinModule } from '@core/components/core-touchspin/core-touchspin.module';
 import { RequestDomainViewComponent } from './request-domain-view/request-domain-view.component';
+
+
 //import { PartialsModule } from 'app/main/sample/partials.module';
 
 
@@ -77,6 +79,7 @@ const routes: Routes = [
     NgSelectModule,
     Ng2FlatpickrModule,
     CoreTouchspinModule,
+    
     NgxDatatableModule,
     CorePipesModule,
     CoreDirectivesModule,

@@ -27,7 +27,7 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
   name: string;
   description: string;
   service_details: [];
-  // max_users: number;
+  // max_contracts: number;
   title: string;
   itemModel: Service;
   editForm: FormGroup;
@@ -80,8 +80,8 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     if (this.service_details.length > 0) {
       this.service_details.map((item: any) => {
         const itemForm = this.fb.group({
-          min_users: item.min_users,
-          max_users: item.max_users,
+          min_contracts: item.min_contracts,
+          max_contracts: item.max_contracts,
           price_monthly: item.price_monthly,
         });
 
@@ -100,12 +100,12 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     arraY = this.editForm.get("service_detail").value;
 
     arraY.forEach(function (item) {
-      numA = item["max_users"] + 1;
+      numA = item["max_contracts"] + 1;
     })
 
     return this.fb.group({
-      min_users: numA == 0 ? 1 : numA,
-      max_users: 0,
+      min_contracts: numA == 0 ? 1 : numA,
+      max_contracts: 0,
       price_monthly: 0
     })
   }
@@ -145,7 +145,7 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
     }
 
     for (let item of this.editForm.get("service_detail").value) {
-      if (item["max_users"] < item["min_users"]) {
+      if (item["max_contracts"] < item["min_contracts"]) {
         this.loading = false;
         this.setMessageError(`Redistribuir los usuarios`)
         this.cdr.detectChanges();

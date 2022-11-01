@@ -6,7 +6,7 @@ const baseUrl = parsedUrl.hostname
 export const environment = {
   production: false,
   hmr: false,
-  apiUrl: `http://${baseUrl}:8080/api/v1` //Developer mode;
+  apiUrl: `http://${baseUrl}:8080/api/v1/admin` //Developer mode;
   //apiUrl: `https://api.ispxentral.com/api/v1` //Production mode;
 };
 

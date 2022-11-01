@@ -62,10 +62,12 @@ export class AuthenticationService {
    * @returns user
    */
   login(email: string, password: string) {
+    console.log(this._http);
     return this._http
       .post<any>(`${this.API_AUTH_URL}`, { email, password })
       .pipe(
         map(user => {
+          console.log(user);
           // login successful if there's a jwt token in the response
           if (user && user.token) {
             // store user details and jwt token in local storage to keep user logged in between page refreshes

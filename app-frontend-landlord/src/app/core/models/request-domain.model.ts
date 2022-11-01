@@ -6,7 +6,7 @@ export class RequestDomain {
     domain_name!: string;
     url!: string;
     company_name!: string;
-    maxUserService!: any[];
+    maxContractService!: any[];
     service!: any[];
     clear(): void {
         this.id = '';

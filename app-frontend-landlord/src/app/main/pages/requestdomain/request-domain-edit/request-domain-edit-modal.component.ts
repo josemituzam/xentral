@@ -31,8 +31,8 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
   public loading = false;
   subscriptions: Subscription[] = [];
   setDomainService: any[] = [];
-  setCantUserService: any[] = [];
-  setMaxUserService: any[] = [];
+  setContractService: any[] = [];
+  maxContractService: any[] = [];
 
 
   errorMessage = '';
@@ -52,30 +52,30 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
     this.setServices();
   }
 
-  getStatus($event, id, name, max_user) {
+  getStatus($event, id, name, max_contracts) {
     var band = 0;
     if ($event.target.checked == true) {
       band = 1;
 
-      this.setCantUserService.push({
+      this.setContractService.push({
         service_id: id,
         is_active: band,
         name: name,
-        max_user: max_user
+        max_contracts: max_contracts
       });
 
     } else {
-      var filerOption = this.setCantUserService.filter(
+      var filerOption = this.setContractService.filter(
         (item) => item.service_id !== id
       );
-      this.setCantUserService.push({
+      this.setContractService.push({
         service_id: id,
         is_active: band,
         name: name,
-        max_user: max_user
+        max_contracts: max_contracts
       });
-      this.setCantUserService = [];
-      this.setCantUserService = filerOption;
+      this.setContractService = [];
+      this.setContractService = filerOption;
     }
 
 
@@ -98,33 +98,28 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
       });
       this.setDomainService = filerOption;
     }
-    console.log(this.setDomainService)
-
-
   }
 
   getCantUser(value, id) {
-    const resultado = this.setMaxUserService.find(
+    const resultado = this.maxContractService.find(
       (obj) => obj.service_id === id
     );
     if (resultado == undefined) {
-      this.setMaxUserService.push({
+      this.maxContractService.push({
         service_id: id,
-        max_users: value,
+        max_contracts: value,
       });
     } else {
-      var filerOption = this.setMaxUserService.filter(
+      var filerOption = this.maxContractService.filter(
         (item) => item.service_id !== id
       );
-      this.setMaxUserService = [];
+      this.maxContractService = [];
       filerOption.push({
         service_id: id,
-        max_users: value,
+        max_contracts: value,
       });
-      this.setMaxUserService = filerOption;
+      this.maxContractService = filerOption;
     }
-
-    console.log(this.setMaxUserService);
   }
 
   /**
@@ -174,7 +169,7 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
     _item.password = controls['password'].value;
     _item.domain_name = controls['domain_name'].value;
     _item.company_name = controls['company_name'].value;
-    _item.maxUserService = this.setMaxUserService;
+    _item.maxContractService = this.maxContractService;
     return _item;
   }
 

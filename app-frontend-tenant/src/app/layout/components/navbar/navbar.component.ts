@@ -98,6 +98,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
         title: 'German',
         flag: 'de'
       },
+      es: {
+        title: 'Español',
+        flag: 'es'
+      },
       pt: {
         title: 'Portuguese',
         flag: 'pt'

@@ -20,7 +20,7 @@ export class JwtInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (
-      request.url.indexOf('/v1/auth/login') < 0
+      request.url.indexOf('/v1/client/auth/login') < 0
     ) {
       const currentUser = this._authenticationService.currentUserValue;
       request = request.clone({

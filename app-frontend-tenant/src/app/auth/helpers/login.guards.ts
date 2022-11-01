@@ -20,7 +20,7 @@ export class LoginGuard implements CanActivate {
         if (userSignIn) {
             // check if route is restricted by role
             // role not authorised so redirect to not-authorized page
-            this._router.navigate(['/dashboard/analytics']);
+            this._router.navigate(['/admin/user/list']);
             return false;
         }
     }

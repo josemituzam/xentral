@@ -79,17 +79,13 @@ export class AuthLoginV2Component implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    this.loading = true;
+    console.log(this.loginForm);
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
-
     // Login
-    this.loading = true;
-
-
-
     this._authService
       .login(this.f.email.value, this.f.password.value)
       .pipe(catchError((errorMessage) => {
@@ -100,9 +96,10 @@ export class AuthLoginV2Component implements OnInit {
         return of(null);
       }))
       .subscribe((user: User) => {
+
         if (user) {
-          //this._router.navigate(['/dashboard/analytics']);
-          this._router.navigate(['/dashboard/analytics']);
+          this._router.navigate(['/manager/user/list']);
+          //this._router.navigate(['/request-domain/list']);
         }
       });
 

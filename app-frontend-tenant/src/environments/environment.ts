@@ -8,7 +8,7 @@ console.log(baseUrl)
 export const environment = {
   production: false,
   hmr: false,
-  apiUrl: `http://${baseUrl}:8080/api/v1`
+  apiUrl: `http://${baseUrl}:8080/api/v1/client`
 };
 
 /*

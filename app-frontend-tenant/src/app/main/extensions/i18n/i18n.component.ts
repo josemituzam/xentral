@@ -8,6 +8,7 @@ import { locale as english } from 'app/main/extensions/i18n/data/en';
 import { locale as french } from 'app/main/extensions/i18n/data/fr';
 import { locale as german } from 'app/main/extensions/i18n/data/de';
 import { locale as portuguese } from 'app/main/extensions/i18n/data/pt';
+import { locale as spanish } from 'app/main/extensions/i18n/data/es';
 
 import * as snippet from 'app/main/extensions/i18n/i18n.snippetcode';
 
@@ -47,10 +48,14 @@ export class I18nComponent implements OnInit {
       pt: {
         title: 'Portuguese',
         flag: 'pt'
+      },
+      es: {
+        title: 'Español',
+        flag: 'es'
       }
     };
 
-    this._coreTranslationService.translate(english, french, german, portuguese);
+    this._coreTranslationService.translate(english, french, german, portuguese, spanish);
   }
 
   // Public Methods

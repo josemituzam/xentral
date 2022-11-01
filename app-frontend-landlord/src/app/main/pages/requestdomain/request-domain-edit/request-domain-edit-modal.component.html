@@ -283,18 +283,18 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Servicio</th>
-                  <th>Usuarios</th>
+                  <th>Servicios</th>
+                  <th>Contratos</th>
                 </tr>
               </thead>
-              <tbody *ngFor="let item of setCantUserService">
+              <tbody *ngFor="let item of setContractService">
                 <tr>
                   <td>{{ item.name }}</td>
                   <td>
                     <core-touchspin
                       (onChange)="getCantUser($event, item.service_id)"
                       [minValue]="0"
-                      [maxValue]="item.max_user"
+                      [maxValue]="item.max_contracts"
                       [disable]="item.is_active == 0 ? true : false"
                     ></core-touchspin>
                   </td>

@@ -11,17 +11,23 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
-    canActivate: [LoginGuard],
+    // canActivate: [LoginGuard],
     loadChildren: () =>
       import('./main/pages/authentication/authentication.module').then((m) => m.AuthenticationModule),
+  },
+  {
+    path: 'manager',
+    //  canActivate: [LoginGuard],
+    loadChildren: () =>
+      import('./main/pages/manager/manager.module').then((m) => m.ManagerModule),
   },
   {
     path: 'misc',
     loadChildren: () => import('./main/pages/miscellaneous/miscellaneous.module').then(m => m.MiscellaneousModule)
   },
   {
-    path: 'dashboard',
-    //canActivate: [AuthGuard],
+    path: 'service',
+    // canActivate: [AuthGuard],
     loadChildren: () => import('./main/dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {

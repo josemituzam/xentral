@@ -6,9 +6,7 @@
         alt="brand-logo"
         height="28"
       />
-      <h2 class="brand-text text-primary ml-1">
-        {{ coreConfig.app.appName }}
-      </h2></a
+      <h2 class="brand-text text-primary ml-1">Vuexy</h2></a
     >
     <!-- /Brand logo-->
     <!-- Left Text-->
@@ -35,21 +33,6 @@
         <p class="card-text mb-2">
           Please sign-in to your account and start the adventure
         </p>
-        <!-- <ngb-alert [type]="'primary'" [dismissible]="false">
-          <div class="alert-body font-small-2">
-            <p>
-              <small class="mr-50"><span class="font-weight-bold">Admin:</span> admin@demo.com | admin</small>
-            </p>
-            <p>
-              <small class="mr-50"><span class="font-weight-bold">Client:</span> client@demo.com | client</small>
-            </p>
-          </div>
-          <span
-            class="feather icon-help-circle auth-help-icon font-medium-3"
-            placement="left"
-            ngbTooltip="This is just for role based JWT authorization demo purpose"
-          ></span>
-        </ngb-alert> -->
 
         <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="error">
           <div class="alert-body">
@@ -135,7 +118,7 @@
             </div>
           </div>
           <button
-            [disabled]="loading"
+            [disabled]="loading "
             class="btn btn-primary btn-block"
             tabindex="4"
             rippleEffect
