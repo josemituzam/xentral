@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 'password' =>  $value["password"],
                 'email_verified_at' => now(),
             ]);
-            $objRoleAdmin = Role::findByName('Administrador', 'apiTenant');
+            $objRoleAdmin = Role::findByName('Root', 'apiTenant');
             $objUser->assignRole($objRoleAdmin);
         }
     }

@@ -35,6 +35,7 @@ Route::group([
         Route::delete('request-domain/{id}', [RequestDomainController::class, 'destroy']);
         Route::put('request-domain/active/{id}', [RequestDomainController::class, 'activeRecord']);
         Route::put('request-domain/approved/{id}', [RequestDomainController::class, 'approvedRecord']);
+        Route::get('request-domain/service/{id}', [RequestDomainController::class, 'editDomainService']);
         // Servicio
         Route::post('service/store', [ServiceController::class, 'store']);
         Route::put('service/{id}/update', [ServiceController::class, 'update']);

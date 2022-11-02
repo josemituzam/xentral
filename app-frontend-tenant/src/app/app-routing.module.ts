@@ -25,11 +25,16 @@ export const routes: Routes = [
     path: 'misc',
     loadChildren: () => import('./main/pages/miscellaneous/miscellaneous.module').then(m => m.MiscellaneousModule)
   },
+
   {
-    path: 'service',
-    // canActivate: [AuthGuard],
-    loadChildren: () => import('./main/dashboard/dashboard.module').then(m => m.DashboardModule)
+    path: 'isp',
+    loadChildren: () => import('./main/pages/isp/isp.module').then(m => m.IspModule)
   },
+  /* {
+     path: 'service',
+     // canActivate: [AuthGuard],
+     loadChildren: () => import('./main/dashboard/dashboard.module').then(m => m.DashboardModule)
+   }, */
   {
     path: '**',
     redirectTo: '/auth/login' //Error 404 - Page not found

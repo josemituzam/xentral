@@ -10,10 +10,13 @@ import { ContentHeaderModule } from 'app/layout/components/content-header/conten
 import { UserModule } from './user/user.module';
 import { CompanyModule } from './company/company.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ServiceModule } from './services/service.module';
+
 
 @NgModule({
   declarations: [],
   imports: [
+    ServiceModule,
     CommonModule,
     CoreCommonModule,
     ContentHeaderModule,

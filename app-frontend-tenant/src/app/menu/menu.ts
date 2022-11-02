@@ -10,7 +10,7 @@ export const menu: CoreMenu[] = [
     translate: 'MENU.SERVICE',
     type: 'item',
     icon: 'home',
-    url: 'dashboard/analytics'
+    url: 'manager/service'
   },
   // Apps & Pages
   {

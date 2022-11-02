@@ -16,15 +16,16 @@ import { CoreSidebarModule } from '@core/components';
 import { InvoiceListService } from 'app/main/apps/invoice/invoice-list/invoice-list.service';
 import { InvoiceModule } from 'app/main/apps/invoice/invoice.module';
 
-import { UserEditComponent } from 'app/main/apps/user/user-edit/user-edit.component';
 import { UserEditService } from 'app/main/apps/user/user-edit/user-edit.service';
-
-import { UserListComponent } from 'app/main/apps/user/user-list/user-list.component';
-import { UserListService } from 'app/main/apps/user/user-list/user-list.service';
 
 import { UserViewComponent } from 'app/main/apps/user/user-view/user-view.component';
 import { UserViewService } from 'app/main/apps/user/user-view/user-view.service';
 import { NewUserSidebarComponent } from 'app/main/apps/user/user-list/new-user-sidebar/new-user-sidebar.component';
+
+import { UserListComponent } from './user-list/user-list.component';
+import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
+import { UserListService } from './user-list/user-list.service';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 // routing
 const routes: Routes = [
@@ -46,12 +47,8 @@ const routes: Routes = [
     data: { path: 'view/:id', animation: 'UserViewComponent' }
   },
   {
-    path: 'user-edit/:id',
-    component: UserEditComponent,
-    resolve: {
-      ues: UserEditService
-    },
-    data: { animation: 'UserEditComponent' }
+    path: 'user/add',
+    component: UserEditComponent
   },
   {
     path: 'user-view',
@@ -76,6 +73,7 @@ const routes: Routes = [
     NgxDatatableModule,
     CorePipesModule,
     CoreDirectivesModule,
+    ContentHeaderModule,
     InvoiceModule,
     CoreSidebarModule
   ],

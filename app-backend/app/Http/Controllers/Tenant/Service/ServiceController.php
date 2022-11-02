@@ -17,8 +17,7 @@ class ServiceController extends Controller
      */
     public function index(Request $request)
     {
-        if (auth()->user()->hasrole('Root')) {
-
+        if (auth('apiTenant')->user()->hasrole('Root')) {
             if (\Request::exists('all')) {
                 return response()->json([
                     'obj' =>  Service::get()

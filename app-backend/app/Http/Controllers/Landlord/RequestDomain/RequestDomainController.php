@@ -100,11 +100,59 @@ class RequestDomainController extends Controller
     {
         return RequestDomain::where('id', $id)
             ->with([
-                'domainService',
+                'domainService' => function ($query) {
+                    $query->with([
+                        'service',
+                    ]);
+                },
+
                 'service',
             ])
             ->firstOrFail();
     }
+
+
+
+    public function editDomainService($id)
+    {
+        $objService = ServiceLandlord::all();
+        $objEnd = [];
+        $objId = array();
+        $objId2 = array();
+        foreach ($objService as $item) :
+            $objId[] = $item->id;
+        endforeach;
+        $objDomainServiceIn = DomainServiceLandlord::select('services.name as name', 'services.id as id', 'domain_services.max_contracts as max_contracts')
+            ->join('services', 'services.id', '=', 'domain_services.service_id')
+            ->whereIn('services.id', $objId)->where('request_domain_id', $id)->get();
+        foreach ($objDomainServiceIn as $item) :
+            $objId2[] = $item->id;
+        endforeach;
+        $objDomainServiceNotIn = ServiceLandlord::whereNotIn('services.id', $objId2)->get();
+        for ($i = 0; $i < $objDomainServiceIn->count(); $i++) {
+            $obj = [
+                'id' => $objDomainServiceIn[$i]->id,
+                'name' =>  $objDomainServiceIn[$i]->name,
+                'checked' => true,
+                'max_contracts' => $objDomainServiceIn[$i]->max_contracts,
+
+            ];
+            array_push($objEnd, $obj);
+        }
+        for ($i = 0; $i < $objDomainServiceNotIn->count(); $i++) {
+            $obj =  [
+                'id' => $objDomainServiceNotIn[$i]->id,
+                'name' =>  $objDomainServiceNotIn[$i]->name,
+                'checked' => false,
+                'max_contracts' => 0
+            ];
+            array_push($objEnd, $obj);
+        }
+        return  [
+            'obj' =>  $objEnd
+        ];
+    }
+
 
 
     /**
@@ -167,8 +215,8 @@ class RequestDomainController extends Controller
         $this->runMigrateTenant($objTenant, $objRequestDomain);
 
         Domain::create([
-            // 'domain' => $request->domain_name . '.' . $request->getHost(),
-            'domain' => $objRequestDomain->domain_name . $objRequestDomain->domain,
+            'domain' => $objRequestDomain->domain_name . '.' . env('CENTRAL'),
+            //'domain' => $objRequestDomain->domain_name . $objRequestDomain->domain,
             //'domain' => $request->domain_name . '.' . $request->getHttpHost(),
             'tenant_id' => $objTenant->id,
         ]);
@@ -202,6 +250,9 @@ class RequestDomainController extends Controller
         for ($i = 0; $i < $objService->count(); $i++) {
             $objServiceTenant =  ServiceTenant::create([
                 'name' => $objService[$i]->name,
+                "photo" => $objService[$i]->photo,
+                "url" => $objService[$i]->url,
+                "icon" => $objService[$i]->icon,
                 'description' => $objService[$i]->description
             ]);
 

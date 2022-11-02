@@ -28,6 +28,9 @@ class Service extends Model
         'name',
         'description',
         'short_code',
+        'photo',
+        'url',
+        'icon',
         'long_code',
         'order',
         'is_active',
@@ -35,6 +38,4 @@ class Service extends Model
         'updated_by',
         'deleted_by',
     ];
-
 }
-

@@ -99,7 +99,7 @@
                       </div>
                       <p class="card-text mb-0">{{ itemModel.fullname }}</p>
                     </div>
-                    <div class="d-flex flex-wrap">
+                    <div class="d-flex flex-wrap mb-1">
                       <div class="user-info-title">
                         <i data-feather="check" class="mr-1"></i>
                         <span
@@ -138,143 +138,46 @@
         </div>
         <!-- /User Card Ends-->
 
-        <!-- Plan Card starts-->
-        <!--   <div class="col-xl-4 col-lg-5 col-md-6">
-          <div class="card plan-card border-primary">
-            <div
-              class="card-header d-flex justify-content-between align-items-center pt-75 pb-1"
-            >
-              <h5 class="mb-0">Servicio activo</h5>
-             <span
-                class="badge badge-light-secondary"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="Expiry Date"
-                >July 22, 2020 <span class="nextYear"></span>
-              </span>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Servicio</th>
-                      <th>Usuarios</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Demo</td>
-                      <td>999</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div> -->
-        <!-- /Plan CardEnds -->
-      </div>
-      <!-- User Card & Plan Ends -->
-
-      <!-- User Timeline & Permissions Starts -->
-      <div class="row">
-        <!--   <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h4 class="card-title mb-2">User Timeline</h4>
-            </div>
-            <div class="card-body">
-              <ul class="timeline">
-                <li class="timeline-item">
-                  <span class="timeline-point timeline-point-indicator"></span>
-                  <div class="timeline-event">
-                    <div
-                      class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1"
-                    >
-                      <h6>12 Invoices have been paid</h6>
-                      <span class="timeline-event-time">12 min ago</span>
-                    </div>
-                    <p>Invoices have been paid to the company.</p>
-                    <div class="media align-items-center">
-                      <img
-                        class="mr-1"
-                        src="assets/images/icons/file-icons/pdf.png"
-                        alt="invoice"
-                        height="23"
-                      />
-                      <div class="media-body">invoice.pdf</div>
-                    </div>
-                  </div>
-                </li>
-                <li class="timeline-item">
-                  <span
-                    class="timeline-point timeline-point-warning timeline-point-indicator"
-                  ></span>
-                  <div class="timeline-event">
-                    <div
-                      class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1"
-                    >
-                      <h6>Client Meeting</h6>
-                      <span class="timeline-event-time">45 min ago</span>
-                    </div>
-                    <p>Project meeting with john @10:15am.</p>
-                    <div class="media align-items-center">
-                      <div class="avatar">
-                        <img
-                          src="assets/images/avatars/12-small.png"
-                          alt="avatar"
-                          height="38"
-                          width="38"
-                        />
-                      </div>
-                      <div class="media-body ml-50">
-                        <h6 class="mb-0">John Doe (Client)</h6>
-                        <span>CEO of Infibeam</span>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="timeline-item">
-                  <span
-                    class="timeline-point timeline-point-info timeline-point-indicator"
-                  ></span>
-                  <div class="timeline-event">
-                    <div
-                      class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1"
-                    >
-                      <h6>Create a new project for client</h6>
-                      <span class="timeline-event-time">2 days ago</span>
-                    </div>
-                    <p class="mb-0">Add files to new design folder</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div> -->
-
         <!-- User Permissions Starts -->
         <div class="col-md-12">
           <!-- User Permissions -->
           <div class="card">
             <div class="card-header">
               <h4 class="card-title">Servicios</h4>
+              <div
+                class="col-md-6 col-12 d-flex justify-content-start justify-content-md-end"
+              >
+                <div
+                  class="d-flex align-items-center justify-content-end pr-1 pb-1 pb-md-0"
+                >
+                  <button
+                    class="btn btn-primary ml-1"
+                    (click)="edit(id)"
+                    rippleEffect
+                  >
+                    <i
+                      data-feather="plus"
+                      class="d-sm-none d-inline-block mr-0 mr-sm-1"
+                    ></i
+                    ><span class="d-none d-sm-inline-block">Gestionar</span>
+                  </button>
+                </div>
+              </div>
             </div>
-            <p class="card-text ml-2">Servicios que se le asignan al cliente</p>
+            <p class="card-text ml-2">Servicios asignados</p>
 
             <div class="table-responsive">
               <table class="table">
                 <thead>
                   <tr>
                     <th>Servicio</th>
-                    <th>Estado</th>
+                    <th>Contratos</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody *ngFor="let item of serviceList">
                   <tr>
-                    <td>Servicio Demo</td>
-                    <td>Estado Demo</td>
+                    <td>{{ item.service.name }}</td>
+                    <td>{{ item.max_contracts }}</td>
                   </tr>
                 </tbody>
               </table>

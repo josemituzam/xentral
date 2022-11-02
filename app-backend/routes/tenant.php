@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Core\AuthController;
 use App\Http\Controllers\Core\User\UserController;
+use App\Http\Controllers\Tenant\Service\ServiceController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -34,7 +35,8 @@ Route::middleware([
             Route::post('auth/logout',  [AuthController::class, 'logout']);
             // User Routes
             Route::get('user/auth/{id}', [UserController::class, 'show']);
-            // Request Domains Routes
+            // Servicio
+            Route::get('service/index', [ServiceController::class, 'index']);
         });
     });
 });

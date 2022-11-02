@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
 import { User } from 'app/auth/models';
 import { RequestDomain } from '../models/request-domain.model';
+import { map, mergeMap } from "rxjs/operators";
 
 @Injectable({ providedIn: 'root' })
 export class RequestDomainService {
@@ -40,6 +41,19 @@ export class RequestDomainService {
       { headers: httpHeaders }
     );
   }
+
+  getDomainServices(id: any): Observable<any[]> {
+    return this._http
+      .get<any>(
+        `${this.API_REQUEST_DOMAIN_URL}/service/${id}`,
+      )
+      .pipe(
+        mergeMap((res) => {
+          return of(res);
+        })
+      );
+  }
+
 
   delete(id: string): Observable<any> {
     return this._http.delete<any>(`${this.API_REQUEST_DOMAIN_URL}/${id}`);

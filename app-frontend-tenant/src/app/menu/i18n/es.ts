@@ -3,6 +3,7 @@ export const locale = {
     data: {
         MENU: {
             SERVICE: 'Servicios',
+            DASHBOARD: 'Dashboard',
             APPS: {
                 SECTION: 'Configuraciones',
                 USER: 'Usuarios',

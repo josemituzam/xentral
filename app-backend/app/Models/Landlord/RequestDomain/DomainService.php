@@ -3,6 +3,7 @@
 namespace App\Models\Landlord\RequestDomain;
 
 use App\Models\Landlord\RequestDomain\Traits\RequestDomainRules;
+use App\Models\Landlord\Service\Service;
 use App\Models\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
+
 class DomainService extends Model
 {
     use HasFactory,
@@ -37,5 +39,8 @@ class DomainService extends Model
         'deleted_by'
     ];
 
-    
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
 }

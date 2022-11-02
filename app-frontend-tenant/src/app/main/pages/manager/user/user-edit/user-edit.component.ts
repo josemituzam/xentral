@@ -23,6 +23,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   public currentRow;
   public tempRow;
   public avatarImage: string;
+  public contentHeader: object
 
   @ViewChild('accountForm') accountForm: NgForm;
 
@@ -91,15 +92,49 @@ export class UserEditComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
+    this.contentHeader = {
+      headerTitle: 'Usuarios',
+      actionButton: true,
+      breadcrumb: {
+        type: '',
+        links: [
+          {
+            name: 'Registros',
+            isLink: true,
+            link: '/manager/user/list'
+          },
+        ]
+      }
+    };
+
+    /*
+    this.contentHeader = {
+      headerTitle: 'Servicios',
+      actionButton: true,
+      breadcrumb: {
+        type: '',
+        links: [
+          {
+            name: 'Registros',
+            isLink: false,
+            link: '/'
+          },
+        ]
+      }
+      
+    }
+    */
+
+
     this._userEditService.onUserEditChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(response => {
       this.rows = response;
-      this.rows.map(row => {
-        if (row.id == this.urlLastValue) {
-          this.currentRow = row;
-          this.avatarImage = this.currentRow.avatar;
-          this.tempRow = cloneDeep(row);
-        }
-      });
+      /* this.rows.map(row => {
+         if (row.id == this.urlLastValue) {
+           this.currentRow = row;
+           this.avatarImage = this.currentRow.avatar;
+           this.tempRow = cloneDeep(row);
+         }
+       }); */
     });
   }
 

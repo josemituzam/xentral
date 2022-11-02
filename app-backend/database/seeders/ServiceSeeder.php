@@ -19,18 +19,28 @@ class ServiceSeeder extends Seeder
             [
                 "name" => 'ISP',
                 "short_code" => 'PL1',
+                "photo" => '#',
+                "url" => 'isp',
+                "icon" => 'codesandbox',
                 "description" => 'Plan ISP',
                 "order" => '1'
             ],
             [
+
                 "name" => 'OLT',
                 "short_code" => 'PL2',
+                "photo" => '#',
+                "url" => 'olt',
+                "icon" => 'codesandbox',
                 "description" => 'Plan OLT',
                 "order" => '2'
             ],
             [
                 "name" => 'Contable',
                 "short_code" => 'PL3',
+                "photo" => '#',
+                "url" => 'cont',
+                "icon" => 'codesandbox',
                 "description" => 'Plan Contable',
                 "order" => '3'
             ],
@@ -92,8 +102,11 @@ class ServiceSeeder extends Seeder
 
         foreach ($obj as $value) {
             $objService =  Service::create([
-                'name' => $value["name"],
-                'description' => $value["description"],
+                "name" => $value["name"],
+                "description" => $value["description"],
+                "photo" => $value["photo"],
+                "url" => $value["url"],
+                "icon" => $value["icon"],
                 "short_code" => $value["short_code"],
                 "order" => $value["order"],
             ]);

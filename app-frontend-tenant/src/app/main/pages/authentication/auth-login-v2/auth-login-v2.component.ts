@@ -17,7 +17,7 @@ import { User } from 'app/auth/models';
 })
 export class AuthLoginV2Component implements OnInit {
   defaultAuth: any = {
-    email: 'admin@admin.com',
+    email: 'tenant@admin.com',
     password: 'admin',
   };
 
