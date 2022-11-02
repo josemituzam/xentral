@@ -112,6 +112,30 @@ class RequestDomainController extends Controller
     }
 
 
+    public function putDomainService(Request $request, $id)
+    {
+        DomainServiceLandlord::where('request_domain_id', $id)->delete();
+        $objDomainService = $request->maxContractService;
+        for ($i = 0; $i < count($objDomainService); $i++) {
+            if ($objDomainService[$i]["service_id"] == null) {
+                return response()->json(['errors' => [
+                    'error' => ['Los campos de dejar de hacer no pueden quedar vacíos.'],
+                ]], 422);
+            }
+            $objDataLet = [
+                'request_domain_id' =>  $id,
+                "service_id" =>  $objDomainService[$i]["service_id"],
+                'price_monthly' => 0,
+                'price_yearly' => 0,
+                'max_contracts' =>  $objDomainService[$i]["max_contracts"]
+            ];
+            DomainServiceLandlord::create($objDataLet);
+        }
+
+        return response()->json(['success' => [
+            'message' => ['Servicios actualizados'],
+        ]], 200);
+    }
 
     public function editDomainService($id)
     {

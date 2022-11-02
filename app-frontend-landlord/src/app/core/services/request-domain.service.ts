@@ -54,6 +54,16 @@ export class RequestDomainService {
       );
   }
 
+  putDomainServices(data: any): Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set("Content-Type", "application/json");
+    return this._http.put(
+      `${this.API_REQUEST_DOMAIN_URL}/service/${data.request_domain_id}/domain`,
+      data,
+      { headers: httpHeaders }
+    );
+  }
+
 
   delete(id: string): Observable<any> {
     return this._http.delete<any>(`${this.API_REQUEST_DOMAIN_URL}/${id}`);

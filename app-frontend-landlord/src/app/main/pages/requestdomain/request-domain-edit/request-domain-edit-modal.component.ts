@@ -101,6 +101,7 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
   }
 
   getCantUser(value, id) {
+    console.log(value);
     const resultado = this.maxContractService.find(
       (obj) => obj.service_id === id
     );
