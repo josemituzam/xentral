@@ -25,7 +25,7 @@ import { ServiceModule } from './services/service.module';
     FormsModule,
     UserModule,
     CompanyModule,
-    NgxDatatableModule
+    NgxDatatableModule,
   ],
 
   providers: []

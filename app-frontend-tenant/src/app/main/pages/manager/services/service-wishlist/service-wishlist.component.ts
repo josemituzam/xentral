@@ -40,25 +40,17 @@ export class ServiceWishlistComponent implements OnInit {
     this.getServices();
     // content header
     this.contentHeader = {
-      headerTitle: 'Wish List',
+      headerTitle: 'Servicios',
       actionButton: true,
       breadcrumb: {
         type: '',
         links: [
           {
-            name: 'Home',
-            isLink: true,
+            name: 'Mis servicios',
+            isLink: false,
             link: '/'
           },
-          {
-            name: 'eCommerce',
-            isLink: true,
-            link: '/'
-          },
-          {
-            name: 'Wish List',
-            isLink: false
-          }
+
         ]
       }
     };

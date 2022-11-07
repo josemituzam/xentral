@@ -12,4 +12,55 @@ export const menuIsp: CoreMenu[] = [
         icon: 'home',
         url: 'isp/dashboard'
     },
+
+    {
+        id: 'apps',
+        type: 'section',
+        title: 'Apps & Pages',
+        translate: 'MENU.APPS.SECTION',
+        icon: 'package',
+        children: [
+            {
+                id: 'commercial',
+                title: 'Commercial',
+                translate: 'MENU.ISP.COMMERCIAL.COLLAPSIBLE',
+                type: 'collapsible',
+                icon: 'briefcase',
+                children: [
+                    {
+                        id: 'edit',
+                        title: 'Edit',
+                        translate: 'MENU.ISP.COMMERCIAL.CUSTOMER',
+                        type: 'item',
+                        icon: 'circle',
+                        url: 'isp/customer/list'
+                    },
+                    {
+                        id: 'branch',
+                        title: 'Branch',
+                        translate: 'MENU.ISP.COMMERCIAL.CONTRACTS',
+                        type: 'item',
+                        icon: 'circle',
+                        url: 'manager/branch/list'
+                    },
+                    {
+                        id: 'sales',
+                        title: 'Sales',
+                        translate: 'MENU.ISP.COMMERCIAL.PLANS',
+                        type: 'item',
+                        icon: 'circle',
+                        url: 'manager/sales/list'
+                    },
+                    {
+                        id: 'sales',
+                        title: 'Sales',
+                        translate: 'MENU.ISP.COMMERCIAL.SECTIONS',
+                        type: 'item',
+                        icon: 'circle',
+                        url: 'manager/sales/list'
+                    }
+                ]
+            },
+        ]
+    }
 ];

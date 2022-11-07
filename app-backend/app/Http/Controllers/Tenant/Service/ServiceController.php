@@ -6,6 +6,7 @@ use App\Models\Tenant\Service\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Helpers;
+use App\Models\Tenant\Customer\Customer;
 use Carbon\Carbon;
 
 class ServiceController extends Controller
@@ -73,6 +74,18 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
+         $validator = Service::createdRules($request->all());
+         if ($validator->fails()) {
+             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
+         }
+
+         $input['name'] = $request->name;
+         $input['description'] = $request->description;
+         $obj = Service::create($input);
+
+         return response()->json([
+             'obj'  => $obj
+         ]);
     }
 
     /*

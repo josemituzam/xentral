@@ -1,0 +1,47 @@
+<div class="container">
+  <ngb-alert [type]="'primary'" [dismissible]="false">
+    <div class="alert-body">
+      <strong>Good Morning!</strong> Start your day with some alerts.
+    </div>
+  </ngb-alert>
+
+  <form class="form">
+    <div class="form-group">
+      <fieldset class="form-group">
+        <textarea
+          class="form-control"
+          id="basicTextarea"
+          rows="3"
+          placeholder="Textarea"
+        ></textarea>
+      </fieldset>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button type="button" class="btn btn-primary" rippleEffect>
+          Agregar
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <br />
+
+  <ul class="timeline">
+    <li class="timeline-item">
+      <span class="timeline-point timeline-point-indicator"></span>
+      <div class="timeline-event">
+        <div
+          class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1"
+        >
+          <h6>12 Invoices have been paid</h6>
+          <span class="timeline-event-time">12 min ago</span>
+        </div>
+        <p>Invoices have been paid to the company.</p>
+        <div class="media align-items-center">
+          <div class="media-body">invoice.pdf</div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

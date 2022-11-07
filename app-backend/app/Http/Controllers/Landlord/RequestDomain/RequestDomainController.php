@@ -132,6 +132,43 @@ class RequestDomainController extends Controller
             DomainServiceLandlord::create($objDataLet);
         }
 
+        $objRequestDomain = RequestDomain::where('id', $id)->first();
+
+        $objTenant = Tenant::where('id', $objRequestDomain->tenant_id)->first();
+
+        // Tomo el servicio
+        $objDomainService = DomainServiceLandlord::where('request_domain_id', '=', $objRequestDomain->id)->get();
+        foreach ($objDomainService as $s) :
+            $serviceId[] = $s->service_id;
+        endforeach;
+
+        $objService = ServiceLandlord::whereIn('id', $serviceId)->get();
+
+        tenancy()->initialize($objTenant);
+
+        ServiceTenant::truncate();
+        DomainServiceTenant::truncate();
+
+        for ($i = 0; $i < $objService->count(); $i++) {
+            $objServiceTenant =  ServiceTenant::create([
+                'name' => $objService[$i]->name,
+                "photo" => $objService[$i]->photo,
+                "url" => $objService[$i]->url,
+                "icon" => $objService[$i]->icon,
+                'description' => $objService[$i]->description
+            ]);
+
+            DomainServiceTenant::create([
+                'tenant_id' => $objTenant['id'],
+                "service_id" =>  $objServiceTenant->id,
+                'price_monthly' => 0,
+                'price_yearly' => 0,
+                'max_contracts' =>  $objDomainService[$i]["max_contracts"],
+            ]);
+        }
+        tenancy()->end();
+
+
         return response()->json(['success' => [
             'message' => ['Servicios actualizados'],
         ]], 200);

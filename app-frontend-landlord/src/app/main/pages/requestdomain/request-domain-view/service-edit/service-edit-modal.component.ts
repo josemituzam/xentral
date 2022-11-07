@@ -191,20 +191,19 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
         service_id: id,
         is_active: band,
         name: name,
-        max_contracts: max_contracts == undefined? 0 : max_contracts,
+        max_contracts: max_contracts == undefined ? 0 : max_contracts,
       });
 
     } else {
       var filerOption = this.setContractService.filter(
         (item) => item.service_id !== id
       );
-      console.log(filerOption);
       this.maxContractService = [];
-
       for (let item of filerOption) {
+
         this.maxContractService.push({
           service_id: item.service_id,
-          max_contracts: item.max_contracts == undefined? 0 : max_contracts,
+          max_contracts: item.max_contracts == undefined ? 0 : item.max_contracts,
         });
       }
 
@@ -212,7 +211,7 @@ export class ServiceEditModalComponent implements OnInit, OnDestroy {
         service_id: id,
         is_active: band,
         name: name,
-        max_contracts: max_contracts == undefined? 0 : max_contracts,
+        max_contracts: max_contracts == undefined ? 0 : max_contracts,
       });
       this.setContractService = [];
 

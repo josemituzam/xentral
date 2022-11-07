@@ -1,0 +1,29 @@
+@import "@core/scss/angular/libs/flatpickr.component.scss";
+@import "@core/scss/angular/libs/select.component.scss";
+@import "@core/scss/base/pages/app-user.scss";
+
+@import "@core/scss/base/pages/app-invoice.scss";
+@import "@core/scss/angular/libs/flatpickr.component.scss";
+
+// Preview
+// Windows Print Dialogue
+@media print {
+  @page {
+    margin: 0;
+  }
+  .invoice-actions,
+  .main-menu,
+  .buy-now {
+    visibility: hidden;
+  }
+
+  .printRef {
+    max-width: 100% !important;
+    flex: 0 0 100%;
+  }
+}
+
+.iti {
+  position: relative !important;
+  display: block !important;
+}
