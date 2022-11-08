@@ -45,9 +45,9 @@ export class CustomerListService {
    * Get rows
    */
 
-  getDataTableRows(searchQuery: string, perPage: number, currentPage: number, sortBy: string, is_active: string): Observable<any[]> {
+  getDataTableRows(searchQuery: string, perPage: number, currentPage: number, sortBy: string, is_active: string, type_people: string): Observable<any[]> {
     return this._httpClient.get<any>(this.API_SERVICE_URL
-      + `/index?q=${searchQuery}&perPage=${perPage}&page=${currentPage}&sortBy=${sortBy}&is_active=${is_active}`).pipe(
+      + `/index?q=${searchQuery}&perPage=${perPage}&page=${currentPage}&sortBy=${sortBy}&is_active=${is_active}&type_people=${type_people}`).pipe(
         mergeMap((res) => {
           return of(res);
         })

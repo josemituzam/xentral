@@ -12,15 +12,30 @@
                 <div class="col-12 col-md-4">
                   <fieldset class="form-group">
                     <ng-select
+                      [items]="getTypePeople"
+                      [(ngModel)]="selectedTypePeople"
+                      name="selectedPeople"
+                      bindLabel="name"
+                      placeholder="Tipo de persona"
+                      (change)="filterByTypePeople($event)"
+                    >
+                      <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                        {{ item.name }}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <div class="col-12 col-md-4">
+                  <fieldset class="form-group">
+                    <ng-select
                       [items]="getStatus"
                       [(ngModel)]="selectedStatus"
-                      name="selectedStatis"
+                      name="selectedStatus"
                       bindLabel="name"
                       placeholder="Estados"
                       (change)="filterByStatus($event)"
                     >
                       <ng-template ng-option-tmp ng-label-tmp let-item="item">
-                        <i [class]="item.icon"></i>
                         {{ item.name }}
                       </ng-template>
                     </ng-select>
@@ -82,6 +97,7 @@
           </div>
         </div>
         <ngx-datatable
+          *ngIf="activeTable == true"
           (sort)="onSort($event)"
           [rows]="rows"
           [rowHeight]="75"
@@ -104,9 +120,22 @@
             >
               <span *ngIf="row.type_people == 'PN'">
                 {{ row.fullname }}
+                <ng-template #infoPeople>
+                  <table>
+                    <tr>
+                      <td>Correo electrónico: {{ row.email }}</td>
+                    </tr>
+                    <tr>
+                      <td>Teléfono: {{ row?.phone }}</td>
+                    </tr>
+                  </table>
+                </ng-template>
                 <button
                   type="button"
                   class="btn btn-icon btn-icon rounded-circle btn-flat-success"
+                  placement="top"
+                  container="body"
+                  [ngbTooltip]="infoPeople"
                   rippleEffect
                 >
                   <span [data-feather]="'info'"></span>
@@ -114,10 +143,13 @@
               </span>
               <span *ngIf="row.type_people == 'PJ'">
                 {{ row.name_company }}
-                <!-- <ng-template #infoCompany>
+                <ng-template #infoCompany>
                   <table>
-                    <tr *ngFor="let item of row.phone_movil">
-                      <td>{{ item }}</td>
+                    <tr>
+                      <td>Correo electrónico: {{ row.email }}</td>
+                    </tr>
+                    <tr>
+                      <td>Teléfono: {{ row.phone }}</td>
                     </tr>
                   </table>
                 </ng-template>
@@ -130,7 +162,7 @@
                   rippleEffect
                 >
                   <span [data-feather]="'info'"></span>
-                </button> -->
+                </button>
               </span>
             </ng-template>
           </ngx-datatable-column>

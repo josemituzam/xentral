@@ -31,8 +31,8 @@ class IspCustomerController extends Controller
                 $type = 1;
             } else {
                 //Filtros normales
-                $columns = array(0 => 'is_active');
-                $param = array(0 => '=');
+                $columns = array(0 => 'is_active', 1 => 'type_people');
+                $param = array(0 => '=', 1 => '=');
                 $type = 0;
             }
             $service = IspCustomer::where('deleted_at', '=', null);
@@ -40,8 +40,10 @@ class IspCustomerController extends Controller
             $Filtred = $helpers->filter($service, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
                     return $query->when($request->filled('q'), function ($query) use ($request) {
-                        return $query->where('name', 'LIKE', "%{$request->q}%")
-                            ->orWhere('description', 'LIKE', "%{$request->q}%");
+                        return $query->where('name_company', 'LIKE', "%{$request->q}%")
+                            ->orWhere('fullname', 'LIKE', "%{$request->q}%")
+                            ->orWhere('identification', 'LIKE', "%{$request->q}%")
+                            ->orWhere('address', 'LIKE', "%{$request->q}%");
                     });
                 })->paginate(
                     request(
@@ -87,7 +89,6 @@ class IspCustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //return $request->all();
         $validator = IspCustomer::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
@@ -106,9 +107,7 @@ class IspCustomerController extends Controller
         $input['lastname_representative'] = $request->lastname_representative;
         $input['fullname_representative'] = $request->firstname_representative . ' ' . $request->lastname_representative;
         $input['name_company'] = $request->name_company;
-        $input['phone_fixed'] = $request->phone_fixed;
-        $input['phone_movil'] = json_encode($request->phone_movil);
-        $input['phone_representative'] =  json_encode($request->phone_representative);;
+        $input['phone'] = json_encode($request->phone);
         $input['started_at'] = $request->started_at;
         $input['type_gender'] = $request->type_gender;
         $input['type_identification'] = $request->type_identification;

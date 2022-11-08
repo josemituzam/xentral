@@ -10,8 +10,8 @@ export class IspCustomer {
     type_gender!: string;
     address!: string;
     type_number!: string;
-    phone_movil !: number;
-    phone_fixed !: number;
+    phone !: string;
+    //phone_fixed !: number;
     email !: string;
     is_accounting!: Boolean;
     is_disability!: Boolean;
@@ -19,7 +19,7 @@ export class IspCustomer {
     is_bond!: Boolean;
     firstname_representative !: string;
     lastname_representative !: string;
-    phone_representative !: number;
+    phone_representative !: string;
 
     clear(): void {
         this.id = null;
@@ -33,8 +33,8 @@ export class IspCustomer {
         this.type_gender = null;
         this.address = '';
         this.type_number = null;
-        this.phone_movil = 0;
-        this.phone_fixed = 0;
+        this.phone = '0';
+        //this.phone_fixed = null;
         this.email = '';
         this.is_accounting = false;
         this.is_disability = false;
@@ -42,7 +42,7 @@ export class IspCustomer {
         this.is_bond = false;
         this.firstname_representative = '';
         this.lastname_representative = '';
-        this.phone_representative = 0;
+        this.phone_representative = '0';
 
     }
 }

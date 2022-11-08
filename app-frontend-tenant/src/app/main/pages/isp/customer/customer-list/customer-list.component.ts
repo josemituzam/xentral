@@ -21,6 +21,7 @@ import { CustomerListService } from './customer-list.service';
 export class CustomerListComponent implements OnInit {
   // Public
   public sidebarToggleRef = false;
+  public activeTable = false;
   public rows = [];
   public pageSizes: number;
   public curPages: number = 1;
@@ -36,12 +37,14 @@ export class CustomerListComponent implements OnInit {
 
   public ColumnMode = ColumnMode;
   public temp = [];
+  public selectedTypePeople = [];
   public selectedStatus = [];
   public previousRoleFilter = '';
   public previousPlanFilter = '';
   public previousStatusFilter = '';
   public searchValue = '';
   public isActive = '';
+  public typePeople = '';
 
   // Decorator
   @ViewChild(DatatableComponent) table: DatatableComponent;
@@ -69,6 +72,11 @@ export class CustomerListComponent implements OnInit {
     this._unsubscribeAll = new Subject();
   }
 
+  public getTypePeople: any = [
+    { id: 'PN', name: 'Persona Natural' },
+    { id: 'PJ', name: 'Persona Jurídica' },
+  ];
+
   public getStatus: any = [
     { is_active: 1, name: 'Activo', icon: 'fa fa-check' },
     { is_active: 0, name: 'Inactivo', icon: 'fa fa-times' },
@@ -80,6 +88,10 @@ export class CustomerListComponent implements OnInit {
     this.getRowData();
   }
 
+  filterByTypePeople(event) {
+    this.typePeople = event ? event.id : '';
+    this.getRowData();
+  }
 
   onCheckboxChange($event, id) {
     var band = 0;
@@ -196,26 +208,26 @@ export class CustomerListComponent implements OnInit {
 
 
   getRowData() {
-    this._service.getDataTableRows(this.searchValue, this.selectedOption, this.curPages, this.sortBy, this.isActive).subscribe(res => {
-      //var row = [];
+    this._service.getDataTableRows(this.searchValue, this.selectedOption, this.curPages, this.sortBy, this.isActive, this.typePeople).subscribe(res => {
+      this.rows = [];
       if (res) {
-        this.rows = res['data'];
+        for (let item of res['data']) {
+          var phone = JSON.parse(item.phone)
+          let obj = {
+            id: item.id,
+            fullname: item.fullname,
+            name_company: item.name_company,
+            identification: item.identification,
+            address: item.address,
+            type_people: item.type_people,
+            phone: typeof JSON.parse(item?.phone) !== "string" ? phone?.internationalNumber : phone,
+            email: item.email,
+            is_active: item.is_active,
+          }
+          this.rows.push(obj);
+        }
         console.log(this.rows);
-
-        /*  for (let item of res['data']) {
-            let obj = {
-              id: item.id,
-              fullname: item.fullname,
-              name_company: item.name_company,
-              identification: item.identification,
-              address: item.address
-            }
-            this.rows.push(obj);
-          }*/
-
-        console.log(this.rows);
-
-        // console.log(JSON.parse(this.rows[0].phone_movil));
+        this.activeTable = true;
         this.pageSizes = res['last_page'];
         this.curPages = res['current_page'];
         this.rowCounts = res['total'];

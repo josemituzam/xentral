@@ -47,8 +47,8 @@ class CreateIspCustomersTable extends Migration
              * FIJ: Fijo
              * MOV: Móvil
              */
-            $table->string('phone_fixed', 100)->nullable(true);
-            $table->longText('phone_movil')->nullable(true);
+            //$table->string('phone_fixed', 100)->nullable(true);
+            $table->longText('phone')->nullable(true);
 
 
 

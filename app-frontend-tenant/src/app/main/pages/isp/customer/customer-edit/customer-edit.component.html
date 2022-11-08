@@ -5,19 +5,54 @@
     <section class="app-user-edit">
       <div class="card">
         <div class="card-body">
-          <ul ngbNav #nav="ngbNav" class="nav nav-pills">
-            <li ngbNavItem>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [(activeId)]="active"
+            class="nav nav-pills"
+            (navChange)="onNavChange($event)"
+          >
+            <li [ngbNavItem]="1">
               <a ngbNavLink class="d-flex align-items-center"
                 ><i data-feather="user" class="mr-sm-50"></i
                 ><span class="d-none d-sm-block">Información</span></a
               >
               <ng-template ngbNavContent>
                 <!-- Account Tab starts -->
+
+                <div
+                  class="tab-pane d-flex justify-content-center active"
+                  id="account"
+                  aria-labelledby="account-tab"
+                  role="tabpanel"
+                  *ngIf="refresh == true"
+                >
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+
                 <div
                   class="tab-pane active"
                   id="account"
                   aria-labelledby="account-tab"
                   role="tabpanel"
+                  *ngIf="refresh == false"
                 >
                   <!-- users edit media object ends -->
                   <!-- users edit account form start -->
@@ -55,6 +90,12 @@
                             *ngIf="isControlValid('type_people')"
                           >
                             Tipo de persona ingresado correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="controlHasError('required', 'type_people')"
+                          >
+                            {{ "El elemento es requerido" }}
                           </div>
                           <div
                             class="invalid-feedback"
@@ -107,6 +148,14 @@
                           <div
                             class="invalid-feedback"
                             *ngIf="
+                              controlHasError('required', 'type_identification')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
                               editForm.get('type_identification')?.errors
                                 ?.serverError
                             "
@@ -139,7 +188,14 @@
                           >
                             Identificación ingresada correctamente
                           </div>
-
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('required', 'type_identification')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
                           <div
                             class="invalid-feedback"
                             *ngIf="
@@ -324,6 +380,12 @@
                           </div>
                           <div
                             class="invalid-feedback"
+                            *ngIf="controlHasError('required', 'type_gender')"
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
                             *ngIf="
                               editForm.get('type_gender')?.errors?.serverError
                             "
@@ -410,9 +472,7 @@
                       </div>
                       <div class="col-md-4 mb-2">
                         <div class="form-group">
-                          <label for="phone_movil"
-                            >Teléfono {{ titleNumber }}</label
-                          >
+                          <label for="phone">Teléfono {{ titleNumber }}</label>
                           <ngx-intl-tel-input
                             *ngIf="activeMovField == true"
                             [cssClass]="'custom form-control'"
@@ -430,7 +490,11 @@
                             [separateDialCode]="separateDialCode"
                             [numberFormat]="PhoneNumberFormat.National"
                             name="phone-movil"
-                            formControlName="phone_movil"
+                            formControlName="phone"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('phone'),
+                              'is-valid': isControlValid('phone')
+                            }"
                           >
                           </ngx-intl-tel-input>
                           <input
@@ -439,40 +503,29 @@
                             class="form-control"
                             placeholder="(04) 999 99 99"
                             mask="(00) 000 00 00"
-                            formControlName="phone_fixed"
+                            formControlName="phone"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('phone'),
+                              'is-valid': isControlValid('phone')
+                            }"
                           />
                           <div
                             class="valid-feedback"
-                            *ngIf="isControlValid('phone_movil')"
+                            *ngIf="isControlValid('phone')"
                           >
                             Teléfono ingresado correctamente
                           </div>
                           <div
                             class="invalid-feedback"
-                            *ngIf="
-                              editForm.get('phone_movil')?.errors?.serverError
-                            "
+                            *ngIf="controlHasError('required', 'phone')"
                           >
-                            {{
-                              editForm.get("phone_movil")?.errors?.serverError
-                            }}
-                          </div>
-
-                          <div
-                            class="valid-feedback"
-                            *ngIf="isControlValid('phone_fixed')"
-                          >
-                            Teléfono ingresado correctamente
+                            {{ "El elemento es requerido" }}
                           </div>
                           <div
                             class="invalid-feedback"
-                            *ngIf="
-                              editForm.get('phone_fixed')?.errors?.serverError
-                            "
+                            *ngIf="editForm.get('phone')?.errors?.serverError"
                           >
-                            {{
-                              editForm.get("phone_fixed")?.errors?.serverError
-                            }}
+                            {{ editForm.get("phone")?.errors?.serverError }}
                           </div>
                         </div>
                       </div>
@@ -721,21 +774,20 @@
                         <div class="form-group">
                           <label for="phone_representative">Celular</label>
                           <ngx-intl-tel-input
-                            *ngIf="activeMovField == true"
                             [cssClass]="'custom form-control'"
-                            [preferredCountries]="preferredCountries"
+                            [preferredCountries]="preferredCountries2"
                             [enableAutoCountrySelect]="true"
                             [enablePlaceholder]="true"
                             [searchCountryFlag]="true"
                             [searchCountryField]="[
-                              SearchCountryField.Iso2,
-                              SearchCountryField.Name
+                              SearchCountryField2.Iso2,
+                              SearchCountryField2.Name
                             ]"
                             [selectFirstCountry]="false"
                             [selectedCountryISO]="CountryISO.Ecuador"
                             [phoneValidation]="true"
-                            [separateDialCode]="separateDialCode"
-                            [numberFormat]="PhoneNumberFormat.National"
+                            [separateDialCode]="separateDialCode2"
+                            [numberFormat]="PhoneNumberFormat2.National"
                             name="phone-representative"
                             formControlName="phone_representative"
                           >
@@ -780,7 +832,7 @@
                 <!-- Account Tab ends -->
               </ng-template>
             </li>
-            <li ngbNavItem>
+            <li [ngbNavItem]="2">
               <a ngbNavLink class="d-flex align-items-center">
                 <i data-feather="info" class="mr-sm-50"></i
                 ><span class="d-none d-sm-block">Contactos</span></a
@@ -844,7 +896,7 @@
                       <div class="col-md-2 col-12">
                         <div class="form-group">
                           <label for="itemName{{ i }}">Teléfono</label>
-                          <ngx-intl-tel-input
+                          <!--  <ngx-intl-tel-input
                             [cssClass]="'custom'"
                             [preferredCountries]="[
                               CountryISO.UnitedStates,
@@ -864,7 +916,7 @@
                             [inputId]="my - input - id"
                             name="phone"
                             formControlName="phone"
-                          ></ngx-intl-tel-input>
+                          ></ngx-intl-tel-input> -->
                           <!--  <input
                             type="text"
                             class="form-control"
@@ -918,7 +970,7 @@
                 <!-- Information Tab ends -->
               </ng-template>
             </li>
-            <li ngbNavItem>
+            <li [ngbNavItem]="3">
               <a ngbNavLink class="d-flex align-items-center"
                 ><i data-feather="book-open" class="mr-sm-50"></i
                 ><span class="d-none d-sm-block">Notas</span></a
@@ -928,7 +980,7 @@
                 <!-- Social Tab starts -->
               </ng-template>
             </li>
-            <li ngbNavItem>
+            <li [ngbNavItem]="4">
               <a ngbNavLink class="d-flex align-items-center"
                 ><i data-feather="archive" class="mr-sm-50"></i
                 ><span class="d-none d-sm-block">Documentos</span></a
