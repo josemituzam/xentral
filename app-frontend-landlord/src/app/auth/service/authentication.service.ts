@@ -28,8 +28,8 @@ export class AuthenticationService {
    */
   constructor(private _http: HttpClient, private _toastrService: ToastrService) {
 
-    this.API_AUTH_URL = `${this.REST_API}/admin/auth/login`;
-    this.API_AUTH_LOGOUT_URL = `${this.REST_API}/admin/auth/logout`;
+    this.API_AUTH_URL = `${this.REST_API}/auth/login`;
+    this.API_AUTH_LOGOUT_URL = `${this.REST_API}/auth/logout`;
 
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
