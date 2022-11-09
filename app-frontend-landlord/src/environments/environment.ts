@@ -4,10 +4,10 @@
 const parsedUrl = new URL(window.location.href);
 const baseUrl = parsedUrl.hostname
 export const environment = {
-  production: true,
+  production: false,
   hmr: false,
   //apiUrl: `http://${baseUrl}:8080/api/v1/admin` //Developer mode;
-  apiUrl: `https://api.ispxentral.com/api/v1/admin/`  //Production mode;
+  apiUrl: `https://api.ispxentral.com/api/v1/admin`  //Production mode;
 
   // apiUrl: `https://api.ispxentral.com/api/v1` //Qa mode;
 };

@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   hmr: false,
-  apiUrl: `https://api.ispxentral.com/api/v1/admin/` 
+  apiUrl: `https://api.ispxentral.com/api/v1/admin` 
 };
