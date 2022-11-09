@@ -18,9 +18,14 @@ return [
      */
 
     //Dominios centrales para desarrollo
+   /* 'central_domains' => [
+        env('CENTRAL_DOMAIN_API')  '127.0.0.1',
+        env('CENTRAL_DOMAIN_A') 'localhost',
+    ], */
+
     'central_domains' => [
-        '127.0.0.1',
-        'localhost',
+        env('CENTRAL_DOMAIN_API'),
+        env('CENTRAL_DOMAIN_LANDLORD')
     ],
 
     //Dominios centrales de producción

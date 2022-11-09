@@ -105,6 +105,7 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
     const resultado = this.maxContractService.find(
       (obj) => obj.service_id === id
     );
+
     if (resultado == undefined) {
       this.maxContractService.push({
         service_id: id,

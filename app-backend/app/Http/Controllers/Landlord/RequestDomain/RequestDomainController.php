@@ -274,9 +274,8 @@ class RequestDomainController extends Controller
         ]);
 
         $this->runMigrateTenant($objTenant, $objRequestDomain);
-
         Domain::create([
-            'domain' => $objRequestDomain->domain_name . '.' . env('CENTRAL'),
+            'domain' => $objRequestDomain->domain_name . env('CENTRAL_DOMAIN'),
             //'domain' => $objRequestDomain->domain_name . $objRequestDomain->domain,
             //'domain' => $request->domain_name . '.' . $request->getHttpHost(),
             'tenant_id' => $objTenant->id,
