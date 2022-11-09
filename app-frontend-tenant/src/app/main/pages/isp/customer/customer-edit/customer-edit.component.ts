@@ -45,8 +45,16 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   preferredCountries2: CountryISO[] = [CountryISO.UnitedStates,
   CountryISO.UnitedKingdom];
 
+  separateDialCode3 = true;
+  SearchCountryField3 = SearchCountryField;
+  CountryISO3 = CountryISO;
+  PhoneNumberFormat3 = PhoneNumberFormat;
+
+  preferredCountries3: CountryISO[] = [CountryISO.UnitedStates,
+  CountryISO.UnitedKingdom];
+
   // Public
-  public active = 1;
+  public active = 2;
   public url = this.router.url;
   public activeMovField = true;
   public urlLastValue;
@@ -65,6 +73,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   public titleNumber = 'Móvil';
   public titleStartedAt = 'Fecha de nacimiento';
   public refresh = false;
+
+  public activeMovFieldContact = true;
 
   startDate: string;
   endDate: string;
@@ -131,8 +141,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    console.log(this.activeField);
-
     if (this.activeField == false) {
       this.editForm = this.fb.group({
         type_people: [
@@ -156,8 +164,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           Validators.compose([Validators.required]),
         ],
         started_at: [
-          this.itemModel.started_at,
-          Validators.compose([Validators.required]),
+          this.itemModel.started_at
         ],
         type_gender: [
           this.itemModel.type_gender,
@@ -174,10 +181,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           this.itemModel.phone,
           Validators.compose([Validators.required]),
         ],
-        /* phone_fixed: [
-           this.itemModel.phone_fixed,
-           Validators.compose([Validators.required]),
-         ],*/
         email: [
           this.itemModel.email,
           Validators.compose([Validators.maxLength(100), Validators.email]),
@@ -230,10 +233,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           this.itemModel.phone,
           Validators.compose([Validators.required]),
         ],
-        /*  phone_fixed: [
-            this.itemModel.phone_fixed,
-            Validators.compose([Validators.required]),
-          ],*/
         email: [
           this.itemModel.email,
           Validators.compose([Validators.maxLength(100), Validators.email]),
@@ -257,81 +256,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         contacts: this.fb.array([]),
       });
     }
-
-    /*
-    this.editForm = this.fb.group({
-      type_people: [
-        this.itemModel.type_people,
-        Validators.compose([Validators.required]),
-      ],
-      type_identification: [
-        this.itemModel.type_identification,
-        Validators.compose([Validators.required]),
-      ],
-      identification: [
-        this.itemModel.identification,
-        Validators.compose([Validators.required]),
-      ],
-      name_company: [
-        this.itemModel.name_company,
-        Validators.compose([Validators.required]),
-      ],
-      firstname: [
-        this.itemModel.firstname
-      ],
-      lastname: [
-        this.itemModel.lastname
-      ],
-      started_at: [
-        this.itemModel.started_at
-      ],
-      type_gender: [
-        this.itemModel.type_gender
-      ],
-      address: [
-        this.itemModel.address
-      ],
-
-      type_number: [
-        this.itemModel.type_number
-      ],
-      phone_movil: [
-        this.itemModel.phone_movil
-      ],
-
-      phone_fixed: [
-        this.itemModel.phone_fixed
-      ],
-      email: [
-        this.itemModel.email,
-        Validators.compose([Validators.maxLength(100), Validators.email]),
-      ],
-      is_accounting: [
-        this.itemModel.is_accounting
-      ],
-      is_disability: [
-        this.itemModel.is_disability
-      ],
-      is_old: [
-        this.itemModel.is_old
-      ],
-      is_bond: [
-        this.itemModel.is_bond
-      ],
-      firstname_representative: [
-        this.itemModel.firstname_representative
-      ],
-
-      lastname_representative: [
-        this.itemModel.lastname_representative
-      ],
-      phone_representative: [
-        this.itemModel.phone_representative
-      ],
-      contacts: this.fb.array([]),
-    });
-    */
-
   }
 
 
@@ -360,7 +284,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
          return;
        }*/
       this.addItem(editedItem);
-
     }
   }
 
@@ -404,35 +327,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       _item.phone_representative = controls["phone_representative"].value;
       return _item;
     }
-
-    /*
-    _item.type_people = controls["type_people"].value;
-    _item.type_identification = controls["type_identification"].value;
-    _item.identification = controls["identification"].value;
-    _item.name_company = controls["name_company"].value;
-    _item.firstname = controls["firstname"].value;
-    _item.lastname = controls["lastname"].value;
-    _item.started_at = controls["started_at"].value;
-    _item.type_gender = controls["type_gender"].value;
-    _item.address = controls["address"].value;
-    _item.type_number = controls["type_number"].value;
-    _item.phone_movil = controls["phone_movil"].value;
-    _item.phone_fixed = controls["phone_fixed"].value;
-    _item.email = controls["email"].value;
-    _item.is_accounting = controls["is_accounting"].value;
-    _item.is_disability = controls["is_disability"].value;
-    _item.is_old = controls["is_old"].value;
-    _item.is_bond = controls["is_bond"].value;
-    _item.firstname_representative = controls["firstname_representative"].value;
-    _item.lastname_representative = controls["lastname_representative"].value;
-    _item.phone_representative = controls["phone_representative"].value;
-    return _item;
-    */
   }
 
   changeTypeNumber($event) {
-
-
     if ($event.id == 'MOV') {
       this.titleNumber = 'Móvil';
       this.activeMovField = true;
@@ -440,15 +337,12 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       this.titleNumber = 'Fijo';
       this.activeMovField = false;
     }
-
     this.editForm.controls['phone'].setValue(null);
-
   }
 
   changeTypePeople($event) {
     this.getTypeIdentification = [];
     this.refresh = true;
-    // this.initForm();
     if ($event.id == 'PN') {
       this.typeIdentificator = 'IDE';
       this.titleStartedAt = 'Fecha de nacimiento';
@@ -464,7 +358,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       this.activeField = true;
     }
     this.initForm();
-
     setTimeout(() => this.refresh = false, 1500);
     this.cdr.detectChanges();
   }
@@ -472,12 +365,28 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
   addRecord() {
     const item = this.fb.group({
-      contact: '',
-      parent: '',
-      value_email: '',
-      value_phone: '',
+      name: '',
+      name_parent: '',
+      email: '',
+      phone: '',
+      type_number: 'MOV',
     });
     this.contacts.push(item);
+  }
+
+  changeTypeNumberContacts($event, i) {
+    console.log(i);
+    console.log(this.contacts);
+   // this.activeMovFieldContact `${i}` = false;
+    console.log($event.id);
+    if ($event.id == 'MOV') {
+      //  this.titleNumberContact = 'Móvil';
+      this.activeMovFieldContact = true;
+    } else {
+      //  this.titleNumber = 'Fijo';
+      this.activeMovFieldContact = false;
+    }
+    // this.editForm.controls['phone'].setValue(null);
   }
 
   removeItem(i: number) {
@@ -581,16 +490,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     this.itemModel = new IspCustomer();
     this.itemModel.clear();
-
-
-    /* if (this.activeField == false) {
-       this.createForm1();
-     } else {
-       this.createForm2();
-     }*/
-
     this.initForm();
-
     this.addRecord();
   }
 
