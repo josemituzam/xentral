@@ -15,8 +15,9 @@ class CreateApiCloudfaresTable extends Migration
     {
         Schema::create('api_cloudfares', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('token', 64)->unique();
+            $table->string('token', 64)->nullable(true);
             $table->string('type', 100)->nullable(true);
+            $table->string('type_constrain', 100)->nullable(true);
             $table->string('type_id', 100)->nullable(true);
             $table->string('ip', 100)->nullable(true);
             $table->string('domain', 100)->nullable(true);

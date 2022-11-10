@@ -27,8 +27,7 @@ class Note extends Model
     protected $fillable = [
         'note',
         'module_short_code',
-        'contextable_type',
-        'contextable_id',
+        'reference_id',
         'created_by',
         'updated_by',
         'deleted_by',

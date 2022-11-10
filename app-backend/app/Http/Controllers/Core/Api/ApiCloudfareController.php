@@ -16,8 +16,8 @@ class ApiCloudfareController extends Controller
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $obj->token,
         ])->post($this->url . 'zones/' . $obj->type_id . '/dns_records', [
-            'type' => 'A',
-            'name' => $subdomain .  $obj->domain,
+            'type' =>  $obj->type_constrain,
+            'name' => $subdomain . $obj->domain,
             'content' =>  $obj->ip,
             'ttl' => 1,
             'proxied' => true

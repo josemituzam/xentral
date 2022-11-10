@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   FormArray,
   FormBuilder,
@@ -14,12 +13,12 @@ import { FlatpickrOptions } from 'ng2-flatpickr';
 import { cloneDeep } from 'lodash';
 import { catchError, delay, finalize, tap } from 'rxjs/operators';
 import { repeaterAnimation } from './form-repeater.animation';
-
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { IspCustomerService } from 'core/services/ispcustomer.service';
 import { IspCustomer } from 'core/models/ispcustomer.model';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-
+import Swal from 'sweetalert2'
 @Component({
   selector: 'app-customer-edit',
   templateUrl: './customer-edit.component.html',
@@ -36,7 +35,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   preferredCountries: CountryISO[] = [CountryISO.UnitedStates,
   CountryISO.UnitedKingdom];
 
-
   separateDialCode2 = true;
   SearchCountryField2 = SearchCountryField;
   CountryISO2 = CountryISO;
@@ -45,16 +43,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   preferredCountries2: CountryISO[] = [CountryISO.UnitedStates,
   CountryISO.UnitedKingdom];
 
-  separateDialCode3 = true;
-  SearchCountryField3 = SearchCountryField;
-  CountryISO3 = CountryISO;
-  PhoneNumberFormat3 = PhoneNumberFormat;
-
-  preferredCountries3: CountryISO[] = [CountryISO.UnitedStates,
-  CountryISO.UnitedKingdom];
-
   // Public
-  public active = 2;
+  public active = 1;
   public url = this.router.url;
   public activeMovField = true;
   public urlLastValue;
@@ -64,6 +54,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   public avatarImage: string;
   public contentHeader: object
   public loading = false;
+  public loadingWith = false;
   public typePeople = 'PN';
   public typeIdentificator = 'IDE'
   public typeNumber = 'MOV'
@@ -73,27 +64,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   public titleNumber = 'Móvil';
   public titleStartedAt = 'Fecha de nacimiento';
   public refresh = false;
-
   public activeMovFieldContact = true;
-
   startDate: string;
   endDate: string;
   maxDate: string;
-
   editForm: FormGroup;
   itemModel: IspCustomer;
-
-  //@ViewChild('accountForm') accountForm: NgForm;
-
-  public birthDateOptions: FlatpickrOptions = {
-    altInput: true
-  };
-
   subscriptions: Subscription[] = [];
-
-  public selectMultiLanguages = ['English', 'Spanish', 'French', 'Russian', 'German', 'Arabic', 'Sanskrit'];
-  public selectMultiLanguagesSelected = [];
-
 
   public getTypePeople: any = [
     { id: 'PN', name: 'Persona Natural' },
@@ -114,8 +91,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   ];
 
 
-
-
   // Private
   private _unsubscribeAll: Subject<any>;
 
@@ -125,19 +100,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
    * @param {Router} router
    * @param {UserEditService} _userEditService
    */
-  constructor(private datePipe: DatePipe, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
+  constructor(private datePipe: DatePipe, private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
     this._unsubscribeAll = new Subject();
     this.urlLastValue = this.url.substr(this.url.lastIndexOf('/') + 1);
-  }
-
-  // Public Methods
-  // -----------------------------------------------------------------------------------------------------
-
-  /**
-   * Reset Form With Default Values
-   */
-  resetFormWithDefaultValues() {
-    //this.accountForm.resetForm(this.tempRow);
   }
 
   initForm() {
@@ -197,7 +162,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         is_bond: [
           this.itemModel.is_bond
         ],
-        contacts: this.fb.array([]),
       });
     } else {
       this.editForm = this.fb.group({
@@ -253,7 +217,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           this.itemModel.phone_representative,
           Validators.compose([Validators.required]),
         ],
-        contacts: this.fb.array([]),
       });
     }
   }
@@ -277,13 +240,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
         return;
       }
-
       const editedItem = this.prepareItem();
-      /* if (this.id) {
-         // this.updateItem(editedItem);
-         return;
-       }*/
-      this.addItem(editedItem);
+      this.addItem(editedItem, false, false);
     }
   }
 
@@ -303,7 +261,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       _item.address = controls["address"].value;
       _item.type_number = controls["type_number"].value;
       _item.phone = controls["phone"].value;
-      //  _item.phone_fixed = controls["phone_fixed"].value;
       _item.email = controls["email"].value;
       _item.is_accounting = controls["is_accounting"].value;
       _item.is_disability = controls["is_disability"].value;
@@ -311,21 +268,22 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       _item.is_bond = controls["is_bond"].value;
       return _item;
     } else {
-      _item.type_people = controls["type_people"].value;
-      _item.type_identification = controls["type_identification"].value;
-      _item.identification = controls["identification"].value;
-      _item.name_company = controls["name_company"].value;
-      _item.started_at = controls["started_at"].value;
-      _item.address = controls["address"].value;
-      _item.type_number = controls["type_number"].value;
-      _item.phone = controls["phone"].value;
-      //  _item.phone_fixed = controls["phone_fixed"].value;
-      _item.email = controls["email"].value;
-      _item.is_accounting = controls["is_accounting"].value;
-      _item.firstname_representative = controls["firstname_representative"].value;
-      _item.lastname_representative = controls["lastname_representative"].value;
-      _item.phone_representative = controls["phone_representative"].value;
-      return _item;
+      if (this.activeField == true) {
+        _item.type_people = controls["type_people"].value;
+        _item.type_identification = controls["type_identification"].value;
+        _item.identification = controls["identification"].value;
+        _item.name_company = controls["name_company"].value;
+        _item.started_at = controls["started_at"].value;
+        _item.address = controls["address"].value;
+        _item.type_number = controls["type_number"].value;
+        _item.phone = controls["phone"].value;
+        _item.email = controls["email"].value;
+        _item.is_accounting = controls["is_accounting"].value;
+        _item.firstname_representative = controls["firstname_representative"].value;
+        _item.lastname_representative = controls["lastname_representative"].value;
+        _item.phone_representative = controls["phone_representative"].value;
+        return _item;
+      }
     }
   }
 
@@ -363,56 +321,19 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   }
 
 
-  addRecord() {
-    const item = this.fb.group({
-      name: '',
-      name_parent: '',
-      email: '',
-      phone: '',
-      type_number: 'MOV',
-    });
-    this.contacts.push(item);
-  }
-
-  changeTypeNumberContacts($event, i) {
-    console.log(i);
-    console.log(this.contacts);
-   // this.activeMovFieldContact `${i}` = false;
-    console.log($event.id);
-    if ($event.id == 'MOV') {
-      //  this.titleNumberContact = 'Móvil';
-      this.activeMovFieldContact = true;
-    } else {
-      //  this.titleNumber = 'Fijo';
-      this.activeMovFieldContact = false;
-    }
-    // this.editForm.controls['phone'].setValue(null);
-  }
-
-  removeItem(i: number) {
-    this.contacts.removeAt(i);
-  }
-
-  get contacts() {
-    return this.editForm.controls['contacts'] as FormArray;
-  }
-
-  /**
-   * Upload Image
-   *
-   * @param event
-   */
-  uploadImage(event: any) {
-
-  }
-
   /**
    * Submit
    *
    * @param form
    */
-  submit() {
-    this.loading = true;
+  submit(withBack: boolean = false, back: boolean = false) {
+
+    if (back == true) {
+      this.loading = true;
+    } else {
+      this.loadingWith = true;
+    }
+
     const controls = this.editForm.controls;
     /** check form */
     if (this.editForm.invalid) {
@@ -423,20 +344,16 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         );
         controls[controlName].markAsTouched();
       });
+      this.loadingWith = false;
       this.loading = false;
       this.cdr.detectChanges();
       return;
     }
-
     const editedItem = this.prepareItem();
-    /* if (this.id) {
-       // this.updateItem(editedItem);
-       return;
-     }*/
-    this.addItem(editedItem);
+    this.addItem(editedItem, withBack, back);
   }
 
-  addItem(_item: IspCustomer) {
+  addItem(_item: IspCustomer, withBack: boolean = false, back: boolean = false) {
 
     const sbCreate = this._service.create(_item).pipe(
       catchError((errorMessage) => {
@@ -454,16 +371,55 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           )
         }
         this.loading = false;
+        this.loadingWith = false;
         this.cdr.detectChanges();
         return of(null);
       })
     ).subscribe((res: any) => {
       if (res) {
+        console.log(res);
+        this.itemModel = res.obj;
         this.loading = false;
+        this.loadingWith = false;
+        this.setMessageSuccess("Guardado Correctamente")
+        if (back) {
+          console.log("si tiene back");
+          this.goBackWithout();
+          return;
+        }
+        if (withBack) {
+          console.log("si tiene withBack");
+          this.refreshItem();
+          return;
+        }
       }
     });
     this.subscriptions.push(sbCreate);
   }
+
+  setMessageSuccess(message: string) {
+    Swal.fire({
+      icon: 'success',
+      title: `${message}`,
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
+
+  goBackWithout() {
+    console.log("goBackWithout...");
+    this.router.navigate(['/isp/customer/list'], { relativeTo: this.activatedRoute });
+  }
+
+
+  refreshItem() {
+    let url = this.router.url;
+    this.editForm.reset();
+    url = `/isp/customer/add`;
+    this.router.navigate([url], { relativeTo: this.activatedRoute });
+  }
+
+
 
   // Lifecycle Hooks
   // -----------------------------------------------------------------------------------------------------
@@ -491,7 +447,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     this.itemModel = new IspCustomer();
     this.itemModel.clear();
     this.initForm();
-    this.addRecord();
   }
 
   getDate(): void {

@@ -32,4 +32,15 @@ export class IspCustomerService {
         });
     }
 
+    /**
+    * Get all users
+    */
+    createContactCustomer(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+        return this._http.post<any>(`${this.API_SERVICE_URL}/contact`, data, {
+            headers: httpHeaders,
+        });
+    }
+
 }

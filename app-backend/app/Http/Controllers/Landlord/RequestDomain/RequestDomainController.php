@@ -51,7 +51,9 @@ class RequestDomainController extends Controller
                 $param = array(0 => '=', 1 => '=');
                 $type = 0;
             }
-            $requestDomains = RequestDomain::with(['service'])->where('deleted_at', '=', null);
+            $requestDomains = RequestDomain::with(['service' => function ($query) {
+                $query->where('domain_services.deleted_at', '=', null);
+            }])->where('deleted_at', '=', null);
 
             $Filtred = $helpers->filter($requestDomains, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
@@ -281,9 +283,11 @@ class RequestDomainController extends Controller
             'tenant_id' => $objTenant->id,
         ]);
 
-        $objApi = ApiCloudfare::where('long_code', 'ROOT')->where('type', 'Zone')->first();
+        $objApi = ApiCloudfare::where('short_code', env('APP_MODE'))->get();
         $methods = new ApiCloudfareController();
-        $methods->createSubDomain($objRequestDomain, $objApi);
+        foreach ($objApi as $item) {
+            $methods->createSubDomain($objRequestDomain->domain_name, $item);
+        }
         return $objTenant;
     }
 

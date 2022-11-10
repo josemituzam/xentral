@@ -15,9 +15,9 @@ class CreateNotesTable extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->longText('note');
-            $table->string('module_short_code', 10)->nullable(true);
-            $table->nullableUuidMorphs('contextable');
+            $table->string('note', 300)->nullable(false);
+            $table->string('module_short_code', 10)->nullable(false);
+            $table->uuid('reference_id')->nullable(false);
             $table->uuid('created_by')->nullable(true);
             $table->uuid('updated_by')->nullable(true);
             $table->uuid('deleted_by')->nullable(true);

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Core\AuthController;
 use App\Http\Controllers\Core\User\UserController;
+use App\Http\Controllers\Tenant\Customer\IspContactCustomerController;
 use App\Http\Controllers\Tenant\Customer\IspCustomerController;
+use App\Http\Controllers\Tenant\Note\NoteController;
 use App\Http\Controllers\Tenant\Service\ServiceController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -46,6 +48,12 @@ Route::middleware([
             Route::get('ispcustomer/{id}/edit', [IspCustomerController::class, 'edit']);
             Route::delete('ispcustomer/{id}', [IspCustomerController::class, 'destroy']);
             Route::put('ispcustomer/active/{id}', [IspCustomerController::class, 'activeRecord']);
+            Route::post('ispcustomer/contact', [IspContactCustomerController::class, 'store']);
+
+            //Notas
+            Route::get('note/index', [NoteController::class, 'index']);
+            Route::post('note/store', [NoteController::class, 'store']);
+            Route::put('note/{id}/update', [NoteController::class, 'update']);
         });
     });
 });

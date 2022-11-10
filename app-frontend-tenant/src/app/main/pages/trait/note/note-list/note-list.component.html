@@ -1,24 +1,42 @@
 <div class="container">
-  <ngb-alert [type]="'primary'" [dismissible]="false">
-    <div class="alert-body">
-      <strong>Good Morning!</strong> Start your day with some alerts.
-    </div>
-  </ngb-alert>
-
-  <form class="form">
+  <form class="form" [formGroup]="editForm">
     <div class="form-group">
       <fieldset class="form-group">
         <textarea
           class="form-control"
           id="basicTextarea"
           rows="3"
-          placeholder="Textarea"
+          placeholder="Mi nota"
+          formControlName="note"
+          [ngClass]="{
+            'is-invalid': isControlInvalid('note'),
+            'is-valid': isControlValid('note')
+          }"
         ></textarea>
+        <div class="valid-feedback" *ngIf="isControlValid('note')">
+          Nota ingresada correctamente
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="editForm.get('note')?.errors?.serverError"
+        >
+          {{ editForm.get("note")?.errors?.serverError }}
+        </div>
       </fieldset>
     </div>
     <div class="row">
       <div class="col">
-        <button type="button" class="btn btn-primary" rippleEffect>
+        <button
+          type="button"
+          [disabled]="loading"
+          (click)="submit()"
+          class="btn btn-primary"
+          rippleEffect
+        >
+          <span
+            *ngIf="loading"
+            class="spinner-border spinner-border-sm mr-1"
+          ></span>
           Agregar
         </button>
       </div>
@@ -26,22 +44,37 @@
   </form>
 
   <br />
+  <hr />
+  <div *ngFor="let item of noteList">
+    <ul class="timeline mb-2">
+      <li class="timeline-item">
+        <span
+          class="timeline-point timeline-point-success timeline-point-indicator"
+        ></span>
+        <div class="timeline-event">
+          <div class="d-flex justify-content-between align-items-center mb-50">
+            <h6>Administrador </h6>
 
-  <ul class="timeline">
-    <li class="timeline-item">
-      <span class="timeline-point timeline-point-indicator"></span>
-      <div class="timeline-event">
-        <div
-          class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1"
-        >
-          <h6>12 Invoices have been paid</h6>
-          <span class="timeline-event-time">12 min ago</span>
+            <span class="timeline-event-time">
+              <span
+                class="badge badge-pill badge-light-primary"
+                *ngIf="isActiveNew(item)"
+                >Nuevo</span
+              >
+              <span
+                class="badge badge-pill badge-light-primary"
+                *ngIf="isUpdateNote(item)"
+                >Editado</span
+              >
+              {{ item.created_at | date: "medium" }}</span
+            >
+          </div>
+          <p>
+            {{ item.note }}
+          </p>
         </div>
-        <p>Invoices have been paid to the company.</p>
-        <div class="media align-items-center">
-          <div class="media-body">invoice.pdf</div>
-        </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+    <hr />
+  </div>
 </div>

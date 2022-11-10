@@ -21,6 +21,8 @@ import { NoteListComponent } from '../../trait/note/note-list/note-list.componen
 
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { CustomerContactsComponent } from './customer-edit/customer-contact/customer-contact.component';
+import { TypesUtilsService } from 'core/helpers/types-utils.service';
 
 // routing
 const routes: Routes = [
@@ -43,7 +45,7 @@ const routes: Routes = [
 ];
 export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
 @NgModule({
-  declarations: [CustomerListComponent, CustomerEditComponent, NoteListComponent],
+  declarations: [CustomerListComponent, CustomerEditComponent, NoteListComponent, CustomerContactsComponent],
   imports: [
     NgxIntlTelInputModule,
     NgxMaskModule.forRoot(),
@@ -60,6 +62,6 @@ export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
     CoreDirectivesModule,
     CoreSidebarModule
   ],
-  providers: [CustomerListService, DatePipe]
+  providers: [CustomerListService, DatePipe, TypesUtilsService]
 })
 export class CustomerModule { }

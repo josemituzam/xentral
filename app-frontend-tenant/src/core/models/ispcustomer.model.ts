@@ -21,6 +21,8 @@ export class IspCustomer {
     lastname_representative !: string;
     phone_representative !: string;
 
+    contacts!: [];
+
     clear(): void {
         this.id = null;
         this.type_people = null;
@@ -43,6 +45,7 @@ export class IspCustomer {
         this.firstname_representative = '';
         this.lastname_representative = '';
         this.phone_representative = '0';
+        this.contacts = [];
 
     }
 }

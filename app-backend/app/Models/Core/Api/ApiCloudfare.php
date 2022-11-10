@@ -16,6 +16,7 @@ class ApiCloudfare extends Model
         'token',
         'type',
         'type_id',
+        'type_constrain',
         'ip',
         'domain',
         'short_code',
