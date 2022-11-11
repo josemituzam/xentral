@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="myModalLabel1">Editar Nota</h4>
+  <button
+    type="button"
+    class="close"
+    (click)="modal.dismiss('Cross click')"
+    aria-label="Close"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" tabindex="0" ngbAutofocus>
+  <form [formGroup]="editForm">
+    <div class="form-group">
+      <fieldset class="form-group">
+        <textarea
+          class="form-control"
+          id="basicTextarea"
+          rows="3"
+          placeholder="Mi nota"
+          formControlName="note"
+          [ngClass]="{
+            'is-invalid': isControlInvalid('note'),
+            'is-valid': isControlValid('note')
+          }"
+        ></textarea>
+        <div class="valid-feedback" *ngIf="isControlValid('note')">
+          Nota ingresada correctamente
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="controlHasError('maxlength', 'note')"
+        >
+          {{ "Máximo: " }} 300
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="editForm.get('note')?.errors?.serverError"
+        >
+          {{ editForm.get("note")?.errors?.serverError }}
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-light" (click)="modal.close()">
+    Cancelar
+  </button>
+  <button
+    [disabled]="loading"
+    type="submit"
+    class="btn btn-primary mr-1"
+    (click)="submit()"
+    rippleEffect
+  >
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span
+    >Guardar
+  </button>
+</div>

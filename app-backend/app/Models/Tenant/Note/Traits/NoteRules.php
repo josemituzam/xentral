@@ -31,13 +31,15 @@ trait NoteRules
         $messages = [
             'note.required' => 'El :attribute es requerido.',
             'module_short_code.required' => 'El :attribute es requerido.',
+            'reference_id.required' => 'El :attribute es requerido.',
         ];
 
         return Validator::make(
             $note,
             [
-                'note' => 'required,',
+                'note' => 'required',
                 'module_short_code' => 'required',
+                'reference_id' => 'required',
             ],
             $messages
         );

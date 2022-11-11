@@ -15,6 +15,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Note } from 'core/models/note.model';
 import { NoteService } from 'core/services/note.service';
 import { TypesUtilsService } from 'core/helpers/types-utils.service';
+import { NoteEditComponent } from '../note-edit/note-edit-modal.component';
 
 @Component({
 	selector: 'app-note-list',
@@ -142,7 +143,25 @@ export class NoteListComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(sbCreate);
 	}
 
-	editItem() {
+	/**
+ * Redirect to edit page
+ *
+ * @param id: any
+ */
+	editItem(id, note) {
+
+		const modalRef = this.modalService.open(NoteEditComponent, {
+			centered: true,
+			backdrop: 'static',
+			size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
+		});
+		modalRef.componentInstance.referenceId = 'a30e0dbe-8214-4470-9779-4e907bc9507a';
+		modalRef.componentInstance.type = this.type;
+		modalRef.componentInstance.note = note;
+		modalRef.componentInstance.id = id;
+		modalRef.result.then(() => {
+			this.getNotes('a30e0dbe-8214-4470-9779-4e907bc9507a', this.type)
+		});
 
 	}
 
@@ -173,7 +192,7 @@ export class NoteListComponent implements OnInit, OnDestroy {
 	 */
 	initForm() {
 		this.editForm = this.fb.group({
-			note: ['', Validators.required]
+			note: ['', Validators.compose([Validators.maxLength(300), Validators.required])]
 		});
 	}
 

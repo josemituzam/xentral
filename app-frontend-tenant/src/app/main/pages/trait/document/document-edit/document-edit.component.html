@@ -1,0 +1,109 @@
+<div class="modal-header">
+  <h4 class="modal-title"></h4>
+
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form
+    [formGroup]="uploadFileForm"
+    class="kt-form kt-form--group-seperator-dashed"
+  >
+    <div class="form-group row">
+      <label class="col-xl-3 col-lg-3 col-form-label text-right"
+        >Descripción</label
+      >
+      <div class="col-lg-9 col-xl-9">
+        <input
+          class="form-control form-control-lg form-control-solid"
+          type="text"
+          formControlName="description"
+          name="description"
+          [ngClass]="{ 'is-invalid': isValidField('description') }"
+        />
+
+        <div
+          class="invalid-feedback"
+          *ngIf="isControlHasError('description', 'required')"
+        >
+          {{ "EDITFORM.VALIDATION.REQUIRED_FIELD" | translate }}
+        </div>
+
+        <div
+          class="invalid-feedback"
+          *ngIf="isControlHasError('description', 'minlength')"
+        >
+          {{ "EDITFORM.VALIDATION.MIN_LENGTH_FIELD" | translate }} 10
+        </div>
+
+        <div
+          class="invalid-feedback"
+          *ngIf="isControlHasError('description', 'maxlength')"
+        >
+          {{ "EDITFORM.VALIDATION.MAX_LENGTH_FIELD" | translate }} 320
+        </div>
+        <span *ngIf="!contentId" class="form-text text-muted"
+          >Detalle la descripción de su documento de soporte.</span
+        >
+      </div>
+    </div>
+
+    <div class="form-group row" *ngIf="!contentId">
+      <label class="col-xl-3 col-lg-3 col-form-label text-right"
+        >Documento</label
+      >
+
+      <div class="col-lg-9 col-xl-9 custom-file">
+        <input
+          type="file"
+          placeholder="Ingrese el archivo"
+          class="form-control form-control-lg form-control-solid custom-file-input"
+          id="customFile"
+          (change)="onFileChange($event)"
+          [ngClass]="{ 'is-invalid': isValidField('contentFile') }"
+        />
+
+        <label
+          class="custom-file-label"
+          style="right: 14px; left: 12px"
+          for="customFile"
+          >{{ getTextSelect() }}</label
+        >
+
+        <div
+          class="invalid-feedback"
+          *ngIf="isControlHasError('contentFile', 'required')"
+        >
+          {{ "EDITFORM.VALIDATION.REQUIRED_FIELD" | translate }}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-default"
+    (click)="activeModal.close('NoLoad')"
+  >
+    Cancelar
+  </button>
+  &nbsp;&nbsp;
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="viewLoading"
+    (click)="onSubmit()"
+    [ngClass]="{
+      'spinner spinner-right spinner-md spinner-light': viewLoading
+    }"
+  >
+    Guardar
+  </button>
+</div>

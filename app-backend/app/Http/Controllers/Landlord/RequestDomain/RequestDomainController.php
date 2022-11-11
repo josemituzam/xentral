@@ -287,7 +287,7 @@ class RequestDomainController extends Controller
         $objApi = ApiCloudfare::where('short_code', '=', $varEnv)->get();
         $methods = new ApiCloudfareController();
         foreach ($objApi as $item) {
-            $methods->createSubDomain($objRequestDomain->domain_name, $item);
+            // $methods->createSubDomain($objRequestDomain->domain_name, $item);
         }
         return $objTenant;
     }

@@ -23,6 +23,8 @@ import { NgxMaskModule, IConfig } from 'ngx-mask'
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { CustomerContactsComponent } from './customer-edit/customer-contact/customer-contact.component';
 import { TypesUtilsService } from 'core/helpers/types-utils.service';
+import { NoteEditComponent } from '../../trait/note/note-edit/note-edit-modal.component';
+import { DocumentListComponent } from '../../trait/document/document-list/document-list.component';
 
 // routing
 const routes: Routes = [
@@ -45,7 +47,8 @@ const routes: Routes = [
 ];
 export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
 @NgModule({
-  declarations: [CustomerListComponent, CustomerEditComponent, NoteListComponent, CustomerContactsComponent],
+  //declarations: [CustomerListComponent, CustomerEditComponent, NoteListComponent, NoteEditComponent, DocumentListComponent, CustomerContactsComponent],
+  declarations: [CustomerListComponent, CustomerEditComponent, NoteListComponent, NoteEditComponent, CustomerContactsComponent],
   imports: [
     NgxIntlTelInputModule,
     NgxMaskModule.forRoot(),

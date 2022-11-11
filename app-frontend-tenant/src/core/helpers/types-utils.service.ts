@@ -153,15 +153,6 @@ export class TypesUtilsService {
       
       let dayToday = date.getDate();
 
-      console.log("yearToday: ",yearToday);
-      console.log("year: ",year);
-
-      console.log("monthToday: ",monthToday);
-      console.log("month: ",month);
-
-      console.log("dayToday: ",dayToday);
-      console.log("day: ",day);
-
       if (year !== yearToday) {
         return false;
       }
@@ -173,7 +164,6 @@ export class TypesUtilsService {
       if (day !== dayToday) {
         return false;
       }
-
 
       return true;
 
