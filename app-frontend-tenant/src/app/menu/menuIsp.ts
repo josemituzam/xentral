@@ -52,12 +52,12 @@ export const menuIsp: CoreMenu[] = [
                         url: 'manager/sales/list'
                     },
                     {
-                        id: 'sales',
-                        title: 'Sales',
-                        translate: 'MENU.ISP.COMMERCIAL.SECTIONS',
+                        id: 'sectores',
+                        title: 'Sector',
+                        translate: 'MENU.ISP.COMMERCIAL.SECTORS',
                         type: 'item',
                         icon: 'circle',
-                        url: 'manager/sales/list'
+                        url: 'isp/sector/list'
                     }
                 ]
             },

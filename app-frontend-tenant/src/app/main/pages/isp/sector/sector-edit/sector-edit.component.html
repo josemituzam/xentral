@@ -1,0 +1,164 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-body">
+          <ul ngbNav #nav="ngbNav" class="nav nav-pills">
+            <li ngbNavItem>
+              <a ngbNavLink class="d-flex align-items-center"
+                ><i data-feather="user" class="mr-sm-50"></i
+                ><span class="d-none d-sm-block">Información</span></a
+              >
+              <ng-template ngbNavContent>
+                <!-- Account Tab starts -->
+                <div
+                  class="tab-pane active"
+                  id="account"
+                  aria-labelledby="account-tab"
+                  role="tabpanel"
+                >
+                  <!-- users edit media object ends -->
+                  <!-- users edit account form start -->
+                  <form class="form-validate" [formGroup]="editForm">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="name">Nombre</label>
+                          <input
+                            type="text"
+                            id="name"
+                            class="form-control"
+                            placeholder="Nombre"
+                            formControlName="name"
+                            name="name-customer"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('name'),
+                              'is-valid': isControlValid('name')
+                            }"
+                          />
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('name')"
+                          >
+                            Sector ingresado correctamente
+                          </div>
+
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="editForm.get('name')?.errors?.serverError"
+                          >
+                            {{ editForm.get("name")?.errors?.serverError }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="description"
+                            >Provincia/Canton/Parroquia</label
+                          >
+                          <ng-select
+                            [(ngModel)]="descriptionValue"
+                            [items]="getDescripcion"
+                            [clearable]="false"
+                            name="selectdescription"
+                            formControlName="description"
+                            bindValue="id"
+                            bindLabel="name"
+                            placeholder="Seleccione de la lista"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('description'),
+                              'is-valid': isControlValid('description')
+                            }"
+                          >
+                            <ng-template
+                              ng-option-tmp
+                              ng-label-tmp
+                              let-item="item"
+                            >
+                              {{ item.name }}
+                            </ng-template>
+                          </ng-select>
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('description')"
+                          >
+                            Localizacion ingresada correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('description')?.errors?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("description")?.errors?.serverError
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div>
+                          <!--<label>Enter address</label>-->
+                          <input
+                            type="text"
+                            class="my-search-box"
+                            (keydown.enter)="$event.preventDefault();"
+                            placeholder="Buscar locacion"
+                            type="text"
+                            #search
+                          />
+                        </div>
+                        <!--<div class="my-google-map">
+                          <google-map [options]="mapOptions"
+                          (mapClick)="eventHandler($event,'mapClick')">
+                            <map-marker
+                              [position]="marker.position"
+                            ></map-marker>
+                          </google-map>
+                        </div>-->
+                        <google-map
+                          #myGoogleMap
+                          height="500px"
+                          width="100%"
+                          [zoom]="zoom"
+                          [center]="center"
+                          [options]="options"
+                          (mapClick)="eventHandler($event,'mapClick')"
+                        >
+                        <map-marker
+                              [position]="marker.position"
+                            ></map-marker>
+                      </google-map>
+                      </div>
+                    </div>
+                    <div
+                      class="col-12 d-flex flex-row-reverse flex-column mt-2"
+                    >
+                      <button
+                        (click)="submit()"
+                        type="button"
+                        class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                        rippleEffect
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- users edit account form ends -->
+                </div>
+                <!-- Account Tab ends -->
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

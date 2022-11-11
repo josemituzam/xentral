@@ -27,6 +27,9 @@ const routes: Routes = [
     ContentHeaderModule,
     CardSnippetModule,
     GoogleMapsModule
+  ],
+  exports: [
+    GoogleMapsComponent
   ]
 })
 export class GoogleMapModule {}

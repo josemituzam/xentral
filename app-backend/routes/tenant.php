@@ -6,6 +6,7 @@ use App\Http\Controllers\Core\AuthController;
 use App\Http\Controllers\Core\User\UserController;
 use App\Http\Controllers\Tenant\Customer\IspCustomerController;
 use App\Http\Controllers\Tenant\Service\ServiceController;
+use App\Http\Controllers\Tenant\Sector\IspSectorController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -46,6 +47,15 @@ Route::middleware([
             Route::get('ispcustomer/{id}/edit', [IspCustomerController::class, 'edit']);
             Route::delete('ispcustomer/{id}', [IspCustomerController::class, 'destroy']);
             Route::put('ispcustomer/active/{id}', [IspCustomerController::class, 'activeRecord']);
+
+             //Sectores
+            Route::post('ispsector/store', [IspSectorController::class, 'store']); // guarda
+            Route::put('ispsector/{id}/update', [IspSectorController::class, 'update']); //actualiza
+            Route::get('/ispsector/index', [IspSectorController::class, 'index']); //lista
+            Route::get('ispsector/{id}/show', [IspSectorController::class, 'show']); // lista uno
+            Route::delete('ispsector/{id}', [IspSectorController::class, 'destroy']); //elimina
+            Route::put('ispsector/active/{id}', [IspSectorController::class, 'activeRecord']); //activa
+            Route::get('/ispsector/getDescriptions',[IspSectorController::class, 'getAllParishCitiesProvinces']); //provincias-ciudades-parroquias
         });
     });
 });

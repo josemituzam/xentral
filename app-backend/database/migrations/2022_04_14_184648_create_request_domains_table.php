@@ -26,6 +26,7 @@ class CreateRequestDomainsTable extends Migration
             $table->string('type');
             $table->boolean('is_approved')->default(0);
             $table->boolean('is_active')->default(0);
+            $table->int('country_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
         });

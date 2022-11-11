@@ -10,6 +10,8 @@ import { ContentHeaderModule } from 'app/layout/components/content-header/conten
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CompanyModule } from './company/company.module';
 import { CustomerModule } from './customer/customer.module';
+import { SectorModule } from './sector/sector.module';
+
 //import { DashboardModule } from './dashboard/dashboard.module';
 
 
@@ -24,7 +26,8 @@ import { CustomerModule } from './customer/customer.module';
     FormsModule,
     NgxDatatableModule,
     CompanyModule,
-    CustomerModule
+    CustomerModule,
+    SectorModule
     //DashboardModule
   ],
 

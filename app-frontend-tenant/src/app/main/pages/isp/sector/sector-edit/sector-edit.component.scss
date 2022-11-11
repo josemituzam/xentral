@@ -1,0 +1,19 @@
+
+.my-google-map{
+    width: 100% !important;
+    .map-container{
+      width: 100% !important;
+      height: 600px !important;
+    }
+  }
+
+  .my-search-box {
+    align-self: center;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #212529;
+    width: 60%;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+  }

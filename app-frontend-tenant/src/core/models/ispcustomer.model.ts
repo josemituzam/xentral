@@ -47,4 +47,8 @@ export class IspCustomer {
     }
 }
 
+export class DescriptionSector {
+    id !: string;
+    name!: string;
+}
 

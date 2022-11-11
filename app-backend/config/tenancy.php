@@ -18,10 +18,10 @@ return [
      */
 
     //Dominios centrales para desarrollo
-    /*'central_domains' => [
+    'central_domains' => [
         '127.0.0.1',
         'localhost',
-    ],*/
+    ],
 
     //Dominios centrales de producción
     /* 'central_domains' => [
@@ -32,11 +32,11 @@ return [
     */
 
     //Dominios centrales de QA
-    'central_domains' => [
+    /*'central_domains' => [
         'api.ispxentral.com',
         // 'local_api.ispxentral.app',
         'ispxentral.com',
-    ],
+    ],*/
 
 
     /**

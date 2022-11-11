@@ -25,7 +25,7 @@ export const locale = {
                     CUSTOMER: 'Clientes',
                     CONTRACTS: 'Contratos',
                     PLANS: 'Planes',
-                    SECTIONS: 'Sectores'
+                    SECTORS: 'Sectores'
                 },
             },
 
