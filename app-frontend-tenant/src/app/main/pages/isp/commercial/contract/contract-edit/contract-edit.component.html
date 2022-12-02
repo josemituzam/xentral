@@ -1,0 +1,1135 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-body">
+          <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
+            <li ngbNavItem>
+              <a ngbNavLink><span [data-feather]="'cast'"></span> General</a>
+              <ng-template ngbNavContent>
+                <form class="form-validate" [formGroup]="editForm">
+                  <div class="row mt-1">
+                    <div class="col-12">
+                      <h4 class="mb-1">
+                        <i
+                          data-feather="edit-2"
+                          [size]="16"
+                          class="mr-75 font-medium-4"
+                        ></i>
+                        <span class="align-middle">General</span>
+                      </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="basicTextarea">Fecha de emisión</label>
+                        <input
+                          type="date"
+                          id="f-emission"
+                          formControlName="emission_at"
+                          class="form-control"
+                          name="f-created"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="basicTextarea">Cliente</label>
+                        <ng-select
+                          [items]="customers$ | async"
+                          bindLabel="fullname"
+                          bindValue="id"
+                          [minTermLength]="minLengthTerm"
+                          formControlName="customer_id"
+                          [loading]="customerLoading"
+                          placeholder="Digite el nombre o la identificación"
+                          [typeahead]="customersInput$"
+                          (change)="getCustomerAddress($event)"
+                        >
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Alias del contrato</label>
+                        <input
+                          type="text"
+                          id="firstname"
+                          class="form-control"
+                          formControlName="username"
+                          name="firstname"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="basicTextarea">Forma de pago</label>
+                        <ng-select
+                          [items]="paymentsList"
+                          [clearable]="false"
+                          name="selectpayment"
+                          formControlName="payment_id"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Seleccione"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="basicTextarea">Versión del contrato</label>
+                        <ng-select
+                          [items]="templateContractList"
+                          [clearable]="false"
+                          name="selecttemplatecontract"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Seleccione"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="basicTextarea"
+                          >Vendedor (Nombres y apellidos)</label
+                        >
+                        <ng-select
+                          [clearable]="false"
+                          name="selectplan"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Seleccione"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <h4 class="mb-1 mt-2">
+                        <i
+                          data-feather="shopping-cart"
+                          [size]="16"
+                          class="mr-75 font-medium-4"
+                        ></i>
+                        <span class="align-middle">Plan</span>
+                      </h4>
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                      <ngb-alert
+                        *ngIf="!selectedPlan"
+                        [type]="'warning'"
+                        [dismissible]="false"
+                      >
+                        <div class="alert-body">
+                          <span
+                            [data-feather]="'info'"
+                            [class]="'mr-50 align-middle'"
+                          ></span>
+                          <span>No ha sido seleccionado ningún plan</span>
+                        </div>
+                      </ngb-alert>
+
+                      <ngb-alert
+                        *ngIf="selectedPlan"
+                        [type]="'success'"
+                        [dismissible]="false"
+                      >
+                        <h4 class="alert-heading">
+                          {{ selectedPlan.name }}
+                        </h4>
+                        <div class="alert-body">
+                          <div class="row">
+                            <div class="col-lg-4">
+                              <table>
+                                <tr>
+                                  <td>
+                                    Costo de instalación:
+                                    <strong
+                                      >{{
+                                        selectedPlan?.plandetail[0]
+                                          ?.installation_cost
+                                      }}
+                                    </strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Costo mensual:
+                                    <strong>
+                                      {{
+                                        selectedPlan?.plandetail[0]?.month_cost
+                                      }}
+                                    </strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Monto de penalidad:
+                                    <strong>
+                                      {{
+                                        selectedPlan?.plandetail[0]
+                                          ?.penalty_amount
+                                      }}
+                                    </strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Costo de metro adicional:
+                                    <strong>
+                                      {{
+                                        selectedPlan?.plandetail[0]
+                                          ?.additional_meter_cost
+                                      }}
+                                    </strong>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                            <div class="col-lg-4">
+                              <table>
+                                <tr>
+                                  <td>
+                                    Subida: {{ selectedPlan.increase }}
+                                    {{ selectedPlan.type_increase }}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Bajada: {{ selectedPlan.downfall }}
+                                    {{ selectedPlan.type_downfall }}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Compartición:
+                                    <span
+                                      *ngIf="selectedPlan.compartition == 'A'"
+                                    >
+                                      1:1
+                                    </span>
+                                    <span
+                                      *ngIf="selectedPlan.compartition == 'B'"
+                                    >
+                                      1:2
+                                    </span>
+                                    <span
+                                      *ngIf="selectedPlan.compartition == 'C'"
+                                    >
+                                      1:4
+                                    </span>
+                                    <span
+                                      *ngIf="selectedPlan.compartition == 'D'"
+                                    >
+                                      1:8
+                                    </span>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                            <div class="col-lg-4">
+                              <table>
+                                <tr>
+                                  <td>
+                                    Metros gratis:
+                                    {{
+                                      selectedPlan?.plandetail[0]?.meters_free
+                                    }}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Permanencia mínima:
+                                    {{
+                                      selectedPlan?.plandetail[0]
+                                        ?.minimunpermanence?.name
+                                    }}
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </ngb-alert>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Última milla</label>
+                        <ng-select
+                          [items]="lastMilesList"
+                          [clearable]="false"
+                          name="selectcustomer"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Seleccione"
+                          (change)="getPlan($event)"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Planes</label>
+                        <ng-select
+                          [items]="planList"
+                          [clearable]="false"
+                          formControlName="plan_id"
+                          name="selectplan"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Seleccione"
+                          (change)="getPlanSelected($event)"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="basicTextarea">Día de corte</label>
+                        <input
+                          type="date"
+                          id="f-emission"
+                          class="form-control"
+                          formControlName="break_at"
+                          name="f-created"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Compartición</label>
+                        <ng-select
+                          [items]="getCompartition"
+                          [clearable]="false"
+                          name="selectpeople"
+                          formControlName="compartition"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Seleccione"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Permanencia mínima</label>
+                        <ng-select
+                          [items]="minimunPermanenceList"
+                          [clearable]="false"
+                          name="selectminimun"
+                          bindLabel="name"
+                          formControlName="minimun_permanence_id"
+                          bindValue="id"
+                          placeholder="Seleccione"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Costo de instalación</label>
+                        <input
+                          type="text"
+                          id="firstname"
+                          class="form-control"
+                          formControlName="installation_cost"
+                          name="firstname"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Costo mensual</label>
+                        <input
+                          type="text"
+                          id="firstname"
+                          class="form-control"
+                          formControlName="month_cost"
+                          name="firstname"
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      class="col-lg-4 col-md-4 d-flex align-items-center justify-content-center"
+                    >
+                      <div class="form-group">
+                        <div
+                          class="custom-control custom-switch custom-switch-success"
+                        >
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            formControlName="is_permanence_cost"
+                            id="customSwitch03"
+                            checked
+                            (change)="inputPermanence($event)"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="customSwitch03"
+                          >
+                            <span class="switch-icon-left"
+                              ><i data-feather="check"></i
+                            ></span>
+                            <span class="switch-icon-right"
+                              ><i data-feather="x"></i
+                            ></span>
+                          </label>
+                          ¿Cobrar permanencia?
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                      <div class="form-group">
+                        <label for="birth">Costo de permanencia</label>
+                        <input
+                          type="text"
+                          id="firstname"
+                          class="form-control"
+                          formControlName="permanence_cost"
+                          name="firstname"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <h4 class="mb-1 mt-2">
+                        <i
+                          data-feather="shopping-cart"
+                          [size]="16"
+                          class="mr-75 font-medium-4"
+                        ></i>
+                        <span class="align-middle">Ubicación</span>
+                      </h4>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                      <div class="col-lg-12 col-md-12">
+                        <div class="form-group">
+                          <label for="birth">Dirección de instalación</label>
+                          <input
+                            type="text"
+                            id="firstname"
+                            class="form-control"
+                            formControlName="address_contract"
+                            name="firstname"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-12 col-md-12">
+                        <div class="form-group">
+                          <button
+                            type="button"
+                            (click)="openSearchSector()"
+                            [attr.aria-expanded]="!isCollapsed0"
+                            class="btn btn-warning btn-block"
+                            rippleEffect
+                          >
+                            Buscar sector
+                          </button>
+                        </div>
+                      </div>
+
+                      <div [ngbCollapse]="isCollapsed0">
+                        <div class="col-lg-12 col-md-12">
+                          <div class="form-group">
+                            <label for="birth">Sectores</label>
+                            <ng-select
+                              [items]="sectorList"
+                              [clearable]="false"
+                              name="selectsector"
+                              formControlName="sector_id"
+                              bindLabel="sector_name"
+                              bindValue="sector_uuid"
+                              placeholder="Seleccione"
+                              (change)="setLocation($event)"
+                            >
+                              <ng-template
+                                ng-option-tmp
+                                ng-label-tmp
+                                let-item="item"
+                              >
+                                {{ item.sector_name }}
+                              </ng-template>
+                            </ng-select>
+                            <p>
+                              <small class="text-muted"
+                                >Seleccione o cree una nueva locación</small
+                              >
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-12 col-md-12">
+                        <div class="form-group">
+                          <button
+                            type="button"
+                            (click)="openAddSector()"
+                            [attr.aria-expanded]="!isCollapsed1"
+                            class="btn btn-success btn-block"
+                            rippleEffect
+                          >
+                            Crear sector
+                          </button>
+                        </div>
+                      </div>
+
+                      <div [ngbCollapse]="isCollapsed1">
+                        <div class="card">
+                          <div class="card-body">
+                            <form
+                              class="form-validate"
+                              formGroupName="sectorGroup"
+                            >
+                              <div class="form-group">
+                                <label for="name">Provincia</label>
+                                <ng-select
+                                  [items]="stateList"
+                                  [clearable]="false"
+                                  name="selectstates"
+                                  bindValue="name"
+                                  formControlName="state"
+                                  bindLabel="name"
+                                  placeholder="Seleccione"
+                                  (change)="getCity($event)"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !editForm.controls?.sectorGroup?.controls
+                                        ?.state.valid,
+                                    'is-valid':
+                                      editForm.controls?.sectorGroup?.controls
+                                        ?.state.valid
+                                  }"
+                                >
+                                  <ng-template
+                                    ng-option-tmp
+                                    ng-label-tmp
+                                    let-item="item"
+                                  >
+                                    {{ item.name }}
+                                  </ng-template>
+                                </ng-select>
+                                <div
+                                  *ngIf="
+                                    editForm.controls?.sectorGroup?.controls
+                                      ?.state.valid
+                                  "
+                                  class="valid-feedback"
+                                >
+                                  Provincia ingresada correctamente
+                                </div>
+                                <div
+                                  *ngIf="
+                                    !editForm.controls?.sectorGroup?.controls
+                                      ?.state.valid
+                                  "
+                                  class="invalid-feedback"
+                                >
+                                  {{ "El elemento es requerido" }}
+                                </div>
+                                <div
+                                  class="invalid-feedback"
+                                  *ngIf="
+                                    editForm.get('sectorGroup')?.controls?.state
+                                      ?.errors?.serverError
+                                  "
+                                >
+                                  {{
+                                    editForm.get("sectorGroup")?.controls?.state
+                                      ?.errors?.serverError
+                                  }}
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="name">Ciudad</label>
+                                <ng-select
+                                  [items]="cityList"
+                                  [clearable]="false"
+                                  name="selectcity"
+                                  formControlName="city"
+                                  bindValue="name"
+                                  bindLabel="name"
+                                  placeholder="Seleccione"
+                                  (change)="getLocationCity($event)"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !editForm.controls?.sectorGroup?.controls
+                                        ?.city.valid,
+                                    'is-valid':
+                                      editForm.controls?.sectorGroup?.controls
+                                        ?.city.valid
+                                  }"
+                                >
+                                  <ng-template
+                                    ng-option-tmp
+                                    ng-label-tmp
+                                    let-item="item"
+                                  >
+                                    {{ item.name }}
+                                  </ng-template>
+                                </ng-select>
+                                <div
+                                  *ngIf="
+                                    editForm.controls?.sectorGroup?.controls
+                                      ?.city.valid
+                                  "
+                                  class="valid-feedback"
+                                >
+                                  Ciudad ingresada correctamente
+                                </div>
+                                <div
+                                  *ngIf="
+                                    !editForm.controls?.sectorGroup?.controls
+                                      ?.city.valid
+                                  "
+                                  class="invalid-feedback"
+                                >
+                                  {{ "El elemento es requerido" }}
+                                </div>
+                                <div
+                                  class="invalid-feedback"
+                                  *ngIf="
+                                    editForm.get('sectorGroup')?.controls?.city
+                                      ?.errors?.serverError
+                                  "
+                                >
+                                  {{
+                                    editForm.get("sectorGroup")?.controls?.city
+                                      ?.errors?.serverError
+                                  }}
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="name">Localidad</label>
+                                <ng-select
+                                  [items]="locationList"
+                                  [addTag]="selectAddTagMethod"
+                                  formControlName="location"
+                                  placeholder="Seleccione o cree una nueva parroquia"
+                                  [hideSelected]="true"
+                                  bindLabel="location"
+                                  bindValue="location"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !editForm.controls?.sectorGroup?.controls
+                                        ?.location.valid,
+                                    'is-valid':
+                                      editForm.controls?.sectorGroup?.controls
+                                        ?.location.valid
+                                  }"
+                                >
+                                  <ng-template
+                                    ng-label-tmp
+                                    let-item="item"
+                                    let-clear="clear"
+                                  >
+                                    <span class="ng-value-label">
+                                      {{ item.location }}</span
+                                    >
+                                    <span
+                                      class="ng-value-icon right"
+                                      (click)="clear(item)"
+                                      aria-hidden="true"
+                                      >×</span
+                                    >
+                                  </ng-template>
+                                </ng-select>
+                                <div
+                                  *ngIf="
+                                    editForm.controls?.sectorGroup?.controls
+                                      ?.location.valid
+                                  "
+                                  class="valid-feedback"
+                                >
+                                  Localidad ingresada correctamente
+                                </div>
+                                <div
+                                  *ngIf="
+                                    !editForm.controls?.sectorGroup?.controls
+                                      ?.city.valid
+                                  "
+                                  class="invalid-feedback"
+                                >
+                                  {{ "El elemento es requerido" }}
+                                </div>
+                                <div
+                                  *ngIf="
+                                    editForm.controls?.sectorGroup?.controls
+                                      ?.location.errors?.maxlength
+                                  "
+                                  class="invalid-feedback"
+                                >
+                                  {{ "Máximo: " }} 250
+                                </div>
+                                <div
+                                  class="invalid-feedback"
+                                  *ngIf="
+                                    editForm.get('sectorGroup')?.controls
+                                      ?.location?.errors?.serverError
+                                  "
+                                >
+                                  {{
+                                    editForm.get("sectorGroup")?.controls
+                                      ?.location?.errors?.serverError
+                                  }}
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="name">Sector</label>
+                                <input
+                                  type="text"
+                                  id="name"
+                                  class="form-control"
+                                  placeholder="Nombre"
+                                  formControlName="sector"
+                                  name="name-customer"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !editForm.controls?.sectorGroup?.controls
+                                        ?.sector.valid,
+                                    'is-valid':
+                                      editForm.controls?.sectorGroup?.controls
+                                        ?.sector.valid
+                                  }"
+                                />
+                                <div
+                                  *ngIf="
+                                    editForm.controls?.sectorGroup?.controls
+                                      ?.sector.valid
+                                  "
+                                  class="valid-feedback"
+                                >
+                                  Sector ingresado correctamente
+                                </div>
+                                <div
+                                  *ngIf="
+                                    editForm.controls?.sectorGroup?.controls
+                                      ?.sector.errors?.required
+                                  "
+                                  class="invalid-feedback"
+                                >
+                                  {{ "El elemento es requerido" }}
+                                </div>
+                                <div
+                                  *ngIf="
+                                    editForm.controls?.sectorGroup?.controls
+                                      ?.sector.errors?.maxlength
+                                  "
+                                  class="invalid-feedback"
+                                >
+                                  {{ "Máximo: " }} 250
+                                </div>
+                                <div
+                                  class="invalid-feedback"
+                                  *ngIf="
+                                    editForm.get('sectorGroup')?.controls
+                                      ?.sector?.errors?.serverError
+                                  "
+                                >
+                                  {{
+                                    editForm.get("sectorGroup")?.controls
+                                      ?.sector?.errors?.serverError
+                                  }}
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                          <div class="card-footer">
+                            <div class="col-12 flex-colum">
+                              <div class="row d-flex justify-content-end">
+                                <button
+                                  (click)="submitSector()"
+                                  type="submit"
+                                  class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                                  rippleEffect
+                                >
+                                  Guardar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                      <google-map
+                        #myGoogleMap
+                        height="600px"
+                        width="100%"
+                        [zoom]="zoom"
+                        [center]="center"
+                        [options]="options"
+                        (mapClick)="eventHandler($event, 'mapClick')"
+                      >
+                        <map-marker [position]="marker.position"></map-marker>
+                      </google-map>
+                    </div>
+
+                    <div class="col-12">
+                      <h4 class="mb-1 mt-2">
+                        <i
+                          data-feather="shopping-cart"
+                          [size]="16"
+                          class="mr-75 font-medium-4"
+                        ></i>
+                        <span class="align-middle">Adicional</span>
+                      </h4>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div class="form-group">
+                                  <div
+                                    class="custom-control custom-switch custom-switch-success"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      id="customSwitch01"
+                                      formControlName="is_reconnection_cost"
+                                      (change)="inputReconnection($event)"
+                                      checked
+                                    />
+                                    <label
+                                      class="custom-control-label"
+                                      for="customSwitch01"
+                                    >
+                                      <span class="switch-icon-left"
+                                        ><i data-feather="check"></i
+                                      ></span>
+                                      <span class="switch-icon-right"
+                                        ><i data-feather="x"></i
+                                      ></span>
+                                    </label>
+                                    ¿Aplica costo de reconexión?
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="form-group">
+                                  <label for="birth">Costo de reconexión</label>
+                                  <input
+                                    type="text"
+                                    id="firstname"
+                                    class="form-control"
+                                    formControlName="reconnection_cost"
+                                    name="firstname"
+                                  />
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-group">
+                                  <div
+                                    class="custom-control custom-switch custom-switch-success"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      id="customSwitch02"
+                                      formControlName="is_from_another_provider"
+                                      checked
+                                      (change)="inputSupplier($event)"
+                                    />
+                                    <label
+                                      class="custom-control-label"
+                                      for="customSwitch02"
+                                    >
+                                      <span class="switch-icon-left"
+                                        ><i data-feather="check"></i
+                                      ></span>
+                                      <span class="switch-icon-right"
+                                        ><i data-feather="x"></i
+                                      ></span>
+                                    </label>
+                                    ¿Viene de otro proveedor?
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="form-group">
+                                  <label for="birth">Proveedor anterior</label>
+
+                                  <ng-select
+                                    appendTo="body"
+                                    [items]="anotherProviderList"
+                                    [addTag]="selectAddTagMethod"
+                                    formControlName="another_provider_id"
+                                    placeholder="Seleccione"
+                                    [hideSelected]="true"
+                                    bindLabel="name"
+                                    bindValue="name"
+                                  >
+                                    <ng-template
+                                      ng-label-tmp
+                                      let-item="item"
+                                      let-clear="clear"
+                                    >
+                                      <span class="ng-value-label">
+                                        {{ item.name }}</span
+                                      >
+                                      <span
+                                        class="ng-value-icon right"
+                                        (click)="clear(item)"
+                                        aria-hidden="true"
+                                        >×</span
+                                      >
+                                    </ng-template>
+                                  </ng-select>
+                                  <p>
+                                    <small class="text-muted"
+                                      >Seleccione o cree un nuevo
+                                      proveedor</small
+                                    >
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div class="form-group">
+                                  <div
+                                    class="custom-control custom-switch custom-switch-success"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      formControlName="is_pay_to_invoice"
+                                      id="customSwitch04"
+                                      checked
+                                    />
+                                    <label
+                                      class="custom-control-label"
+                                      for="customSwitch04"
+                                    >
+                                      <span class="switch-icon-left"
+                                        ><i data-feather="check"></i
+                                      ></span>
+                                      <span class="switch-icon-right"
+                                        ><i data-feather="x"></i
+                                      ></span>
+                                    </label>
+                                    ¿Paga contra factura?
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="form-group">
+                                  <div
+                                    class="custom-control custom-switch custom-switch-success"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      formControlName="is_apply_arcotel"
+                                      id="customSwitch05"
+                                      checked
+                                    />
+                                    <label
+                                      class="custom-control-label"
+                                      for="customSwitch05"
+                                    >
+                                      <span class="switch-icon-left"
+                                        ><i data-feather="check"></i
+                                      ></span>
+                                      <span class="switch-icon-right"
+                                        ><i data-feather="x"></i
+                                      ></span>
+                                    </label>
+                                    ¿Aplica Arcotel?
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="form-group">
+                                  <div
+                                    class="custom-control custom-switch custom-switch-success"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      formControlName="is_not_cut_for_debt"
+                                      id="customSwitch06"
+                                      checked
+                                    />
+                                    <label
+                                      class="custom-control-label"
+                                      for="customSwitch06"
+                                    >
+                                      <span class="switch-icon-left"
+                                        ><i data-feather="check"></i
+                                      ></span>
+                                      <span class="switch-icon-right"
+                                        ><i data-feather="x"></i
+                                      ></span>
+                                    </label>
+                                    No cortar por deuda
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-group">
+                                  <div
+                                    class="custom-control custom-switch custom-switch-success"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      formControlName="is_not_generate_invoice_service"
+                                      id="customSwitch08"
+                                      checked
+                                    />
+                                    <label
+                                      class="custom-control-label"
+                                      for="customSwitch08"
+                                    >
+                                      <span class="switch-icon-left"
+                                        ><i data-feather="check"></i
+                                      ></span>
+                                      <span class="switch-icon-right"
+                                        ><i data-feather="x"></i
+                                      ></span>
+                                    </label>
+                                    ¿No generar factura sin el servicio?
+                                  </div>
+                                </div>
+                              </td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <div class="col-12 flex-column mt-2">
+                      <div class="row d-flex justify-content-end">
+                        <button
+                          (click)="submit(false, true)"
+                          [disabled]="loading"
+                          type="submit"
+                          class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                          rippleEffect
+                        >
+                          <span
+                            *ngIf="loading"
+                            class="spinner-border spinner-border-sm mr-1"
+                          ></span>
+                          Guardar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </ng-template>
+            </li>
+            <li ngbNavItem>
+              <a ngbNavLink
+                ><span [data-feather]="'settings'"></span> Contrato</a
+              >
+              <ng-template ngbNavContent>
+                <app-contract-template></app-contract-template>
+              </ng-template>
+            </li>
+            <li ngbNavItem [disabled]="true">
+              <a href="javascript:void(0)" ngbNavLink
+                ><span [data-feather]="'lock'"></span> Disabled</a
+              >
+              <ng-template ngbNavContent> </ng-template>
+            </li>
+            <li ngbNavItem>
+              <a ngbNavLink><span [data-feather]="'award'"></span> Account</a>
+              <ng-template ngbNavContent> </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

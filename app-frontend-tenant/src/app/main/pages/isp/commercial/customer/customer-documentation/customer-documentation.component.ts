@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormArray,
@@ -7,37 +7,37 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { DatePipe } from '@angular/common';
 import { Subject, of, Subscription } from 'rxjs';
+import { IspCustomerService } from 'core/services/isp/commercial/ispcustomer.service';
+import { IspCustomer } from 'core/models/isp/commercial/ispcustomer.model';
+import { FileUploader } from 'ng2-file-upload';
+import { CropperComponent } from 'angular-cropperjs';
 import { catchError, delay, finalize, tap } from 'rxjs/operators';
-import { repeaterAnimation } from '../form-repeater.animation';
-
-import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
-import { IspCustomerService } from 'core/services/ispcustomer.service';
-import { IspCustomer } from 'core/models/ispcustomer.model';
-
-
+const URL = 'https://your-url.com';
 @Component({
-  selector: 'app-customer-contact',
-  templateUrl: './customer-contact.component.html',
-  styleUrls: ['./customer-contact.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  animations: [repeaterAnimation]
+  selector: 'app-customer-documentation',
+  templateUrl: './customer-documentation.component.html',
+  styleUrls: ['./customer-documentation.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class CustomerContactsComponent implements OnInit, OnDestroy {
-  separateDialCode3 = true;
-  SearchCountryField3 = SearchCountryField;
-  CountryISO3 = CountryISO;
-  PhoneNumberFormat3 = PhoneNumberFormat;
+export class CustomerDocumentationComponent implements OnInit, OnDestroy {
 
-  preferredCountries3: CountryISO[] = [CountryISO.UnitedStates,
-  CountryISO.UnitedKingdom];
-
+  //imageICO: any = "https://upload.wikimedia.org/wikipedia/commons/f/f3/C%C3%A9dula_electr%C3%B3nica_Ecuador_%28Enero_2021%29.png";
   // Public
   @Input() customerId: string;
 
-  public activeNav = 0;
-  public active = 2;
+  public uploader: FileUploader = new FileUploader({
+    url: URL,
+    isHTML5: true
+  });
+
+  public hexp = 500;
+  public wexp = 500;
+
+  @ViewChild('angularCropper') angularCrooper: CropperComponent;
+
+  photoIde = null;
+
   public url = this.router.url;
   public activeMovField = true;
   public urlLastValue;
@@ -50,7 +50,12 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
   public activeField = false;
   public refresh = false;
 
+  public croppedResult: string;
+
   public activeMovFieldContact = true;
+
+  public titleOneFile = "Subir archivo .png/.jpg";
+  public titleTwoFile = "Subir documento pdf";
 
   startDate: string;
   endDate: string;
@@ -60,13 +65,7 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
   itemModel: IspCustomer;
 
   subscriptions: Subscription[] = [];
-
-  public getTypeNumber: any = [{ id: 'FIJ', name: 'Fijo' },
-  { id: 'MOV', name: 'Móvil' }];
-
-
-
-
+  @Output() nextStep: EventEmitter<any> = new EventEmitter();
 
 
   // Private
@@ -88,42 +87,86 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.editForm = this.fb.group({
-      type_number: [
-        this.itemModel.type_number,
-      ],
-      contacts: this.fb.array([]),
+      filename: [""],
+      fileContent: [""],
+      ideName: [""],
+      ideContent: [""],
     });
 
   }
 
-  prepareItem(): IspCustomer {
+  public getCroppedImage() {
+    this.croppedResult = this.angularCrooper.cropper.getCroppedCanvas().toDataURL();
+    this.editForm.get("ideContent").setValue(this.croppedResult);
+  }
+
+  public getFileTwo(event: EventEmitter<File[]>) {
+    const file: File = event[0];
+    const name = file.name;
+    this.titleTwoFile = name;
+    console.log(file)
+    console.log(name)
+    this.editForm.get("fileContent").setValue(file);
+    this.editForm.get("filename").setValue(name);
+  }
+
+
+  public getFileOne(event: EventEmitter<File[]>) {
+    const file: File = event[0];
+    const name = file.name;
+    this.titleOneFile = name;
+    console.log(file);
+    this.editForm.get("ideName").setValue(name);
+
+    this.readBase64(file)
+      .then(function (data) {
+        console.log(data);
+      })
+
+  }
+
+  public readBase64(file): Promise<any> {
+    var reader = new FileReader();
+    var future = new Promise((resolve, reject) => {
+      reader.addEventListener("load", () => {
+        resolve(reader.result);
+
+        this.photoIde = reader.result;
+
+      }, false);
+
+
+      reader.addEventListener("error", function (event) {
+        reject(event);
+      }, false);
+
+      reader.readAsDataURL(file);
+    });
+    return future;
+  }
+
+
+  prepareItem(): any {
     const controls = this.editForm.controls;
-    const _item = new IspCustomer();
-    _item.clear();
-    _item.id = this.customerId;
-    _item.contacts = controls["contacts"].value;
-    return _item;
-  }
-
-  addRecord() {
-    const item = this.fb.group({
-      name: '',
-      name_parent: '',
-      email: '',
-      phone: '',
-      type_number: 'MOV',
-    });
-    this.contacts.push(item);
-  }
+    const formData = new FormData();
+    formData.append("id", this.customerId);
+    formData.append("filename", controls["filename"].value);
+    formData.append("fileContent", controls["fileContent"].value);
+    formData.append("ideName", controls["ideName"].value);
+    formData.append("ideContent", controls["ideContent"].value);
 
 
-  removeItem(i: number) {
-    this.contacts.removeAt(i);
+    /*const _item = {
+      id: this.customerId,
+      filename: controls["filename"].value,
+      fileContent: controls["fileContent"].value,
+      ideName: controls["ideName"].value,
+      ideContent: controls["ideContent"].value
+    };*/
+    return formData;
   }
 
-  get contacts() {
-    return this.editForm.controls['contacts'] as FormArray;
-  }
+
 
   /**
    * Submit
@@ -131,7 +174,8 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
    * @param form
    */
   submit() {
-    this.loading = true;
+    // this.nextStep.emit();
+    // return;
     const controls = this.editForm.controls;
     /** check form */
     if (this.editForm.invalid) {
@@ -146,14 +190,13 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
       return;
     }
-
-
     const editedItem = this.prepareItem();
+    console.log(editedItem);
     this.addItem(editedItem);
   }
 
   addItem(_item: any) {
-    const sbCreate = this._service.createContactCustomer(_item).pipe(
+    const sbCreate = this._service.uploadContent(_item).pipe(
       catchError((errorMessage) => {
         console.log(errorMessage);
         if (errorMessage.status == 422) {
@@ -173,9 +216,7 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
         return of(null);
       })
     ).subscribe((res: any) => {
-      if (res) {
-        this.loading = false;
-      }
+      //  this.nextStep.emit();
     });
     this.subscriptions.push(sbCreate);
   }
@@ -186,11 +227,8 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
-    this.itemModel = new IspCustomer();
-    this.itemModel.clear();
     this.initForm();
-    this.addRecord();
-    this.cdr.detectChanges();
+
   }
 
 

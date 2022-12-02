@@ -1,67 +1,65 @@
-<!--
-<div class="d-flex align-items-center">
-	<a href="#" class="btn btn-light btn-hover-primary btn-sm btn-icon mr-2">
-        <i class="flaticon2-file icon-md text-muted"></i>
-      </a>
-
-      <a href="#" class="btn btn-light btn-hover-primary btn-sm btn-icon mr-2">
-        <i class="flaticon-download-1 icon-md text-muted"></i>
-      </a>
-
-      <a href="#" class="btn btn-light btn-hover-primary btn-sm btn-icon mr-2">
-        <i class="flaticon2-fax icon-md text-muted"></i>
-      </a>
-
-      <a href="#" class="btn btn-light btn-hover-primary btn-sm btn-icon mr-2">
-        <i class="flaticon2-settings icon-md text-muted"></i>
-      </a>
-</div>
--->
-
-<div class="d-flex align-items-center flex-wrap mr-2">
-  <div class="alert alert-custom alert-default" role="alert">
-    <div class="alert-icon">
-      <i class="flaticon2-information text-primary"></i>
+<div class="content-wrapper container-xxl p-0">
+  <div class="card">
+    <div>
+      <div class="d-flex flex-row-reverse">
+        <button class="btn btn-primary ml-1" (click)="addItem()" rippleEffect>
+          <i
+            data-feather="plus"
+            class="d-sm-none d-inline-block mr-0 mr-sm-1"
+          ></i
+          ><span class="d-none d-sm-inline-block">Nuevo</span>
+        </button>
+      </div>
     </div>
-    <div class="alert-text"></div>
+    <div class="card-body">
+      <div class="content-body">
+        <div class="d-flex align-items-center">
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="50%">Name</th>
+                <th>Size</th>
+                <th>Progress</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong></strong>
+                </td>
+                <td nowrap></td>
+                <td></td>
+                <td class="text-center"></td>
+                <td nowrap>
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-outline-success btn-sm mr-50"
+                    rippleEffect
+                  >
+                    <span data-feather="upload"></span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-outline-warning btn-sm mr-50"
+                    rippleEffect
+                  >
+                    <i data-feather="slash"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-outline-danger btn-sm"
+                    rippleEffect
+                  >
+                    <i data-feather="trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<div
-  class="d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap"
->
-  <!--begin::Info-->
-
-  <!-- end:: Info -->
-
-  <!-- begin:: Toolbar -->
-  <div class="d-flex align-items-center">
-    <!--
-    <a href="javascript:;" (click)="addItem()" class="btn btn-light btn-hover-primary btn-sm btn-icon mr-2">
-      <i class="flaticon2-add icon-md text-muted"></i>
-    </a>
-    -->
-
-    <div class="col-md-12 col-lg-6">
-      <!--<div
-        ng2FileDrop
-        [ngClass]="{ 'file-drop-over': hasBaseDropZoneOver }"
-        (fileOver)="fileOverBase($event)"
-        [uploader]="uploader"
-        class="py-5 mb-3 text-center font-medium-5 text-uppercase file-drop-zone"
-      >
-        Drop Files Here To Upload
-      </div> -->
-    </div>
-
-    <a
-      href="javascript:;"
-      (click)="addItem()"
-      class="btn btn-primary font-weight-bolder"
-    >
-      <i class="ki ki-plus icon-sm"></i>
-      Nuevo Documento</a
-    >
-  </div>
-</div>
-<br />

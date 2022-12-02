@@ -247,7 +247,9 @@
                       [class]="'mr-50'"
                     ></span>
                     Detalles</a
-                  > --><a ngbDropdownItem (click)="edit(row)"
+                  > --><a
+                    ngbDropdownItem
+                    routerLink="/isp/customer/edit/{{ row.id }}"
                     ><span
                       [data-feather]="'edit'"
                       [size]="16"

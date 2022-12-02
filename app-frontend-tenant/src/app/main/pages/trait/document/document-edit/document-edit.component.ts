@@ -6,38 +6,37 @@ import { Component, OnInit, Inject, ChangeDetectionStrategy, OnDestroy, Input, N
 import * as _lodash from 'lodash';
 // RxJS
 import { Observable, of, Subscription, forkJoin } from 'rxjs';
-// Lodash
-import { each, find, some } from 'lodash';
 //import { Content } from 'src/app/core/pms';
-
+import { FileUploader } from 'ng2-file-upload';
 import { AbstractControl, Validators } from '@angular/forms';
 import { FormGroup, FormBuilder } from '@angular/forms';
-
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 // Translate
 import { TranslateService } from '@ngx-translate/core';
 
 // Services and Models
-
-
-declare const Tagify: any;
-
-import Swal from 'sweetalert2/dist/sweetalert2.js';
-
+const URL = 'https://your-url.com';
 @Component({
-	selector: 'kt-content-edit-dialog',
-	templateUrl: './content-edit.dialog.component.html',
+	selector: 'app-document-edit',
+	templateUrl: './document-edit.component.html',
+	styleUrls: ['./document-edit.component.scss'],
 	changeDetection: ChangeDetectionStrategy.Default,
 })
-export class ContentEditDialogComponent implements OnInit, OnDestroy {
+export class DocumentEditComponent implements OnInit, OnDestroy {
 
 	// Public properties
 	hasFormErrors: boolean = false;
 	viewLoading: boolean = false;
 	loadingAfterSubmit: boolean = false;
 
+	public uploader: FileUploader = new FileUploader({
+		url: URL,
+		isHTML5: true
+	});
 
+	public hasAnotherDropZoneOver: boolean = false;
+	public hasBaseDropZoneOver: boolean = false;
 	uploadFileForm: FormGroup;
 
 	referenceId: string;
@@ -67,7 +66,7 @@ export class ContentEditDialogComponent implements OnInit, OnDestroy {
 	 * @param store: Store<AppState>
 	 */
 	constructor(
-		public activeModal: NgbActiveModal,
+		public modal: NgbActiveModal,
 		private zone: NgZone,
 		private fb: FormBuilder,
 		private translate: TranslateService,
@@ -83,10 +82,47 @@ export class ContentEditDialogComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 
 
-		this.createForm();
+		//this.createForm();
 
 
 
+	}
+
+
+	fileOverBase(e: any): void {
+		this.hasBaseDropZoneOver = e;
+	}
+
+	fileOverAnother(e: any): void {
+		this.hasAnotherDropZoneOver = e;
+	}
+
+	public onFileSelected(event: EventEmitter<File[]>) {
+		const file: File = event[0];
+
+		console.log(file);
+
+		this.readBase64(file)
+			.then(function (data) {
+				console.log(data);
+			})
+
+	}
+
+	public readBase64(file): Promise<any> {
+		var reader = new FileReader();
+		var future = new Promise((resolve, reject) => {
+			reader.addEventListener("load", function () {
+				resolve(reader.result);
+			}, false);
+
+			reader.addEventListener("error", function (event) {
+				reject(event);
+			}, false);
+
+			reader.readAsDataURL(file);
+		});
+		return future;
 	}
 
 

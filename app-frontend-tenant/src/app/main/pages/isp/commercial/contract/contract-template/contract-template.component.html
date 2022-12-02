@@ -1,0 +1,11 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <ckeditor 
+    name="myckeditor"
+    required
+    [config]="ckeConfig" 
+    debounce="500" 
+    (ngModelChange)="onChange($event)">
+  </ckeditor>
+  </div>
+</div>

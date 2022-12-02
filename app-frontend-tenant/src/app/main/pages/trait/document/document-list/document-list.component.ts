@@ -3,39 +3,36 @@ import { AfterViewInit, AfterViewChecked, NgZone } from '@angular/core';
 import { Component, OnInit, ElementRef, ViewChild, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-// RXJS
-import { debounceTime, distinctUntilChanged, tap, skip, take, delay, mergeMap } from 'rxjs/operators';
-import { fromEvent, merge, Observable, of, Subscription } from 'rxjs';
-// LODASH
-import { each, find } from 'lodash';
+import { FileUploader } from 'ng2-file-upload';
+import { Subscription } from 'rxjs';
 
-// Services
-
-// Models
-
-// Services
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DocumentEditComponent } from '../document-edit/document-edit.component';
+
+const URL = 'https://your-url.com';
 
 @Component({
 	selector: 'app-document-list',
 	templateUrl: './document-list.component.html',
+	styleUrls: ['./document-list.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocumentListComponent implements OnInit, OnDestroy {
 
 
-	KTTableObj: any;
+	public uploader: FileUploader = new FileUploader({
+		url: URL,
+		isHTML5: true
+	});
 
-	//allRoles: Role[] = [];
-
-	// Subscriptions
 	private subscriptions: Subscription[] = [];
 
 
 	@Input() referenceId: number;
 
 	@Input() type: string;
-
+	public hasAnotherDropZoneOver: boolean = false;
+	public hasBaseDropZoneOver: boolean = false;
 	/**
 	 *
 	 * @param activatedRoute: ActivatedRoute
@@ -62,27 +59,48 @@ export class DocumentListComponent implements OnInit, OnDestroy {
 		//this.router.navigate(['../companies/edit', id], { relativeTo: this.activatedRoute });
 
 		//window.open(this.contentServices.getURLDownload(id));
-		
+
 
 
 	}
 
+
+	/**
+ * Redirect to edit page
+ *
+ * @param id: any
+ */
+	addItem() {
+
+		const modalRef = this.modalService.open(DocumentEditComponent, {
+			centered: true,
+			backdrop: 'static',
+			size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
+		});
+		modalRef.result.then(() => {
+
+		});
+
+	}
+
+	fileOverBase(e: any): void {
+		this.hasBaseDropZoneOver = e;
+	}
+
+	fileOverAnother(e: any): void {
+		this.hasAnotherDropZoneOver = e;
+	}
 	/**
 	 * Redirect to edit page
 	 *
 	 * @param id: any
 	 */
 	editItem(id, description) {
-		
-	}
 
-	addItem() {
-	
 	}
-
 
 	deleteItem(id, name) {
-	
+
 
 
 	}

@@ -5,13 +5,7 @@
     <section class="app-user-edit">
       <div class="card">
         <div class="card-body">
-          <ul
-            ngbNav
-            #nav="ngbNav"
-            [(activeId)]="active"
-            class="nav nav-pills"
-            (navChange)="onNavChange($event)"
-          >
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-pills">
             <li [ngbNavItem]="1">
               <a ngbNavLink class="d-flex align-items-center"
                 ><i data-feather="user" class="mr-sm-50"></i
@@ -57,6 +51,87 @@
                   <!-- users edit media object ends -->
                   <!-- users edit account form start -->
                   <form class="form-validate" [formGroup]="editForm">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div
+                          *ngIf="mostrarWebcam || imagenWebcam"
+                          class="d-flex justify-content-center mb-5"
+                        >
+                          <webcam
+                            [height]="hexp"
+                            [width]="wexp"
+                            [trigger]="triggerObservable"
+                            (imageCapture)="handleImage($event)"
+                            *ngIf="mostrarWebcam"
+                            [switchCamera]="nextWebcamObservable"
+                            [imageQuality]="1"
+                            (cameraSwitched)="cameraSwitched($event)"
+                            (initError)="handleInitError($event)"
+                          ></webcam>
+
+                          <div class="row">
+                            <table class="table">
+                              <tbody>
+                                <tr>
+                                  <td *ngIf="imagenWebcam">
+                                    <div class="col-lg-9">
+                                      <angular-cropper
+                                        #angularCropper
+                                        [cropperOptions]="{
+                                          checkCrossOrigin: true
+                                        }"
+                                        [imageUrl]="imagenWebcam.imageAsDataUrl"
+                                      ></angular-cropper>
+                                    </div>
+                                  </td>
+                                  <td *ngIf="croppedResult">
+                                    <div class="col-lg-6">
+                                      Imágen final
+                                      <img
+                                        width="400px"
+                                        height="250px"
+                                        [src]="croppedResult"
+                                      />
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div
+                          class="d-flex justify-content-center"
+                          *ngIf="imagenWebcam"
+                        >
+                          <button
+                            class="btn btn-success mb-5"
+                            (click)="getCroppedImage()"
+                          >
+                            Recortar
+                          </button>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                          <div *ngIf="mostrarWebcam" class="px-2">
+                            <button
+                              class="btn btn-success mb-5"
+                              (click)="triggerCaptura()"
+                            >
+                              Tomar foto
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              class="btn btn-primary mb-2"
+                              (click)="toggleWebcam()"
+                            >
+                              Cámara
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <h5 class="mb-2">Información General</h5>
                     <div class="row">
                       <div class="col-md-4">
@@ -345,7 +420,7 @@
                             />
                             <div class="input-group-append">
                               <span class="input-group-text" id="basic-addon6"
-                                >Edad: {{ myYear }}
+                                >Edad: {{ myYear }} años
                               </span>
                             </div>
                           </div>
@@ -872,7 +947,7 @@
                     </div>
                     <hr />
                     <div class="col-12 flex-column mt-2">
-                      <div class="row d-flex justify-content-center">
+                      <div class="row d-flex justify-content-end">
                         <button
                           (click)="submit(false, true)"
                           [disabled]="loading"
@@ -884,20 +959,7 @@
                             *ngIf="loading"
                             class="spinner-border spinner-border-sm mr-1"
                           ></span>
-                          Guardar y salir
-                        </button>
-                        <button
-                          (click)="submit(true, false)"
-                          [disabled]="loadingWith"
-                          type="submit"
-                          class="btn btn-secondary mb-1 mb-sm-0 mr-0 mr-sm-1"
-                          rippleEffect
-                        >
-                          <span
-                            *ngIf="loadingWith"
-                            class="spinner-border spinner-border-sm mr-1"
-                          ></span>
-                          Guardar y continuar
+                          Guardar
                         </button>
                       </div>
                     </div>
@@ -909,6 +971,19 @@
               </ng-template>
             </li>
             <li [ngbNavItem]="2">
+              <a ngbNavLink class="d-flex align-items-center"
+                ><i data-feather="archive" class="mr-sm-50"></i
+                ><span class="d-none d-sm-block">Documentación</span></a
+              >
+              <ng-template ngbNavContent>
+                <app-customer-documentation
+                  [customerId]="itemModel.id"
+                ></app-customer-documentation>
+                <!-- Social Tab starts -->
+              </ng-template>
+            </li>
+
+            <li [ngbNavItem]="3">
               <a ngbNavLink class="d-flex align-items-center">
                 <i data-feather="info" class="mr-sm-50"></i
                 ><span class="d-none d-sm-block">Contactos</span></a
@@ -920,7 +995,8 @@
                 ></app-customer-contact>
               </ng-template>
             </li>
-            <li [ngbNavItem]="3">
+
+            <li [ngbNavItem]="4">
               <a ngbNavLink class="d-flex align-items-center"
                 ><i data-feather="book-open" class="mr-sm-50"></i
                 ><span class="d-none d-sm-block">Notas</span></a
@@ -930,19 +1006,6 @@
                   [referenceId]="itemModel.id"
                   type="CUR"
                 ></app-note-list>
-                <!-- Social Tab starts -->
-              </ng-template>
-            </li>
-            <li [ngbNavItem]="4">
-              <a ngbNavLink class="d-flex align-items-center"
-                ><i data-feather="archive" class="mr-sm-50"></i
-                ><span class="d-none d-sm-block">Documentos</span></a
-              >
-              <ng-template ngbNavContent>
-              <!--  <app-document-list
-                  [referenceId]="itemModel.id"
-                  type="CUR"
-                ></app-document-list> -->
                 <!-- Social Tab starts -->
               </ng-template>
             </li>

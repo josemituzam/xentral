@@ -13,42 +13,40 @@ import { CoreDirectivesModule } from '@core/directives/directives';
 import { CorePipesModule } from '@core/pipes/pipes.module';
 import { CoreSidebarModule } from '@core/components';
 
-import { CustomerListService } from './customer-list/customer-list.service';
-import { CustomerListComponent } from './customer-list/customer-list.component';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
-import { CustomerEditComponent } from './customer-edit/customer-edit.component';
-import { NoteListComponent } from '../../trait/note/note-list/note-list.component';
+
 
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { CustomerContactsComponent } from './customer-edit/customer-contact/customer-contact.component';
+
 import { TypesUtilsService } from 'core/helpers/types-utils.service';
-import { NoteEditComponent } from '../../trait/note/note-edit/note-edit-modal.component';
-import { DocumentListComponent } from '../../trait/document/document-list/document-list.component';
+import { FileUploadModule } from 'ng2-file-upload';
+
+import { WebcamModule } from 'ngx-webcam';
+import { AngularCropperjsModule } from 'angular-cropperjs';
+import { PlanListComponent } from './plan-list/plan-list.component';
+import { PlanListService } from './plan-list/plan-list.service';
+import { PlanEditComponent } from './plan-edit/plan-edit.component';
+
 
 // routing
 const routes: Routes = [
   {
-    path: 'customer/list',
-    component: CustomerListComponent,
+    path: 'plan/list',
+    component: PlanListComponent,
   },
   {
-    path: 'customer/add',
-    component: CustomerEditComponent,
+    path: 'plan/add',
+    component: PlanEditComponent,
   },
   {
-    path: 'user-view',
-    redirectTo: '/apps/user/user-view/2' // Redirection
+    path: 'plan/edit/:id',
+    component: PlanEditComponent,
   },
-  {
-    path: 'user-edit',
-    redirectTo: '/apps/user/user-edit/2' // Redirection
-  }
 ];
 export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
 @NgModule({
-  //declarations: [CustomerListComponent, CustomerEditComponent, NoteListComponent, NoteEditComponent, DocumentListComponent, CustomerContactsComponent],
-  declarations: [CustomerListComponent, CustomerEditComponent, NoteListComponent, NoteEditComponent, CustomerContactsComponent],
+  declarations: [PlanListComponent, PlanEditComponent],
   imports: [
     NgxIntlTelInputModule,
     NgxMaskModule.forRoot(),
@@ -63,8 +61,11 @@ export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
     NgxDatatableModule,
     CorePipesModule,
     CoreDirectivesModule,
-    CoreSidebarModule
+    CoreSidebarModule,
+    FileUploadModule,
+    WebcamModule,
+    AngularCropperjsModule
   ],
-  providers: [CustomerListService, DatePipe, TypesUtilsService]
+  providers: [PlanListService, DatePipe, TypesUtilsService],
 })
-export class CustomerModule { }
+export class PlanModule { }

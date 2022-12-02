@@ -9,7 +9,11 @@ import { CoreCommonModule } from '@core/common.module';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CompanyModule } from './company/company.module';
-import { CustomerModule } from './customer/customer.module';
+import { CustomerModule } from './commercial/customer/customer.module';
+import { PlanModule } from './commercial/plan/plan.module';
+import { SectorModule } from './commercial/sector/sector.module';
+import { ContractModule } from './commercial/contract/contract.module';
+
 //import { DashboardModule } from './dashboard/dashboard.module';
 
 
@@ -24,7 +28,10 @@ import { CustomerModule } from './customer/customer.module';
     FormsModule,
     NgxDatatableModule,
     CompanyModule,
-    CustomerModule
+    CustomerModule,
+    PlanModule,
+    SectorModule,
+    ContractModule
     //DashboardModule
   ],
 

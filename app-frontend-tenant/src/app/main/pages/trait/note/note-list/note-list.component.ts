@@ -135,7 +135,7 @@ export class NoteListComponent implements OnInit, OnDestroy {
 			if (res) {
 				this.loading = false;
 				this.setMessageSuccess("Guardado Correctamente")
-				this.getNotes('a30e0dbe-8214-4470-9779-4e907bc9507a', this.type);
+				this.getNotes(this.referenceId, this.type);
 				this.editForm.reset();
 				this.cdr.detectChanges();
 			}
@@ -155,12 +155,12 @@ export class NoteListComponent implements OnInit, OnDestroy {
 			backdrop: 'static',
 			size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
 		});
-		modalRef.componentInstance.referenceId = 'a30e0dbe-8214-4470-9779-4e907bc9507a';
+		modalRef.componentInstance.referenceId = this.referenceId;
 		modalRef.componentInstance.type = this.type;
 		modalRef.componentInstance.note = note;
 		modalRef.componentInstance.id = id;
 		modalRef.result.then(() => {
-			this.getNotes('a30e0dbe-8214-4470-9779-4e907bc9507a', this.type)
+			this.getNotes(this.referenceId, this.type)
 		});
 
 	}
@@ -184,7 +184,7 @@ export class NoteListComponent implements OnInit, OnDestroy {
 		this.itemModel.clear();
 		this.initForm();
 
-		this.getNotes('a30e0dbe-8214-4470-9779-4e907bc9507a', this.type)
+		this.getNotes(this.referenceId, this.type)
 	}
 
 	/**
@@ -202,7 +202,7 @@ export class NoteListComponent implements OnInit, OnDestroy {
 		_item.clear();
 		_item.note = controls['note'].value;
 		_item.module_short_code = this.type;
-		_item.reference_id = 'a30e0dbe-8214-4470-9779-4e907bc9507a';
+		_item.reference_id = this.referenceId;
 		return _item;
 	}
 

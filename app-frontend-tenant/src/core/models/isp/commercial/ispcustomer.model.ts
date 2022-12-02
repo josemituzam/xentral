@@ -20,6 +20,7 @@ export class IspCustomer {
     firstname_representative !: string;
     lastname_representative !: string;
     phone_representative !: string;
+    photo !: string;
 
     contacts!: [];
 
@@ -46,6 +47,7 @@ export class IspCustomer {
         this.lastname_representative = '';
         this.phone_representative = '0';
         this.contacts = [];
+        this.photo = '';
 
     }
 }

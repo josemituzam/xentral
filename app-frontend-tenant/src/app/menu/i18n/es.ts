@@ -27,9 +27,18 @@ export const locale = {
                     PLANS: 'Planes',
                     SECTIONS: 'Sectores'
                 },
+                TECHNICALAREA: {
+                    COLLAPSIBLE: 'Área técnica',
+                    CONNECTION: 'Conexiones',
+                    RED: 'Red',
+                },
+                TABLEOFSERVICE: {
+                    COLLAPSIBLE: 'Mesa de servicios',
+                    NEWTICKET: 'Nuevo ticket',
+                    METICKET: 'Mis tickets',
+                },
             },
-
-
+            //INVOICE: 'Facturación',
         }
     }
 };

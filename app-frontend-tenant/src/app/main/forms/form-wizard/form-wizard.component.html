@@ -14,7 +14,9 @@
               </span>
             </button>
           </div>
-          <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
           <div class="step" data-target="#personal-info">
             <button class="step-trigger">
               <span class="bs-stepper-box">2</span>
@@ -24,7 +26,9 @@
               </span>
             </button>
           </div>
-          <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
           <div class="step" data-target="#address">
             <button class="step-trigger">
               <span class="bs-stepper-box">3</span>
@@ -34,7 +38,9 @@
               </span>
             </button>
           </div>
-          <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
           <div class="step" data-target="#social-links">
             <button class="step-trigger">
               <span class="bs-stepper-box">3</span>
@@ -65,11 +71,18 @@
                       name="username"
                       id="username"
                       class="form-control"
-                      [class.error]="!TDNameRef.valid && accountDetailsForm.submitted"
+                      [class.error]="
+                        !TDNameRef.valid && accountDetailsForm.submitted
+                      "
                       placeholder="johndoe"
                     />
-                    <span *ngIf="accountDetailsForm.submitted && TDNameRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="TDNameRef.errors.required"
+                    <span
+                      *ngIf="accountDetailsForm.submitted && TDNameRef.invalid"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="TDNameRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -85,12 +98,21 @@
                       name="email"
                       id="email"
                       class="form-control"
-                      [class.error]="!TDEmailRef.valid && accountDetailsForm.submitted"
+                      [class.error]="
+                        !TDEmailRef.valid && accountDetailsForm.submitted
+                      "
                       placeholder="john.doe@email.com"
                       aria-label="john.doe"
                     />
-                    <span *ngIf="accountDetailsForm.submitted" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="!TDEmailRef.valid">Email must be valid!</small>
+                    <span
+                      *ngIf="accountDetailsForm.submitted"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="!TDEmailRef.valid"
+                        >Email must be valid!</small
+                      >
                     </span>
                   </div>
                 </div>
@@ -102,7 +124,9 @@
                       name="password"
                       id="password"
                       class="form-control"
-                      [class.error]="!TDPasswordOnlyRef.valid && accountDetailsForm.submitted"
+                      [class.error]="
+                        !TDPasswordOnlyRef.valid && accountDetailsForm.submitted
+                      "
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       ngModel
                       #TDPasswordOnlyRef="ngModel"
@@ -111,24 +135,35 @@
                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                     />
                     <div
-                      *ngIf="TDPasswordOnlyRef.invalid && accountDetailsForm.submitted"
+                      *ngIf="
+                        TDPasswordOnlyRef.invalid &&
+                        accountDetailsForm.submitted
+                      "
                       class="form-text text-danger"
                     >
-                      <small *ngIf="TDPasswordOnlyRef.errors.required"> Password is required. </small>
+                      <small *ngIf="TDPasswordOnlyRef.errors.required">
+                        Password is required.
+                      </small>
                       <small *ngIf="TDPasswordOnlyRef.errors.pattern">
-                        Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more
+                        Must contain at least one number and one uppercase and
+                        lowercase letter, and at least 8 or more
                         characters.</small
                       >
                     </div>
                   </div>
                   <div class="form-group form-password-toggle col-md-6">
-                    <label class="form-label" for="confirm-password">Confirm Password</label>
+                    <label class="form-label" for="confirm-password"
+                      >Confirm Password</label
+                    >
                     <input
                       type="password"
                       name="confirm-password"
                       id="confirm-password"
                       class="form-control"
-                      [class.error]="!TDRepeatPasswordRef.valid && accountDetailsForm.submitted"
+                      [class.error]="
+                        !TDRepeatPasswordRef.valid &&
+                        accountDetailsForm.submitted
+                      "
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       required
                       ngModel
@@ -137,10 +172,15 @@
                       minlength="6"
                     />
                     <div
-                      *ngIf="TDRepeatPasswordRef.invalid && accountDetailsForm.submitted"
+                      *ngIf="
+                        TDRepeatPasswordRef.invalid &&
+                        accountDetailsForm.submitted
+                      "
                       class="form-text text-danger"
                     >
-                      <small *ngIf="TDRepeatPasswordRef.errors.required"> Confirm password is required. </small>
+                      <small *ngIf="TDRepeatPasswordRef.errors.required">
+                        Confirm password is required.
+                      </small>
                       <small *ngIf="TDRepeatPasswordRef.errors.pattern">
                         Password & Confirm Password does not match.</small
                       >
@@ -155,8 +195,13 @@
                     disabled
                     rippleEffect
                   >
-                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    <i
+                      data-feather="arrow-left"
+                      class="align-middle mr-sm-25 mr-0"
+                    ></i>
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Previous</span
+                    >
                   </button>
                   <button
                     (click)="horizontalWizardStepperNext(accountDetailsForm)"
@@ -164,8 +209,13 @@
                     class="btn btn-primary btn-next"
                     rippleEffect
                   >
-                    <span class="align-middle d-sm-inline-block d-none">Next</span>
-                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Next</span
+                    >
+                    <i
+                      data-feather="arrow-right"
+                      class="align-middle ml-sm-25 ml-0"
+                    ></i>
                   </button>
                 </div>
               </form>
@@ -179,7 +229,9 @@
 
                 <div class="row">
                   <div class="form-group col-md-6">
-                    <label class="form-label" for="first-name">First Name</label>
+                    <label class="form-label" for="first-name"
+                      >First Name</label
+                    >
                     <input
                       [(ngModel)]="TDFirstNameVar"
                       #TDFirstNameRef="ngModel"
@@ -188,11 +240,20 @@
                       name="first-name"
                       id="first-name"
                       class="form-control"
-                      [class.error]="personalInfoForm.submitted && TDFirstNameRef.invalid"
+                      [class.error]="
+                        personalInfoForm.submitted && TDFirstNameRef.invalid
+                      "
                       placeholder="John"
                     />
-                    <span *ngIf="personalInfoForm.submitted && TDFirstNameRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="TDFirstNameRef.errors.required"
+                    <span
+                      *ngIf="
+                        personalInfoForm.submitted && TDFirstNameRef.invalid
+                      "
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="TDFirstNameRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -207,11 +268,20 @@
                       name="last-name"
                       id="last-name"
                       class="form-control"
-                      [class.error]="personalInfoForm.submitted && TDLastNameRef.invalid"
+                      [class.error]="
+                        personalInfoForm.submitted && TDLastNameRef.invalid
+                      "
                       placeholder="Doe"
                     />
-                    <span *ngIf="personalInfoForm.submitted && TDLastNameRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="TDLastNameRef.errors.required"
+                    <span
+                      *ngIf="
+                        personalInfoForm.submitted && TDLastNameRef.invalid
+                      "
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="TDLastNameRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -220,7 +290,8 @@
                 <div class="row">
                   <div class="form-group col-md-6">
                     <label class="form-label" for="country">Country</label>
-                    <ng-select [items]="selectBasic" bindLabel="name"> </ng-select>
+                    <ng-select [items]="selectBasic" bindLabel="name">
+                    </ng-select>
                   </div>
                   <div class="form-group col-md-6">
                     <label class="form-label" for="language">Language</label>
@@ -234,9 +305,18 @@
                       placeholder="Select people"
                       [(ngModel)]="selectMultiSelected"
                     >
-                      <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                      <ng-template
+                        ng-label-tmp
+                        let-item="item"
+                        let-clear="clear"
+                      >
                         <span class="ng-value-label"> {{ item.name }}</span>
-                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        <span
+                          class="ng-value-icon right"
+                          (click)="clear(item)"
+                          aria-hidden="true"
+                          >×</span
+                        >
                       </ng-template>
                     </ng-select>
                   </div>
@@ -249,16 +329,26 @@
                     class="btn btn-primary btn-prev"
                     rippleEffect
                   >
-                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    <i
+                      data-feather="arrow-left"
+                      class="align-middle mr-sm-25 mr-0"
+                    ></i>
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Previous</span
+                    >
                   </button>
                   <button
                     (click)="horizontalWizardStepperNext(personalInfoForm)"
                     class="btn btn-primary btn-next"
                     rippleEffect
                   >
-                    <span class="align-middle d-sm-inline-block d-none">Next</span>
-                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Next</span
+                    >
+                    <i
+                      data-feather="arrow-right"
+                      class="align-middle ml-sm-25 ml-0"
+                    ></i>
                   </button>
                 </div>
               </form>
@@ -281,11 +371,18 @@
                       id="address"
                       name="address"
                       class="form-control"
-                      [class.error]="addressForm.submitted && addressRef.invalid"
+                      [class.error]="
+                        addressForm.submitted && addressRef.invalid
+                      "
                       placeholder="98  Borough bridge Road, Birmingham"
                     />
-                    <span *ngIf="addressForm.submitted && addressRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="addressRef.errors.required"
+                    <span
+                      *ngIf="addressForm.submitted && addressRef.invalid"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="addressRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -300,11 +397,18 @@
                       name="landmark"
                       id="landmark"
                       class="form-control"
-                      [class.error]="addressForm.submitted && landmarkRef.invalid"
+                      [class.error]="
+                        addressForm.submitted && landmarkRef.invalid
+                      "
                       placeholder="Borough bridge"
                     />
-                    <span *ngIf="addressForm.submitted && landmarkRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="landmarkRef.errors.required"
+                    <span
+                      *ngIf="addressForm.submitted && landmarkRef.invalid"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="landmarkRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -313,11 +417,21 @@
                 <div class="row">
                   <div class="form-group col-md-6">
                     <label class="form-label" for="pincode1">Pincode</label>
-                    <input type="text" id="pincode1" class="form-control" placeholder="658921" />
+                    <input
+                      type="text"
+                      id="pincode1"
+                      class="form-control"
+                      placeholder="658921"
+                    />
                   </div>
                   <div class="form-group col-md-6">
                     <label class="form-label" for="city1">City</label>
-                    <input type="text" id="city1" class="form-control" placeholder="Birmingham" />
+                    <input
+                      type="text"
+                      id="city1"
+                      class="form-control"
+                      placeholder="Birmingham"
+                    />
                   </div>
                 </div>
 
@@ -328,16 +442,26 @@
                     class="btn btn-primary btn-prev"
                     rippleEffect
                   >
-                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    <i
+                      data-feather="arrow-left"
+                      class="align-middle mr-sm-25 mr-0"
+                    ></i>
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Previous</span
+                    >
                   </button>
                   <button
                     (click)="horizontalWizardStepperNext(addressForm)"
                     class="btn btn-primary btn-next"
                     rippleEffect
                   >
-                    <span class="align-middle d-sm-inline-block d-none">Next</span>
-                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Next</span
+                    >
+                    <i
+                      data-feather="arrow-right"
+                      class="align-middle ml-sm-25 ml-0"
+                    ></i>
                   </button>
                 </div>
               </form>
@@ -359,11 +483,18 @@
                       id="twitter"
                       name="twitter"
                       class="form-control"
-                      [class.error]="socialLinkForm.submitted && twitterkRef.invalid"
+                      [class.error]="
+                        socialLinkForm.submitted && twitterkRef.invalid
+                      "
                       placeholder="https://twitter.com/abc"
                     />
-                    <span *ngIf="socialLinkForm.submitted && twitterkRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="twitterkRef.errors.required"
+                    <span
+                      *ngIf="socialLinkForm.submitted && twitterkRef.invalid"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="twitterkRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -378,11 +509,18 @@
                       id="facebook"
                       name="facebook"
                       class="form-control"
-                      [class.error]="socialLinkForm.submitted && facebookRef.invalid"
+                      [class.error]="
+                        socialLinkForm.submitted && facebookRef.invalid
+                      "
                       placeholder="https://facebook.com/abc"
                     />
-                    <span *ngIf="socialLinkForm.submitted && facebookRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="facebookRef.errors.required"
+                    <span
+                      *ngIf="socialLinkForm.submitted && facebookRef.invalid"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="facebookRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -399,11 +537,18 @@
                       id="google"
                       name="google"
                       class="form-control"
-                      [class.error]="socialLinkForm.submitted && googleRef.invalid"
+                      [class.error]="
+                        socialLinkForm.submitted && googleRef.invalid
+                      "
                       placeholder="https://plus.google.com/abc"
                     />
-                    <span *ngIf="socialLinkForm.submitted && googleRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="googleRef.errors.required"
+                    <span
+                      *ngIf="socialLinkForm.submitted && googleRef.invalid"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="googleRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -418,11 +563,18 @@
                       id="linkedin"
                       name="linkedin"
                       class="form-control"
-                      [class.error]="socialLinkForm.submitted && linkedinRef.invalid"
+                      [class.error]="
+                        socialLinkForm.submitted && linkedinRef.invalid
+                      "
                       placeholder="https://linkedin.com/abc"
                     />
-                    <span *ngIf="socialLinkForm.submitted && linkedinRef.invalid" class="invalid-form">
-                      <small class="form-text text-danger" *ngIf="linkedinRef.errors.required"
+                    <span
+                      *ngIf="socialLinkForm.submitted && linkedinRef.invalid"
+                      class="invalid-form"
+                    >
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="linkedinRef.errors.required"
                         >This field is required!</small
                       >
                     </span>
@@ -435,10 +587,21 @@
                     class="btn btn-primary btn-prev"
                     rippleEffect
                   >
-                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    <i
+                      data-feather="arrow-left"
+                      class="align-middle mr-sm-25 mr-0"
+                    ></i>
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Previous</span
+                    >
                   </button>
-                  <button class="btn btn-success btn-submit" rippleEffect (click)="onSubmit()">Submit</button>
+                  <button
+                    class="btn btn-success btn-submit"
+                    rippleEffect
+                    (click)="onSubmit()"
+                  >
+                    Submit
+                  </button>
                 </div>
               </form>
             </div>
@@ -497,8 +660,15 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-username">Username</label>
-                <input type="text" id="vertical-username" class="form-control" placeholder="johndoe" />
+                <label class="form-label" for="vertical-username"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  id="vertical-username"
+                  class="form-control"
+                  placeholder="johndoe"
+                />
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="vertical-email">Email</label>
@@ -513,7 +683,9 @@
             </div>
             <div class="row">
               <div class="form-group form-password-toggle col-md-6">
-                <label class="form-label" for="vertical-password">Password</label>
+                <label class="form-label" for="vertical-password"
+                  >Password</label
+                >
                 <input
                   type="password"
                   id="vertical-password"
@@ -522,7 +694,9 @@
                 />
               </div>
               <div class="form-group form-password-toggle col-md-6">
-                <label class="form-label" for="vertical-confirm-password">Confirm Password</label>
+                <label class="form-label" for="vertical-confirm-password"
+                  >Confirm Password</label
+                >
                 <input
                   type="password"
                   id="vertical-confirm-password"
@@ -532,13 +706,29 @@
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-outline-secondary btn-prev" disabled rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-outline-secondary btn-prev"
+                disabled
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="verticalWizardNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="verticalWizardNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -549,12 +739,26 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-first-name">First Name</label>
-                <input type="text" id="vertical-first-name" class="form-control" placeholder="John" />
+                <label class="form-label" for="vertical-first-name"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  id="vertical-first-name"
+                  class="form-control"
+                  placeholder="John"
+                />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-last-name">Last Name</label>
-                <input type="text" id="vertical-last-name" class="form-control" placeholder="Doe" />
+                <label class="form-label" for="vertical-last-name"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="vertical-last-name"
+                  class="form-control"
+                  placeholder="Doe"
+                />
               </div>
             </div>
             <div class="row">
@@ -563,7 +767,9 @@
                 <ng-select [items]="selectBasic" bindLabel="name"> </ng-select>
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-language">Language</label>
+                <label class="form-label" for="vertical-language"
+                  >Language</label
+                >
                 <ng-select
                   [items]="selectMulti"
                   [multiple]="true"
@@ -576,19 +782,40 @@
                 >
                   <ng-template ng-label-tmp let-item="item" let-clear="clear">
                     <span class="ng-value-label"> {{ item.name }}</span>
-                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    <span
+                      class="ng-value-icon right"
+                      (click)="clear(item)"
+                      aria-hidden="true"
+                      >×</span
+                    >
                   </ng-template>
                 </ng-select>
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="verticalWizardPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="verticalWizardPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="verticalWizardNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="verticalWizardNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -608,28 +835,61 @@
                 />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-landmark">Landmark</label>
-                <input type="text" id="vertical-landmark" class="form-control" placeholder="Borough bridge" />
+                <label class="form-label" for="vertical-landmark"
+                  >Landmark</label
+                >
+                <input
+                  type="text"
+                  id="vertical-landmark"
+                  class="form-control"
+                  placeholder="Borough bridge"
+                />
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="form-label" for="pincode2">Pincode</label>
-                <input type="text" id="pincode2" class="form-control" placeholder="658921" />
+                <input
+                  type="text"
+                  id="pincode2"
+                  class="form-control"
+                  placeholder="658921"
+                />
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="city2">City</label>
-                <input type="text" id="city2" class="form-control" placeholder="Birmingham" />
+                <input
+                  type="text"
+                  id="city2"
+                  class="form-control"
+                  placeholder="Birmingham"
+                />
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="verticalWizardPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="verticalWizardPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="verticalWizardNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="verticalWizardNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -641,11 +901,23 @@
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="form-label" for="vertical-twitter">Twitter</label>
-                <input type="text" id="vertical-twitter" class="form-control" placeholder="https://twitter.com/abc" />
+                <input
+                  type="text"
+                  id="vertical-twitter"
+                  class="form-control"
+                  placeholder="https://twitter.com/abc"
+                />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-facebook">Facebook</label>
-                <input type="text" id="vertical-facebook" class="form-control" placeholder="https://facebook.com/abc" />
+                <label class="form-label" for="vertical-facebook"
+                  >Facebook</label
+                >
+                <input
+                  type="text"
+                  id="vertical-facebook"
+                  class="form-control"
+                  placeholder="https://facebook.com/abc"
+                />
               </div>
             </div>
             <div class="row">
@@ -659,16 +931,38 @@
                 />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-linkedin">Linkedin</label>
-                <input type="text" id="vertical-linkedin" class="form-control" placeholder="https://linkedin.com/abc" />
+                <label class="form-label" for="vertical-linkedin"
+                  >Linkedin</label
+                >
+                <input
+                  type="text"
+                  id="vertical-linkedin"
+                  class="form-control"
+                  placeholder="https://linkedin.com/abc"
+                />
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="verticalWizardPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="verticalWizardPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-success btn-submit" rippleEffect (click)="onSubmit()">Submit</button>
+              <button
+                class="btn btn-success btn-submit"
+                rippleEffect
+                (click)="onSubmit()"
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
@@ -743,7 +1037,12 @@
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="form-label" for="modern-username">Username</label>
-                <input type="text" id="modern-username" class="form-control" placeholder="johndoe" />
+                <input
+                  type="text"
+                  id="modern-username"
+                  class="form-control"
+                  placeholder="johndoe"
+                />
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="modern-email">Email</label>
@@ -767,7 +1066,9 @@
                 />
               </div>
               <div class="form-group form-password-toggle col-md-6">
-                <label class="form-label" for="modern-confirm-password">Confirm Password</label>
+                <label class="form-label" for="modern-confirm-password"
+                  >Confirm Password</label
+                >
                 <input
                   type="password"
                   id="modern-confirm-password"
@@ -777,13 +1078,29 @@
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-outline-secondary btn-prev" disabled rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-outline-secondary btn-prev"
+                disabled
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="modernHorizontalNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="modernHorizontalNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -794,12 +1111,26 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="modern-first-name">First Name</label>
-                <input type="text" id="modern-first-name" class="form-control" placeholder="John" />
+                <label class="form-label" for="modern-first-name"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  id="modern-first-name"
+                  class="form-control"
+                  placeholder="John"
+                />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="modern-last-name">Last Name</label>
-                <input type="text" id="modern-last-name" class="form-control" placeholder="Doe" />
+                <label class="form-label" for="modern-last-name"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="modern-last-name"
+                  class="form-control"
+                  placeholder="Doe"
+                />
               </div>
             </div>
             <div class="row">
@@ -821,19 +1152,40 @@
                 >
                   <ng-template ng-label-tmp let-item="item" let-clear="clear">
                     <span class="ng-value-label"> {{ item.name }}</span>
-                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    <span
+                      class="ng-value-icon right"
+                      (click)="clear(item)"
+                      aria-hidden="true"
+                      >×</span
+                    >
                   </ng-template>
                 </ng-select>
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="modernHorizontalPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="modernHorizontalPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="modernHorizontalNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="modernHorizontalNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -854,27 +1206,58 @@
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="modern-landmark">Landmark</label>
-                <input type="text" id="modern-landmark" class="form-control" placeholder="Borough bridge" />
+                <input
+                  type="text"
+                  id="modern-landmark"
+                  class="form-control"
+                  placeholder="Borough bridge"
+                />
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="form-label" for="pincode3">Pincode</label>
-                <input type="text" id="pincode3" class="form-control" placeholder="658921" />
+                <input
+                  type="text"
+                  id="pincode3"
+                  class="form-control"
+                  placeholder="658921"
+                />
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="city3">City</label>
-                <input type="text" id="city3" class="form-control" placeholder="Birmingham" />
+                <input
+                  type="text"
+                  id="city3"
+                  class="form-control"
+                  placeholder="Birmingham"
+                />
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="modernHorizontalPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="modernHorizontalPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="modernHorizontalNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="modernHorizontalNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -886,29 +1269,64 @@
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="form-label" for="modern-twitter">Twitter</label>
-                <input type="text" id="modern-twitter" class="form-control" placeholder="https://twitter.com/abc" />
+                <input
+                  type="text"
+                  id="modern-twitter"
+                  class="form-control"
+                  placeholder="https://twitter.com/abc"
+                />
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="modern-facebook">Facebook</label>
-                <input type="text" id="modern-facebook" class="form-control" placeholder="https://facebook.com/abc" />
+                <input
+                  type="text"
+                  id="modern-facebook"
+                  class="form-control"
+                  placeholder="https://facebook.com/abc"
+                />
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="form-label" for="modern-google">Google+</label>
-                <input type="text" id="modern-google" class="form-control" placeholder="https://plus.google.com/abc" />
+                <input
+                  type="text"
+                  id="modern-google"
+                  class="form-control"
+                  placeholder="https://plus.google.com/abc"
+                />
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="modern-linkedin">Linkedin</label>
-                <input type="text" id="modern-linkedin" class="form-control" placeholder="https://linkedin.com/abc" />
+                <input
+                  type="text"
+                  id="modern-linkedin"
+                  class="form-control"
+                  placeholder="https://linkedin.com/abc"
+                />
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="modernHorizontalPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="modernHorizontalPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-success btn-submit" rippleEffect (click)="onSubmit()">Submit</button>
+              <button
+                class="btn btn-success btn-submit"
+                rippleEffect
+                (click)="onSubmit()"
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
@@ -918,7 +1336,10 @@
 
     <!-- Modern Vertical Wizard -->
     <section class="modern-vertical-wizard">
-      <div id="stepper4" class="bs-stepper vertical wizard-modern modern-vertical-wizard-example">
+      <div
+        id="stepper4"
+        class="bs-stepper vertical wizard-modern modern-vertical-wizard-example"
+      >
         <div class="bs-stepper-header">
           <div class="step" data-target="#account-details-vertical-modern">
             <button type="button" class="step-trigger">
@@ -973,11 +1394,20 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-username">Username</label>
-                <input type="text" id="vertical-modern-username" class="form-control" placeholder="johndoe" />
+                <label class="form-label" for="vertical-modern-username"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  id="vertical-modern-username"
+                  class="form-control"
+                  placeholder="johndoe"
+                />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-email">Email</label>
+                <label class="form-label" for="vertical-modern-email"
+                  >Email</label
+                >
                 <input
                   type="email"
                   id="vertical-modern-email"
@@ -989,7 +1419,9 @@
             </div>
             <div class="row">
               <div class="form-group form-password-toggle col-md-6">
-                <label class="form-label" for="vertical-modern-password">Password</label>
+                <label class="form-label" for="vertical-modern-password"
+                  >Password</label
+                >
                 <input
                   type="password"
                   id="vertical-modern-password"
@@ -998,7 +1430,9 @@
                 />
               </div>
               <div class="form-group form-password-toggle col-md-6">
-                <label class="form-label" for="vertical-modern-confirm-password">Confirm Password</label>
+                <label class="form-label" for="vertical-modern-confirm-password"
+                  >Confirm Password</label
+                >
                 <input
                   type="password"
                   id="vertical-modern-confirm-password"
@@ -1008,13 +1442,29 @@
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-outline-secondary btn-prev" disabled rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-outline-secondary btn-prev"
+                disabled
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="modernVerticalNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="modernVerticalNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -1025,21 +1475,39 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-first-name">First Name</label>
-                <input type="text" id="vertical-modern-first-name" class="form-control" placeholder="John" />
+                <label class="form-label" for="vertical-modern-first-name"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  id="vertical-modern-first-name"
+                  class="form-control"
+                  placeholder="John"
+                />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-last-name">Last Name</label>
-                <input type="text" id="vertical-modern-last-name" class="form-control" placeholder="Doe" />
+                <label class="form-label" for="vertical-modern-last-name"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="vertical-modern-last-name"
+                  class="form-control"
+                  placeholder="Doe"
+                />
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-country">Country</label>
+                <label class="form-label" for="vertical-modern-country"
+                  >Country</label
+                >
                 <ng-select [items]="selectBasic" bindLabel="name"> </ng-select>
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-language">Language</label>
+                <label class="form-label" for="vertical-modern-language"
+                  >Language</label
+                >
                 <ng-select
                   [items]="selectMulti"
                   [multiple]="true"
@@ -1052,19 +1520,40 @@
                 >
                   <ng-template ng-label-tmp let-item="item" let-clear="clear">
                     <span class="ng-value-label"> {{ item.name }}</span>
-                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    <span
+                      class="ng-value-icon right"
+                      (click)="clear(item)"
+                      aria-hidden="true"
+                      >×</span
+                    >
                   </ng-template>
                 </ng-select>
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="modernVerticalPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="modernVerticalPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="modernVerticalNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="modernVerticalNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -1075,7 +1564,9 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-address">Address</label>
+                <label class="form-label" for="vertical-modern-address"
+                  >Address</label
+                >
                 <input
                   type="text"
                   id="vertical-modern-address"
@@ -1084,28 +1575,61 @@
                 />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-landmark">Landmark</label>
-                <input type="text" id="vertical-modern-landmark" class="form-control" placeholder="Borough bridge" />
+                <label class="form-label" for="vertical-modern-landmark"
+                  >Landmark</label
+                >
+                <input
+                  type="text"
+                  id="vertical-modern-landmark"
+                  class="form-control"
+                  placeholder="Borough bridge"
+                />
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="form-label" for="pincode4">Pincode</label>
-                <input type="text" id="pincode4" class="form-control" placeholder="658921" />
+                <input
+                  type="text"
+                  id="pincode4"
+                  class="form-control"
+                  placeholder="658921"
+                />
               </div>
               <div class="form-group col-md-6">
                 <label class="form-label" for="city4">City</label>
-                <input type="text" id="city4" class="form-control" placeholder="Birmingham" />
+                <input
+                  type="text"
+                  id="city4"
+                  class="form-control"
+                  placeholder="Birmingham"
+                />
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="modernVerticalPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="modernVerticalPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-primary btn-next" (click)="modernVerticalNext()" rippleEffect>
+              <button
+                class="btn btn-primary btn-next"
+                (click)="modernVerticalNext()"
+                rippleEffect
+              >
                 <span class="align-middle d-sm-inline-block d-none">Next</span>
-                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                <i
+                  data-feather="arrow-right"
+                  class="align-middle ml-sm-25 ml-0"
+                ></i>
               </button>
             </div>
           </div>
@@ -1116,7 +1640,9 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-twitter">Twitter</label>
+                <label class="form-label" for="vertical-modern-twitter"
+                  >Twitter</label
+                >
                 <input
                   type="text"
                   id="vertical-modern-twitter"
@@ -1125,7 +1651,9 @@
                 />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-facebook">Facebook</label>
+                <label class="form-label" for="vertical-modern-facebook"
+                  >Facebook</label
+                >
                 <input
                   type="text"
                   id="vertical-modern-facebook"
@@ -1136,7 +1664,9 @@
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-google">Google+</label>
+                <label class="form-label" for="vertical-modern-google"
+                  >Google+</label
+                >
                 <input
                   type="text"
                   id="vertical-modern-google"
@@ -1145,7 +1675,9 @@
                 />
               </div>
               <div class="form-group col-md-6">
-                <label class="form-label" for="vertical-modern-linkedin">Linkedin</label>
+                <label class="form-label" for="vertical-modern-linkedin"
+                  >Linkedin</label
+                >
                 <input
                   type="text"
                   id="vertical-modern-linkedin"
@@ -1155,11 +1687,26 @@
               </div>
             </div>
             <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-prev" (click)="modernVerticalPrevious()" rippleEffect>
-                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                <span class="align-middle d-sm-inline-block d-none">Previous</span>
+              <button
+                class="btn btn-primary btn-prev"
+                (click)="modernVerticalPrevious()"
+                rippleEffect
+              >
+                <i
+                  data-feather="arrow-left"
+                  class="align-middle mr-sm-25 mr-0"
+                ></i>
+                <span class="align-middle d-sm-inline-block d-none"
+                  >Previous</span
+                >
               </button>
-              <button class="btn btn-success btn-submit" rippleEffect (click)="onSubmit()">Submit</button>
+              <button
+                class="btn btn-success btn-submit"
+                rippleEffect
+                (click)="onSubmit()"
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, ChangeDetectorRef, EventEmitter } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -6,31 +6,37 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import Stepper from 'bs-stepper';
 import { DatePipe } from '@angular/common';
-import { Subject, of, Subscription } from 'rxjs';
+import { Subject, of, Subscription, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FlatpickrOptions } from 'ng2-flatpickr';
 import { cloneDeep } from 'lodash';
 import { catchError, delay, finalize, tap } from 'rxjs/operators';
-import { repeaterAnimation } from './form-repeater.animation';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
-import { IspCustomerService } from 'core/services/ispcustomer.service';
-import { IspCustomer } from 'core/models/ispcustomer.model';
+import { IspCustomerService } from 'core/services/isp/commercial/ispcustomer.service';
+import { IspCustomer } from 'core/models/isp/commercial/ispcustomer.model';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
+import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { CropperComponent } from 'angular-cropperjs';
+
 @Component({
-  selector: 'app-customer-edit',
-  templateUrl: './customer-edit.component.html',
-  styleUrls: ['./customer-edit.component.scss'],
+  selector: 'app-customer-create',
+  templateUrl: './customer-create.component.html',
+  styleUrls: ['./customer-create.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations: [repeaterAnimation]
 })
-export class CustomerEditComponent implements OnInit, OnDestroy {
+export class CustomerCreateComponent implements OnInit, OnDestroy {
   separateDialCode = true;
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
+
+  public hexp = 500;
+  public wexp = 500;
+
 
   preferredCountries: CountryISO[] = [CountryISO.UnitedStates,
   CountryISO.UnitedKingdom];
@@ -43,8 +49,127 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   preferredCountries2: CountryISO[] = [CountryISO.UnitedStates,
   CountryISO.UnitedKingdom];
 
+
+  // Wizard
+  private horizontalWizardStepper: Stepper;
+  private verticalWizardStepper: Stepper;
+  private modernWizardStepper: Stepper;
+  private modernVerticalWizardStepper: Stepper;
+  private bsStepper;
+
+  public croppedResult: string;
+
+
+  @ViewChild('angularCropper') angularCrooper: CropperComponent;
+
+  // Hacer Toogle on/off
+  //  public loadingCamera = null;
+  public mostrarWebcam = false;
+  public permitirCambioCamara = true;
+  public multiplesCamarasDisponibles = false;
+  public dispositivoId: string;
+  public opcionesVideo: MediaTrackConstraints = {
+    //width: {ideal: 1024};
+    //height: {ideal: 576}
+  }
+  public titleCamera = 'Mostrar cámara';
+  // Errores al iniciar la cámara 
+  public errors: WebcamInitError[] = [];
+
+  // Ultima captura o foto 
+  public imagenWebcam: WebcamImage = null;
+
+  // Cada Trigger para una nueva captura o foto 
+  public trigger: Subject<void> = new Subject<void>();
+
+  // Cambiar a la siguiente o anterior cámara 
+  private siguienteWebcam: Subject<boolean | string> = new Subject<boolean | string>();
+
+  public showCapture = false;
+  public triggerCaptura(): void {
+    //this.imagenWebcam = null;
+    //this.mostrarWebcam = false;
+    this.showCapture = true;
+    this.trigger.next();
+  }
+
+  public toggleWebcam(): void {
+    // this.loadingCamera = false;
+    this.mostrarWebcam = !this.mostrarWebcam;
+    //this.imagenWebcam = null;
+    this.showCapture = false;
+
+    if (!this.mostrarWebcam) {
+      this.titleCamera = 'Mostrar cámara';
+    } else {
+      this.titleCamera = 'Ocultar cámara';
+    }
+
+    this.showCapture = false;
+    this.croppedResult = null;
+    //this.mostrarWebcam = false;
+  }
+
+  public getCroppedImage() {
+    this.croppedResult = this.angularCrooper.cropper.getCroppedCanvas().toDataURL();
+    this.titleCamera = "Tomar nuevamente"
+    this.editForm.get("contentFile").setValue(this.croppedResult);
+  }
+
+  public handleInitError(error: WebcamInitError): void {
+    this.errors.push(error);
+  }
+
+  public showNextWebcam(directionOnDeviceId: boolean | string): void {
+    this.siguienteWebcam.next(directionOnDeviceId);
+  }
+
+  public handleImage(imagenWebcam: WebcamImage): void {
+    console.info('Imagen de la webcam recibida: ', imagenWebcam);
+    this.imagenWebcam = imagenWebcam;
+  }
+
+  public cameraSwitched(dispositivoId: string): void {
+    console.log('Dispositivo Actual: ' + dispositivoId);
+    this.dispositivoId = dispositivoId;
+  }
+
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+
+  public get nextWebcamObservable(): Observable<boolean | string> {
+    return this.siguienteWebcam.asObservable();
+  }
+
+
+  /**
+   * Horizontal Wizard Stepper Next
+   *
+   * @param data
+   */
+  horizontalWizardStepperNext(data) {
+    if (data.form.valid === true) {
+      this.horizontalWizardStepper.next();
+    }
+  }
+  /**
+   * Horizontal Wizard Stepper Previous
+   */
+  horizontalWizardStepperPrevious() {
+    this.horizontalWizardStepper.previous();
+  }
+
+  /**
+   * Vertical Wizard Stepper Next
+   */
+  verticalWizardNext() {
+    this.verticalWizardStepper.next();
+  }
+  // Wizard
+
   // Public
-  public active = 1;
+  public active = 4;
   public url = this.router.url;
   public activeMovField = true;
   public urlLastValue;
@@ -77,7 +202,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     { id: 'PJ', name: 'Persona Jurídica' },
   ];
 
-  public getTypeIdentification: any = [{ id: 'IDE', name: 'Cédula' },
+  public getTypeIdentification: any = [{ id: 'IDE', name: 'Cédula' }, { id: 'RUC', name: 'RUC' },
   { id: 'PTE', name: 'Pasaporte / Identificación tributaria el exterior' }];
 
   public getTypeNumber: any = [{ id: 'FIJ', name: 'Fijo' },
@@ -162,6 +287,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         is_bond: [
           this.itemModel.is_bond
         ],
+        contentFile: [""],
       });
     } else {
       this.editForm = this.fb.group({
@@ -217,6 +343,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           this.itemModel.phone_representative,
           Validators.compose([Validators.required]),
         ],
+        contentFile: [""],
       });
     }
   }
@@ -241,6 +368,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         return;
       }
       const editedItem = this.prepareItem();
+      console.log(editedItem)
       this.addItem(editedItem, false, false);
     }
   }
@@ -266,6 +394,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       _item.is_disability = controls["is_disability"].value;
       _item.is_old = controls["is_old"].value;
       _item.is_bond = controls["is_bond"].value;
+      _item.photo = controls["contentFile"].value;
       return _item;
     } else {
       if (this.activeField == true) {
@@ -282,6 +411,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         _item.firstname_representative = controls["firstname_representative"].value;
         _item.lastname_representative = controls["lastname_representative"].value;
         _item.phone_representative = controls["phone_representative"].value;
+        _item.photo = controls["contentFile"].value;
         return _item;
       }
     }
@@ -305,7 +435,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       this.typeIdentificator = 'IDE';
       this.titleStartedAt = 'Fecha de nacimiento';
       this.titleName = 'Nombres';
-      this.getTypeIdentification.push({ id: 'IDE', name: 'Cédula' },
+      this.getTypeIdentification.push({ id: 'IDE', name: 'Cédula' }, { id: 'RUC', name: 'RUC' },
         { id: 'PTE', name: 'Pasaporte / Identificación tributaria el exterior' });
       this.activeField = false;
     } else {
@@ -328,6 +458,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
    */
   submit(withBack: boolean = false, back: boolean = false) {
 
+    //this.horizontalWizardStepper.next();
+    // return;
     if (back == true) {
       this.loading = true;
     } else {
@@ -351,6 +483,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
     const editedItem = this.prepareItem();
     this.addItem(editedItem, withBack, back);
+  }
+
+  nextStep() {
+    console.log("Holaa");
+    this.horizontalWizardStepper.next();
   }
 
   addItem(_item: IspCustomer, withBack: boolean = false, back: boolean = false) {
@@ -381,17 +518,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.itemModel = res.obj;
         this.loading = false;
         this.loadingWith = false;
+        this.horizontalWizardStepper.next();
         this.setMessageSuccess("Guardado Correctamente")
-        if (back) {
-          console.log("si tiene back");
-          this.goBackWithout();
-          return;
-        }
-        if (withBack) {
-          console.log("si tiene withBack");
-          this.refreshItem();
-          return;
-        }
       }
     });
     this.subscriptions.push(sbCreate);
@@ -419,14 +547,34 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     this.router.navigate([url], { relativeTo: this.activatedRoute });
   }
 
-
-
   // Lifecycle Hooks
   // -----------------------------------------------------------------------------------------------------
   /**
    * On init
    */
   ngOnInit(): void {
+    WebcamUtil.getAvailableVideoInputs()
+      .then((mediaDevices: MediaDeviceInfo[]) => {
+        this.multiplesCamarasDisponibles = mediaDevices && mediaDevices.length > 1;
+      });
+    this.horizontalWizardStepper = new Stepper(document.querySelector('#stepper1'), {});
+
+    /* this.verticalWizardStepper = new Stepper(document.querySelector('#stepper2'), {
+       linear: false,
+       animation: true
+     });
+ 
+     this.modernWizardStepper = new Stepper(document.querySelector('#stepper3'), {
+       linear: false,
+       animation: true
+     });
+ 
+     this.modernVerticalWizardStepper = new Stepper(document.querySelector('#stepper4'), {
+       linear: false,
+       animation: true
+     });*/
+
+    this.bsStepper = document.querySelectorAll('.bs-stepper');
     this.contentHeader = {
       headerTitle: 'Crear cliente',
       actionButton: true,
