@@ -33,7 +33,7 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
     Route::group([
-        'prefix' => 'api/v1/client'
+        'prefix' => 'v1/client'
     ], function () {
         Route::post('auth/login', [AuthController::class, 'loginInTenant']);
         Route::group(['middleware' => ['jwt.verify']], function () {
