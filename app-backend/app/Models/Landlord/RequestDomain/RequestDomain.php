@@ -31,6 +31,7 @@ class RequestDomain extends Model
         'tenant_id',
         'domain_name',
         'url',
+        'country',
         'company_name',
         'is_active',
         'is_approved'

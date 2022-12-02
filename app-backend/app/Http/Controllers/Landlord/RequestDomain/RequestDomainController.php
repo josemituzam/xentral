@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Core\Api\ApiCloudfareController;
 use App\Http\Utils\Helpers;
 use App\Models\Core\Api\ApiCloudfare;
+use App\Models\Core\Api\ApiR2;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
 use Stancl\Tenancy\Database\Models\Domain;
@@ -17,11 +18,33 @@ use App\Models\Landlord\RequestDomain\RequestDomain;
 use App\Models\Landlord\RequestDomain\DomainService as DomainServiceLandlord;
 use App\Models\Tenant\Service\DomainService as DomainServiceTenant;
 use App\Models\Landlord\Service\Service  as ServiceLandlord;
+use App\Models\Tenant\Api\ApiR2 as ApiR2Tenant;
 use App\Models\Tenant\Service\Service as ServiceTenant;
+use Aws\Credentials\Credentials;
+use Aws\S3\S3Client;
 use Database\Seeders\tenant\DatabaseSeeder;
+use Illuminate\Support\Facades\File;
 
 class RequestDomainController extends Controller
 {
+    public function uploadStookFile(Request $request)
+    {
+        $fileExtension = $request->file('image')->getClientOriginalExtension();
+        $fileFullName = "testFile" . '.' . $fileExtension;
+
+        // Try upload file to Stook
+        try {
+            $s3 = App::make('aws')->createClient('s3');
+            $s3->putObject(array(
+                'Bucket'     => "test-bucket",
+                'Key'        => $fileFullName,
+                'SourceFile' => $request->file('image')->getRealPath(),
+            ));
+        } catch (\Exception $exception) {
+            throw new \Exception('File could not upload to stook account.');
+        }
+    }
+
     /**
      * Retorna los registros desde la base de datos
      *
@@ -111,6 +134,13 @@ class RequestDomainController extends Controller
                 'service',
             ])
             ->firstOrFail();
+    }
+
+
+    public function runStorageTenant()
+    {
+        $path = storage_path('/app/public');
+        File::makeDirectory($path, $mode = 0777, true, true);
     }
 
 
@@ -226,6 +256,7 @@ class RequestDomainController extends Controller
      */
     public function store(Request $request)
     {
+       // return $request->all();
         $validator = RequestDomain::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
@@ -233,6 +264,7 @@ class RequestDomainController extends Controller
 
         $input['fullname'] = $request->fullname;
         $input['email'] = $request->email;
+        $input['country'] = $request->country;
         $input['password'] = Hash::make($request->password);
         $input['type'] = 'Admin';
         $input['company_name'] = $request->company_name;
@@ -287,9 +319,46 @@ class RequestDomainController extends Controller
         $objApi = ApiCloudfare::where('short_code', '=', $varEnv)->get();
         $methods = new ApiCloudfareController();
         foreach ($objApi as $item) {
-            $methods->createSubDomain($objRequestDomain->domain_name, $item);
+            // $methods->createSubDomain($objRequestDomain->domain_name, $item);
         }
         return $objTenant;
+    }
+
+    protected function createBucketS3($objRequestDomain)
+    {
+        $objR2 = ApiR2::where('short_code', '=', 'PRO')->first();
+        $bucket_name = $objRequestDomain->domain_name;
+        $account_id         = $objR2->account_id;
+        $access_key_id      = $objR2->access_key_id;
+        $access_key_secret  = $objR2->access_key_secret;
+        $credentials = new Credentials($access_key_id, $access_key_secret);
+        $key_image_name =  $objR2->key_image_name;
+        $key_file_name = $objR2->key_file_name;
+
+        $options = [
+            'region' => 'auto',
+            'endpoint' => "https://$account_id.r2.cloudflarestorage.com",
+            'version' => 'latest',
+            'credentials' => $credentials
+        ];
+        $s3_client = new S3Client($options);
+
+        $s3_client->createBucket(array(
+            'Bucket' => $bucket_name,
+        ));
+        $s3_client->waitUntil('BucketExists', array('Bucket' => $bucket_name));
+
+        $s3_client->putObject(array(
+            'Bucket' => $bucket_name,
+            'Key'    => $key_image_name,
+        ));
+
+        $s3_client->putObject(array(
+            'Bucket' => $bucket_name,
+            'Key'    => $key_file_name,
+        ));
+
+        return $objR2;
     }
 
 
@@ -300,12 +369,14 @@ class RequestDomainController extends Controller
         foreach ($objDomainService as $s) :
             $serviceId[] = $s->service_id;
         endforeach;
-
         $objService = ServiceLandlord::whereIn('id', $serviceId)->get();
+        //$objR2 = $this->createBucketS3($objRequestDomain);
 
         tenancy()->initialize($objTenant);
 
         $this->runMigrationsSeeders($objTenant);
+
+        //$this->runStorageTenant();
 
         User::create([
             'email' => $objRequestDomain->email,
@@ -330,6 +401,17 @@ class RequestDomainController extends Controller
             ]);
         }
 
+        /*ApiR2Tenant::create([
+            'bucket_name'  => $objRequestDomain->domain_name,
+            'account_id' => $objR2->account_id,
+            'access_key_id' => $objR2->access_key_id,
+            'access_key_secret' => $objR2->access_key_secret,
+            'key_image_name' => $objR2->key_image_name,
+            'key_file_name' => $objR2->key_file_name,
+            'short_code' =>  $objR2->short_code,
+            'long_code' =>  $objR2->long_code,
+        ]);
+ */
         tenancy()->end();
     }
 

@@ -1,0 +1,212 @@
+<div class="d-flex justify-content-between mb-2">
+  <button
+    class="btn btn-icon btn-primary"
+    type="button"
+    (click)="addRecord()"
+    rippleEffect
+  >
+    <i data-feather="plus" class="mr-25"></i>
+    <span>Agregar</span>
+  </button>
+  <button
+    (click)="submit()"
+    type="submit"
+    class="btn btn-success mb-1 mb-sm-0 mr-0 mr-sm-1"
+    rippleEffect
+  >
+    Guardar
+  </button>
+</div>
+
+<form action="#" [formGroup]="editForm" class="invoice-repeater">
+  <div formArrayName="contacts" @heightIn>
+    <div
+      class="row d-flex align-items-end mb-3"
+      *ngFor="let item of contacts.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <label for="itemName{{ i }}">Contacto</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            name="itemName{{ i }}"
+            id="itemName{{ i }}"
+            placeholder="Contacto"
+            [ngClass]="{
+              'is-invalid':
+                editForm.get('contacts')?.controls[i]?.controls?.name?.invalid
+            }"
+          />
+          <div class="invalid-feedback">
+            {{
+              editForm.get("contacts")?.controls[i]?.controls?.name?.errors
+                ?.serverError
+            }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <label for="itemName{{ i }}">Parentesco</label>
+
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name_parent"
+            name="itemName{{ i }}"
+            id="itemName{{ i }}"
+            placeholder="Parentesco"
+            [ngClass]="{
+              'is-invalid':
+                editForm.get('contacts')?.controls[i]?.controls?.name_parent
+                  ?.invalid
+            }"
+          />
+          <div class="invalid-feedback">
+            {{
+              editForm.get("contacts")?.controls[i]?.controls?.name_parent
+                ?.errors?.serverError
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-12">
+        <div class="form-group">
+          <label for="type_number">Tipo de número</label>
+          <ng-select
+            [items]="getTypeNumber"
+            name="selecttypenumber{{ i }}"
+            id="selecttypenumber{{ i }}"
+            [clearable]="false"
+            formControlName="type_number"
+            (change)="changeTypeNumber(i)"
+            bindValue="id"
+            bindLabel="name"
+            placeholder="Seleccione de la lista"
+            [ngClass]="{
+              'is-invalid': isControlInvalid('type_number'),
+              'is-valid': isControlValid('type_number')
+            }"
+          >
+            <ng-template ng-option-tmp ng-label-tmp let-item="item">
+              {{ item.name }}
+            </ng-template>
+          </ng-select>
+          <div class="valid-feedback" *ngIf="isControlValid('type_number')">
+            Tipo de número ingresado correctamente
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-12">
+        <div class="form-group">
+          <label for="itemName{{ i }}">Teléfono</label>
+          <ngx-intl-tel-input
+            *ngIf="editForm.value.contacts[i]?.type_number == 'MOV'"
+            [cssClass]="'custom form-control'"
+            [preferredCountries]="preferredCountries3"
+            [enableAutoCountrySelect]="true"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [searchCountryField]="[
+              SearchCountryField3.Iso2,
+              SearchCountryField3.Name
+            ]"
+            name="itemName{{ i }}"
+            id="itemName{{ i }}"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="CountryISO3.Ecuador"
+            [phoneValidation]="true"
+            [separateDialCode]="separateDialCode3"
+            [numberFormat]="PhoneNumberFormat3.National"
+            formControlName="phone"
+            [ngClass]="{
+              'is-invalid':
+                editForm.get('contacts')?.controls[i]?.controls?.phone?.invalid,
+              'is-valid':
+                !editForm.get('contacts')?.controls[i]?.controls?.phone?.invalid
+            }"
+          >
+          </ngx-intl-tel-input>
+          <input
+            *ngIf="editForm.value.contacts[i]?.type_number == 'FIJ'"
+            type="text"
+            class="form-control"
+            placeholder="(04) 999 99 99"
+            mask="(00) 000 00 00"
+            name="itemName{{ i }}"
+            id="itemName{{ i }}"
+            formControlName="phone"
+            [ngClass]="{
+              'is-invalid':
+                editForm.get('contacts')?.controls[i]?.controls?.phone?.invalid,
+              'is-valid':
+                !editForm.get('contacts')?.controls[i]?.controls?.phone?.invalid
+            }"
+          />
+
+          <div
+            *ngIf="
+              !editForm.get('contacts')?.controls[i]?.controls?.phone
+                ?.invalid == false
+            "
+            class="invalid-feedback"
+          >
+            El teléfono ingresado no es correcto
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-12">
+        <div class="form-group">
+          <label for="itemName{{ i }}">E-mail</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="email"
+            name="itemName{{ i }}"
+            id="itemName{{ i }}"
+            placeholder="Ingrese un valor"
+            [ngClass]="{
+              'is-invalid':
+                editForm.get('contacts')?.controls[i]?.controls?.email?.invalid
+            }"
+          />
+          <div class="invalid-feedback">
+            {{
+              editForm.get("contacts")?.controls[i]?.controls?.email?.errors
+                ?.serverError
+            }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-1 col-12 mb-70">
+        <div class="form-group">
+          <button
+            class="btn btn-outline-danger text-nowrap px-1"
+            (click)="removeItem(i)"
+            rippleEffect
+          >
+            <i data-feather="x" class="mr-25"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-12 mb-70">
+        <hr style="border: 1px solid #14cc61" />
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="d-flex justify-content-end">
+  <button class="btn btn-danger btn-next" (click)="submit()" rippleEffect>
+    <span class="align-middle d-sm-inline-block d-none">Finalizar</span>
+    <i data-feather="save" class="align-middle ml-sm-25 ml-0"></i>
+  </button>
+</div>

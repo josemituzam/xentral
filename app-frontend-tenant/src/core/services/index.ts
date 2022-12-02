@@ -1,2 +1,2 @@
 export * from './service.service';
-export * from './ispcustomer.service';
+export * from './isp/commercial/ispcustomer.service';

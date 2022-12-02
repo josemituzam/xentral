@@ -1,0 +1,278 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-body">
+          <form class="form-validate" [formGroup]="editForm">
+            <div class="row mt-1">
+              <div class="col-12">
+                <h4 class="mb-1">
+                  <i
+                    data-feather="edit-2"
+                    [size]="16"
+                    class="mr-75 font-medium-4"
+                  ></i>
+                  <span class="align-middle">General</span>
+                </h4>
+              </div>
+              <div class="col-lg-12 col-md-12">
+                <div class="form-group">
+                  <label for="birth">Nombre</label>
+                  <input
+                    id="website"
+                    type="text"
+                    class="form-control"
+                    formControlName="name"
+                    name="website"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12">
+                <div class="form-group">
+                  <label for="basicTextarea">Descripción</label>
+                  <fieldset class="form-group">
+                    <textarea
+                      class="form-control"
+                      id="basicTextarea"
+                      formControlName="description"
+                      rows="3"
+                    ></textarea>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-12">
+                <div class="form-group">
+                  <label for="mobile">Última milla</label>
+                  <ng-select
+                    [items]="lastMilesList"
+                    [clearable]="false"
+                    name="selectlastmile"
+                    formControlName="last_mile_id"
+                    bindLabel="name"
+                    bindValue="id"
+                    placeholder="Seleccione"
+                  >
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      {{ item.name }}
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <div class="form-group">
+                  <label for="website">Subida</label>
+                  <input
+                    id="website"
+                    type="text"
+                    class="form-control"
+                    formControlName="increase"
+                    name="website"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <div class="form-group">
+                  <label for="mobile">Tipo</label>
+                  <ng-select
+                    [items]="getType"
+                    [clearable]="false"
+                    name="selectpeople"
+                    bindLabel="name"
+                    formControlName="type_increase"
+                    bindValue="id"
+                    placeholder="Seleccione"
+                  >
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      {{ item.name }}
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <div class="form-group">
+                  <label for="website">Bajada</label>
+                  <input
+                    id="website"
+                    type="text"
+                    class="form-control"
+                    formControlName="downfall"
+                    name="website"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <div class="form-group">
+                  <label for="mobile">Tipo</label>
+                  <ng-select
+                    [items]="getType"
+                    [clearable]="false"
+                    name="selectpeople"
+                    bindLabel="name"
+                    formControlName="type_downfall"
+                    bindValue="id"
+                    placeholder="Seleccione"
+                  >
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      {{ item.name }}
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-lg-2 col-md-12">
+                <div class="form-group">
+                  <label for="mobile">Compartición</label>
+                  <ng-select
+                    [items]="getCompartition"
+                    [clearable]="false"
+                    name="selectpeople"
+                    bindLabel="name"
+                    formControlName="compartition"
+                    bindValue="id"
+                    placeholder="Seleccione"
+                  >
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      {{ item.name }}
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h4 class="mb-1 mt-2">
+                  <i
+                    data-feather="shopping-cart"
+                    [size]="16"
+                    class="mr-75 font-medium-4"
+                  ></i>
+                  <span class="align-middle">Costos</span>
+                </h4>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                  <label for="address-1">Costo de instalación</label>
+                  <input
+                    id="address-1"
+                    type="text"
+                    class="form-control"
+                    formControlName="installation_cost"
+                    placeholder="($)"
+                    name="address"
+                  />
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                  <label for="address-1">Costo mensual</label>
+                  <input
+                    id="address-1"
+                    type="text"
+                    class="form-control"
+                    formControlName="month_cost"
+                    placeholder="($)"
+                    name="address"
+                  />
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                  <label for="address-1">Monto de penalidad</label>
+                  <input
+                    id="address-1"
+                    type="text"
+                    class="form-control"
+                    formControlName="penalty_amount"
+                    placeholder="($)"
+                    name="address"
+                  />
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                  <label for="address-1">Costo de metro adicional</label>
+                  <input
+                    id="address-1"
+                    type="text"
+                    class="form-control"
+                    formControlName="additional_meter_cost"
+                    placeholder="($)"
+                    name="address"
+                  />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h4 class="mb-1 mt-2">
+                  <i
+                    data-feather="trello"
+                    [size]="16"
+                    class="mr-75 font-medium-4"
+                  ></i>
+                  <span class="align-middle">Condiciones</span>
+                </h4>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                  <label for="address-1">Metros gratis</label>
+                  <input
+                    id="address-1"
+                    type="text"
+                    class="form-control"
+                    formControlName="meters_free"
+                    name="address"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                  <label for="address-2">Permanencia mínima</label>
+                  <ng-select
+                  [items]="minimunPermanenceList"
+                  [clearable]="false"
+                  name="selectminimun"
+                  bindLabel="name"
+                  formControlName="minimun_permanence_id"
+                  bindValue="id"
+                  placeholder="Seleccione"
+                >
+                  <ng-template
+                    ng-option-tmp
+                    ng-label-tmp
+                    let-item="item"
+                  >
+                    {{ item.name }}
+                  </ng-template>
+                </ng-select>
+
+                </div>
+              </div>
+              <div class="col-12 flex-column mt-2">
+                <div class="row d-flex justify-content-end">
+                  <button
+                    (click)="submit(false, true)"
+                    [disabled]="loading"
+                    type="submit"
+                    class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                    rippleEffect
+                  >
+                    <span
+                      *ngIf="loading"
+                      class="spinner-border spinner-border-sm mr-1"
+                    ></span>
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

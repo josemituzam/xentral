@@ -9,6 +9,7 @@ export class RequestDomain {
     maxContractService!: any[];
     domain_service !: any[];
     service!: any[];
+    country !: string;
     clear(): void {
         this.id = '';
         this.fullname = '';

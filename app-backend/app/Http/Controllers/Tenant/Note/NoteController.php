@@ -16,7 +16,7 @@ class NoteController extends Controller
      */
     public function index(Request $request)
     {
-        $obj = Note::where('module_short_code', $request->moduleShortCode)->where('reference_id', $request->referenceId)->get();
+        $obj = Note::where('module_short_code', $request->moduleShortCode)->where('reference_id', $request->referenceId)->orderBy('created_at','desc')->get();
         return response()->json([
             'obj'  => $obj
         ]);
@@ -84,9 +84,23 @@ class NoteController extends Controller
      * @param  \App\Models\Note  $note
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Note $note)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Note::updatedRules($request->all());
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()], 422);
+        }
+
+        $obj = Note::find($id);
+        $obj->note = $request->note;
+        $obj->module_short_code = $request->module_short_code;
+        $obj->reference_id = $request->reference_id;
+        $input['updated_by'] = auth('apiTenant')->user()->id;
+        $obj->save();
+
+        return response()->json([
+            'obj'  => $obj
+        ]);
     }
 
     /**

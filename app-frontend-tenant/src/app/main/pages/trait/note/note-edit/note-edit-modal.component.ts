@@ -1,13 +1,19 @@
 // Angular
-import { Component, OnInit, Inject, ChangeDetectionStrategy, OnDestroy, Input, NgZone, Output , EventEmitter } from '@angular/core';
-
+import {
+	Component,
+	OnInit,
+	Input,
+	OnDestroy,
+	ChangeDetectorRef,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 
 // Lodash
 import * as _lodash from 'lodash';
 // RxJS
-import { Observable, of, Subscription,forkJoin} from 'rxjs';
+import { Observable, of, Subscription, forkJoin } from 'rxjs';
 // Lodash
-import { each, find, some } from 'lodash';
+import { catchError, delay, finalize, tap } from 'rxjs/operators';
 //import { Comment } from 'src/app/core/pms';
 
 import { AbstractControl, Validators } from '@angular/forms';
@@ -17,56 +23,33 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 // Translate
 import { TranslateService } from '@ngx-translate/core';
+import { Note } from 'core/models/note.model';
+import { NoteService } from 'core/services/note.service';
 
-// Services and Models
-import {
-	Comment,
-	Tag,
-	CommentService
-} from '../../../../core/pms';
-
+import Swal from 'sweetalert2'
 declare const Tagify: any;
 
 @Component({
-	selector: 'kt-comment-edit-dialog',
-	templateUrl: './comment-edit.dialog.component.html', 
+	selector: 'app-note-edit-modal',
+	templateUrl: './note-edit-modal.component.html',
 	changeDetection: ChangeDetectionStrategy.Default,
 })
-export class CommentEditDialogComponent implements OnInit, OnDestroy { 
-	
-	// Public properties
-	comment: Comment;
-	comment$: Observable<Comment>;
+export class NoteEditComponent implements OnInit, OnDestroy {
+
+	// Public propertie
 	hasFormErrors: boolean = false;
-	viewLoading: boolean = false;
-	loadingAfterSubmit: boolean = false;
+	itemModel: Note;
+	public loading = false;
+	private subscriptions: Subscription[] = [];
 
-
-	commentFileForm: FormGroup;
+	editForm: FormGroup;
 
 	referenceId: string;
-	type : string;
-	commentId: string;
-	name: string;
-
-	tagListStore: Tag[] = [];
-	tagList: Tag[] = [];
-
-	tagObs : Observable<any>[];
+	type: string;
+	note: string;
+	id: string;
 
 
-	tagListAdd: Tag[] = [];
-	tagListRemove: Tag[] = [];
-
-
-	@Input() title;
-
-	keywords: any;
-
-	//@Output() dataReturn = new EventEmitter<any>();
-
-	//listDocumentsStore: any[] = [];
-	
 
 	// Private properties
 	private componentSubscriptions: Subscription;
@@ -79,12 +62,12 @@ export class CommentEditDialogComponent implements OnInit, OnDestroy {
 	 * @param store: Store<AppState>
 	 */
 	constructor(
-		public activeModal: NgbActiveModal, 
-				private zone: NgZone,
-				private fb: FormBuilder,
-		private commentServices: CommentService,
+		private cdr: ChangeDetectorRef,
+		private _service: NoteService,
+		public modal: NgbActiveModal,
+		private fb: FormBuilder,
 		private translate: TranslateService,
-		) { }
+	) { }
 
 	/**
 	 * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
@@ -94,27 +77,20 @@ export class CommentEditDialogComponent implements OnInit, OnDestroy {
 	 * On init
 	 */
 	ngOnInit() {
-
-		
-		this.comment = new Comment();
-		this.comment.clear();
-		this.createForm();
-
-		
-		
-
-		
+		this.itemModel = new Note();
+		this.itemModel.clear();
+		this.initForm();
 	}
 
 	/**
 	 * Init form
 	 */
-	createForm() {
-
-		this.commentFileForm = this.fb.group({
-			name: [ this.name , Validators.required]
+	initForm() {
+		this.editForm = this.fb.group({
+			note: [this.note, Validators.compose([Validators.maxLength(300), Validators.required])]
 		});
 	}
+
 
 	/**
 	 * Reset
@@ -122,15 +98,15 @@ export class CommentEditDialogComponent implements OnInit, OnDestroy {
 	reset() {
 		this.hasFormErrors = false;
 		//this.loadingSubject.next(false);
-		this.commentFileForm.markAsPristine();
-		this.commentFileForm.markAsUntouched();
-		this.commentFileForm.updateValueAndValidity();
+		this.editForm.markAsPristine();
+		this.editForm.markAsUntouched();
+		this.editForm.updateValueAndValidity();
 	}
 
-	
 
-	  
-	  
+
+
+
 
 	/**
 	 * On destroy
@@ -144,61 +120,77 @@ export class CommentEditDialogComponent implements OnInit, OnDestroy {
 	/**
 	 * Save data
 	 */
-	onSubmit() {
-		this.hasFormErrors = false;
-		this.loadingAfterSubmit = false;
-
-		this.hasFormErrors = false;
-		const controls = this.commentFileForm.controls;
+	submit() {
+		this.loading = true;
+		const controls = this.editForm.controls;
 		/** check form */
-		if (this.commentFileForm.invalid) {
-			Object.keys(controls).forEach(controlName => {
-				console.log("invalid editForm "+controlName+" = ",controls[controlName].status);
-				controls[controlName].markAsTouched()
-			}
-				
-			);
-			this.hasFormErrors = true;
-
+		if (this.editForm.invalid) {
+			Object.keys(controls).forEach((controlName) => {
+				console.log(
+					"invalid editForm " + controlName + " = ",
+					controls[controlName].status
+				);
+				controls[controlName].markAsTouched();
+			});
+			this.loading = false;
+			this.cdr.detectChanges();
 			return;
 		}
+		const editedItem = this.prepareItem();
+		this.updateItem(editedItem);
 
+	}
 
-		
-		let comment = new Comment();
-		comment.name = controls['name'].value;
-		comment.moduleShortCode = this.type;
-		comment.referenceId = this.referenceId;
-		comment.id = this.commentId
-
-		this.commentServices.updateComment(comment).subscribe(result => {
-			console.log("updateComment: ", result);
-
-			this.createForm();
-			this.commentFileForm.markAsPristine();
-			this.commentFileForm.markAsUntouched();
-			this.commentFileForm.updateValueAndValidity();
-
-			this.activeModal.close('ok');
-			
-		},
-			error => {
-
-			},
-			() => {
-
+	updateItem(_item: Note) {
+		const sbUpdate = this._service.update(_item).pipe(
+			catchError((errorMessage) => {
+				if (errorMessage.status == 422) {
+					const validationErrors = errorMessage.error.errors;
+					Object.keys(validationErrors).forEach(prop => {
+						const formControl = this.editForm.get(prop);
+						if (formControl) {
+							formControl.setErrors({
+								serverError: validationErrors[prop]
+							})
+						}
+					}
+					)
+				}
+				this.loading = false;
+				this.cdr.detectChanges();
+				return of(null);
+			}),
+		).subscribe((res: any) => {
+			if (res) {
+				this.loading = false;
+				this.setMessageSuccess("Actualizado Correctamente")
+				this.modal.close()
 			}
-		);
-		
-		
-
-
+		});
+		this.subscriptions.push(sbUpdate);
 	}
 
-	savePermissions(roleId: number){
+	setMessageSuccess(message: string) {
+		Swal.fire({
+			icon: 'success',
+			title: `${message}`,
+			showConfirmButton: false,
+			timer: 1500
+		})
 	}
 
-	
+	prepareItem(): Note {
+		const controls = this.editForm.controls;
+		const _item = new Note();
+		_item.clear();
+		_item.id = this.id;
+		_item.reference_id = this.referenceId;
+		_item.note = controls['note'].value;
+		_item.module_short_code = this.type;
+		return _item;
+	}
+
+
 
 	/**
 	 * Close alert
@@ -209,70 +201,28 @@ export class CommentEditDialogComponent implements OnInit, OnDestroy {
 		this.hasFormErrors = false;
 	}
 
-	
 
-	/** UI */
-	/**
-	 * Returns component title
-	 */
-	getTitle(): string {
-		
-		if (this.commentId) {
-			return `Editar contenido`;
-		}
-
-		// tslint:disable-next-line:no-string-throw
-		return 'Nuevo Documento';
+	// helpers for View
+	isControlValid(controlName: string): boolean {
+		const control = this.editForm.controls[controlName];
+		return control.valid && (control.dirty || control.touched);
 	}
 
-	/**
-	 * Returns is title valid
-	 */
-	isTitleValid(): boolean {
-		return (this.comment && this.comment.name && this.comment.name.length > 0);
+	isControlInvalid(controlName: string): boolean {
+		const control = this.editForm.controls[controlName];
+		return control.invalid && (control.dirty || control.touched);
 	}
 
-
-	getTextSaveButton(): string {
-		
-		if (this.commentId) {
-			// tslint:disable-next-line:no-string-throw
-			return `Grabar`;
-		}
-
-		// tslint:disable-next-line:no-string-throw
-		return 'Agregar';
+	controlHasError(validation: string, controlName: string) {
+		const control = this.editForm.controls[controlName];
+		return control.hasError(validation) && (control.dirty || control.touched);
 	}
 
-	isValidField(controlName: string): boolean {
-		if (this.commentFileForm) {
-			const control = this.commentFileForm.controls[controlName];
-			const result = control.invalid && (control.dirty || control.touched);
-			return result;
-		}
-
-	}
-
-	/**
-	   * Checking control validation
-	   *
-	   * @param controlName: string => Equals to formControlName
-	   * @param validationType: string => Equals to valitors name
-	   */
-	isControlHasError(controlName: string, validationType: string): boolean {
-
-		if (this.commentFileForm) {
-			const control = this.commentFileForm.controls[controlName];
-			if (!control) {
-				return false;
-			}
-
-			const result = control.hasError(validationType) && (control.dirty || control.touched);
-			return result;
-		}
-
+	isControlTouched(controlName: string): boolean {
+		const control = this.editForm.controls[controlName];
+		return control.dirty || control.touched;
 	}
 
 
-	
+
 }

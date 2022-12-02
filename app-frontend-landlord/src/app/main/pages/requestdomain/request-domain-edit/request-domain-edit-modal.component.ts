@@ -14,6 +14,7 @@ import Swal from 'sweetalert2'
 import { RequestDomainService, ServiceService } from 'app/core/services';
 import { RequestDomain } from 'app/core/models/request-domain.model';
 import { Service } from 'app/core/models/service.model';
+import { Country } from 'country-state-city';
 @Component({
   selector: 'request-domain-edit-modal',
   templateUrl: './request-domain-edit-modal.component.html',
@@ -34,6 +35,8 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
   setContractService: any[] = [];
   maxContractService: any[] = [];
 
+  countryList: any[] = [];
+
 
   errorMessage = '';
   public mergedPwdShow = false;
@@ -50,6 +53,11 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
     this.itemModel.clear();
     this.initForm();
     this.setServices();
+    this.getCountries();
+  }
+
+  getCountries() {
+    this.countryList = Country.getAllCountries();
   }
 
   getStatus($event, id, name, max_contracts) {
@@ -149,6 +157,10 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
         this.itemModel.company_name,
         Validators.compose([Validators.maxLength(300), Validators.required]),
       ],
+      country: [
+        this.itemModel.country,
+        Validators.compose([Validators.required]),
+      ],
     });
     if (this.id) {
       this.title = "Editar";
@@ -171,6 +183,7 @@ export class RequestDomainEditModalComponent implements OnInit, OnDestroy {
     _item.password = controls['password'].value;
     _item.domain_name = controls['domain_name'].value;
     _item.company_name = controls['company_name'].value;
+    _item.country = controls['country'].value;
     _item.maxContractService = this.maxContractService;
     return _item;
   }

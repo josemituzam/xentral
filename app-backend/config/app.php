@@ -164,6 +164,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        App\Providers\UtilityFacadesServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -180,7 +182,8 @@ return [
         //Providers de paquetes
         App\Providers\TenancyServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class
+        Spatie\Permission\PermissionServiceProvider::class,
+        Aws\Laravel\AwsServiceProvider::class,
     ],
 
     /*
@@ -235,6 +238,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'AWS' => Aws\Laravel\AwsFacade::class,
 
     ],
 

@@ -17,7 +17,7 @@ export const menuIsp: CoreMenu[] = [
         id: 'apps',
         type: 'section',
         title: 'Apps & Pages',
-        translate: 'MENU.APPS.SECTION',
+        translate: 'MENU.APPS.ISP.SECTION',
         icon: 'package',
         children: [
             {
@@ -28,39 +28,109 @@ export const menuIsp: CoreMenu[] = [
                 icon: 'briefcase',
                 children: [
                     {
-                        id: 'edit',
-                        title: 'Edit',
+                        id: 'customer',
+                        title: 'Customer',
                         translate: 'MENU.ISP.COMMERCIAL.CUSTOMER',
                         type: 'item',
                         icon: 'circle',
                         url: 'isp/customer/list'
                     },
                     {
-                        id: 'branch',
-                        title: 'Branch',
+                        id: 'contract',
+                        title: 'Contract',
                         translate: 'MENU.ISP.COMMERCIAL.CONTRACTS',
                         type: 'item',
                         icon: 'circle',
-                        url: 'manager/branch/list'
+                        url: 'isp/contract/list'
                     },
                     {
-                        id: 'sales',
-                        title: 'Sales',
+                        id: 'plan',
+                        title: 'Plan',
                         translate: 'MENU.ISP.COMMERCIAL.PLANS',
                         type: 'item',
                         icon: 'circle',
-                        url: 'manager/sales/list'
+                        url: 'isp/plan/list'
                     },
                     {
-                        id: 'sales',
-                        title: 'Sales',
+                        id: 'sector',
+                        title: 'Sector',
                         translate: 'MENU.ISP.COMMERCIAL.SECTIONS',
                         type: 'item',
                         icon: 'circle',
-                        url: 'manager/sales/list'
+                        url: 'isp/sector/list'
                     }
                 ]
             },
+            {
+                id: 'technicalarea',
+                title: 'Technical Area',
+                translate: 'MENU.ISP.TECHNICALAREA.COLLAPSIBLE',
+                type: 'collapsible',
+                icon: 'cpu',
+                children: [
+                    {
+                        id: 'connection',
+                        title: 'Connection',
+                        translate: 'MENU.ISP.TECHNICALAREA.CONNECTION',
+                        type: 'item',
+                        icon: 'circle',
+                        url: '#'
+                    },
+                    {
+                        id: 'red',
+                        title: 'Red',
+                        translate: 'MENU.ISP.TECHNICALAREA.RED',
+                        type: 'item',
+                        icon: 'circle',
+                        url: '#'
+                    },
+                ]
+            },
+
+
+
+            {
+                id: 'tableofservice',
+                title: 'Table of Service',
+                translate: 'MENU.ISP.TABLEOFSERVICE.COLLAPSIBLE',
+                type: 'collapsible',
+                icon: 'slack',
+                children: [
+                    {
+                        id: 'newticket',
+                        title: 'NewTicker',
+                        translate: 'MENU.ISP.TABLEOFSERVICE.NEWTICKET',
+                        type: 'item',
+                        icon: 'circle',
+                        url: '#'
+                    },
+                    {
+                        id: 'meticket',
+                        title: 'MeTicket',
+                        translate: 'MENU.ISP.TABLEOFSERVICE.METICKET',
+                        type: 'item',
+                        icon: 'circle',
+                        url: '#'
+                    },
+                ]
+            },
+
+
+
+
+
         ]
-    }
+    },
+
+
+
+
+    /* {
+         id: 'invoice',
+         title: 'Facturación',
+         translate: 'MENU.INVOICE',
+         type: 'item',
+         icon: 'clipboard',
+         url: '#'
+     },*/
 ];

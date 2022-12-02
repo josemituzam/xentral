@@ -1,0 +1,1046 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- Horizontal Wizard -->
+    <section class="horizontal-wizard">
+      <div id="stepper1" class="bs-stepper horizontal-wizard-example">
+        <div class="bs-stepper-header">
+          <div class="step" data-target="#customer-detail">
+            <button class="step-trigger">
+              <span class="bs-stepper-box">1</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Información</span>
+                <span class="bs-stepper-subtitle">Información del cliente</span>
+              </span>
+            </button>
+          </div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
+          <div class="step" data-target="#customer-files">
+            <button class="step-trigger">
+              <span class="bs-stepper-box">2</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Documentación</span>
+                <span class="bs-stepper-subtitle"
+                  >Documentación del cliente</span
+                >
+              </span>
+            </button>
+          </div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
+          <div class="step" data-target="#customer-contacts">
+            <button class="step-trigger">
+              <span class="bs-stepper-box">3</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Contactos </span>
+                <span class="bs-stepper-subtitle">Contactos del cliente</span>
+              </span>
+            </button>
+          </div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
+          <div class="step" data-target="#address">
+            <button class="step-trigger">
+              <span class="bs-stepper-box">4</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Notas</span>
+                <span class="bs-stepper-subtitle">Notas para el cliente</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bs-stepper-content">
+          <form>
+            <div id="customer-detail" class="content">
+              <span *ngIf="refresh == true">
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success mr-1" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </span>
+
+              <form class="form-validate" [formGroup]="editForm">
+                <span *ngIf="refresh == false">
+                  <div class="row">
+                    <div
+                      class="col-lg-12"
+                      *ngIf="mostrarWebcam == true && showCapture == false"
+                    >
+                      <div class="d-flex justify-content-center mb-5">
+                        <webcam
+                          [height]="hexp"
+                          [width]="wexp"
+                          [trigger]="triggerObservable"
+                          (imageCapture)="handleImage($event)"
+                          [switchCamera]="nextWebcamObservable"
+                          [imageQuality]="1"
+                          (cameraSwitched)="cameraSwitched($event)"
+                          (initError)="handleInitError($event)"
+                        ></webcam>
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-12"
+                      *ngIf="showCapture == true || croppedResult"
+                    >
+                      <div class="d-flex justify-content-center mb-5">
+                        <div class="row">
+                          <table class="table">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <div class="col-lg-9">
+                                    <strong> Imágen previa </strong>
+                                    <angular-cropper
+                                      #angularCropper
+                                      [cropperOptions]="{
+                                        checkCrossOrigin: true
+                                      }"
+                                      [imageUrl]="imagenWebcam.imageAsDataUrl"
+                                    ></angular-cropper>
+                                  </div>
+                                </td>
+                                <td *ngIf="croppedResult">
+                                  <div class="col-lg-6">
+                                    <strong> Imágen final </strong>
+                                    <img
+                                      width="350px"
+                                      height="300px"
+                                      [src]="croppedResult"
+                                    />
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                      <div class="d-flex justify-content-center">
+                        <div class="px-2" *ngIf="showCapture == true">
+                          <button
+                            class="btn btn-danger mb-5"
+                            (click)="getCroppedImage()"
+                          >
+                            Recortar
+                          </button>
+                        </div>
+                        <div
+                          class="px-2"
+                          *ngIf="mostrarWebcam == true && showCapture == false"
+                        >
+                          <button
+                            class="btn btn-success mb-5"
+                            (click)="triggerCaptura()"
+                          >
+                            Tomar foto
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            class="btn btn-primary mb-2"
+                            (click)="toggleWebcam()"
+                          >
+                            {{ titleCamera }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="type_people">Tipo de persona</label>
+                        <ng-select
+                          [(ngModel)]="typePeople"
+                          [items]="getTypePeople"
+                          [clearable]="false"
+                          name="selectpeople"
+                          formControlName="type_people"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Seleccione de la lista"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('type_people'),
+                            'is-valid': isControlValid('type_people')
+                          }"
+                          (change)="changeTypePeople($event)"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('type_people')"
+                        >
+                          Tipo de persona ingresado correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'type_people')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('type_people')?.errors?.serverError
+                          "
+                        >
+                          {{ editForm.get("type_people")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="type_identification"
+                          >Tipo de identificador</label
+                        >
+                        <ng-select
+                          [(ngModel)]="typeIdentificator"
+                          [items]="getTypeIdentification"
+                          [clearable]="false"
+                          name="selecttypeidentification"
+                          formControlName="type_identification"
+                          bindValue="id"
+                          bindLabel="name"
+                          placeholder="Seleccione de la lista"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid(
+                              'type_identification'
+                            ),
+                            'is-valid': isControlValid('type_identification')
+                          }"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('type_identification')"
+                        >
+                          Tipo de identificador ingresado correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            controlHasError('required', 'type_identification')
+                          "
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('type_identification')?.errors
+                              ?.serverError
+                          "
+                        >
+                          {{
+                            editForm.get("type_identification")?.errors
+                              ?.serverError
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="identificator">Identificación</label>
+                        <input
+                          type="text"
+                          id="identificator"
+                          class="form-control"
+                          placeholder="Identificador"
+                          formControlName="identification"
+                          name="identificator-customer"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('identification'),
+                            'is-valid': isControlValid('identification')
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('identification')"
+                        >
+                          Identificación ingresada correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'identification')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('identification')?.errors?.serverError
+                          "
+                        >
+                          {{
+                            editForm.get("identification")?.errors?.serverError
+                          }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4" *ngIf="activeField == true">
+                      <div class="form-group">
+                        <label for="name_company">Razón Social</label>
+                        <input
+                          type="text"
+                          id="razon-social"
+                          class="form-control"
+                          formControlName="name_company"
+                          placeholder="Razón Social"
+                          name="razon-social"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('name_company'),
+                            'is-valid': isControlValid('name_company')
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('name_company')"
+                        >
+                          Nombre ingresado correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'name_company')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('name_company')?.errors?.serverError
+                          "
+                        >
+                          {{
+                            editForm.get("name_company")?.errors?.serverError
+                          }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4" *ngIf="activeField == false">
+                      <div class="form-group">
+                        <label for="firstname">Nombres</label>
+                        <input
+                          type="text"
+                          id="firstname"
+                          class="form-control"
+                          formControlName="firstname"
+                          placeholder="Nombres"
+                          name="firstname"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('firstname'),
+                            'is-valid': isControlValid('firstname')
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('firstname')"
+                        >
+                          Nombres ingresados correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'firstname')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="editForm.get('firstname')?.errors?.serverError"
+                        >
+                          {{ editForm.get("firstname")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4" *ngIf="activeField == false">
+                      <div class="form-group">
+                        <label for="lastname">Apellidos</label>
+                        <input
+                          type="text"
+                          id="lastname"
+                          class="form-control"
+                          formControlName="lastname"
+                          placeholder="Apellidos"
+                          name="lastname"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('lastname'),
+                            'is-valid': isControlValid('lastname')
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('lastname')"
+                        >
+                          Apellidos ingresados correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'lastname')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="editForm.get('name')?.errors?.serverError"
+                        >
+                          {{ editForm.get("name")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="started_at">{{ titleStartedAt }} </label>
+                        <div class="input-group input-group-merge mb-2">
+                          <input
+                            type="date"
+                            id="f-created"
+                            class="form-control"
+                            formControlName="started_at"
+                            placeholder="F. Nacimiento / Creación"
+                            (change)="getDate()"
+                            [max]="maxDate"
+                            name="f-created"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('started_at'),
+                              'is-valid': isControlValid('started_at')
+                            }"
+                          />
+                          <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon6"
+                              >Edad: {{ myYear }} años
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('started_at')"
+                        >
+                          Fecha ingresada correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('started_at')?.errors?.serverError
+                          "
+                        >
+                          {{ editForm.get("started_at")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="activeField == false">
+                      <div class="form-group">
+                        <label for="type_gender">Tipo de género</label>
+                        <ng-select
+                          [items]="getTypeGender"
+                          name="selecttypegender"
+                          formControlName="type_gender"
+                          bindValue="id"
+                          bindLabel="name"
+                          placeholder="Seleccione de la lista"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('type_gender'),
+                            'is-valid': isControlValid('type_gender')
+                          }"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('type_gender')"
+                        >
+                          Tipo de genero ingresado correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'type_gender')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('type_gender')?.errors?.serverError
+                          "
+                        >
+                          {{ editForm.get("type_gender")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                      <div class="form-group">
+                        <label for="address">Dirección</label>
+                        <input
+                          type="text"
+                          id="address-customer"
+                          formControlName="address"
+                          class="form-control"
+                          placeholder="Dirección"
+                          name="address"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('address')"
+                        >
+                          Dirección ingresada correctamente
+                        </div>
+
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="editForm.get('address')?.errors?.serverError"
+                        >
+                          {{ editForm.get("address")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="type_number">Tipo de número</label>
+                        <ng-select
+                          [(ngModel)]="typeNumber"
+                          [items]="getTypeNumber"
+                          name="selecttypenumber"
+                          [clearable]="false"
+                          formControlName="type_number"
+                          bindValue="id"
+                          bindLabel="name"
+                          (change)="changeTypeNumber($event)"
+                          placeholder="Seleccione de la lista"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('type_number'),
+                            'is-valid': isControlValid('type_number')
+                          }"
+                        >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('type_number')"
+                        >
+                          Tipo de número ingresado correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('type_number')?.errors?.serverError
+                          "
+                        >
+                          {{ editForm.get("type_number")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <div class="form-group">
+                        <label for="phone">Teléfono {{ titleNumber }}</label>
+                        <ngx-intl-tel-input
+                          *ngIf="activeMovField == true"
+                          [cssClass]="'custom form-control'"
+                          [preferredCountries]="preferredCountries"
+                          [enableAutoCountrySelect]="true"
+                          [enablePlaceholder]="true"
+                          [searchCountryFlag]="true"
+                          [searchCountryField]="[
+                            SearchCountryField.Iso2,
+                            SearchCountryField.Name
+                          ]"
+                          [selectFirstCountry]="false"
+                          [selectedCountryISO]="CountryISO.Ecuador"
+                          [phoneValidation]="true"
+                          [separateDialCode]="separateDialCode"
+                          [numberFormat]="PhoneNumberFormat.National"
+                          name="phone-movil"
+                          formControlName="phone"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('phone'),
+                            'is-valid': isControlValid('phone')
+                          }"
+                        >
+                        </ngx-intl-tel-input>
+                        <input
+                          *ngIf="activeMovField == false"
+                          type="text"
+                          class="form-control"
+                          placeholder="(04) 999 99 99"
+                          mask="(00) 000 00 00"
+                          formControlName="phone"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('phone'),
+                            'is-valid': isControlValid('phone')
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('phone')"
+                        >
+                          Teléfono ingresado correctamente
+                        </div>
+
+                        <div
+                          *ngIf="!editForm.controls['phone'].invalid == false"
+                          class="invalid-feedback"
+                        >
+                          El teléfono ingresado no es correcto
+                        </div>
+
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'phone')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="editForm.get('phone')?.errors?.serverError"
+                        >
+                          {{ editForm.get("phone")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input
+                          type="email"
+                          id="email"
+                          class="form-control"
+                          formControlName="email"
+                          placeholder="Email"
+                          name="email"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('email'),
+                            'is-valid': isControlValid('email')
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('email')"
+                        >
+                          Email ingresado correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('maxlength', 'email')"
+                        >
+                          {{ "Máximo: " }} 100
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('email', 'email')"
+                        >
+                          El correo ingresado no es válido
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="editForm.get('email')?.errors?.serverError"
+                        >
+                          {{ editForm.get("email")?.errors?.serverError }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      [ngClass]="
+                        activeField === false ? 'col-md-4' : 'col-md-12'
+                      "
+                    >
+                      <div class="form-group">
+                        <div
+                          class="custom-control custom-switch custom-switch-success"
+                        >
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            formControlName="is_accounting"
+                            id="customSwitch111"
+                            checked
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="customSwitch111"
+                          >
+                            <span class="switch-icon-left"
+                              ><i data-feather="check"></i
+                            ></span>
+                            <span class="switch-icon-right"
+                              ><i data-feather="x"></i
+                            ></span>
+                          </label>
+                          ¿Obligado a llevar contabilidad?
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="activeField == false">
+                      <div class="form-group">
+                        <div
+                          class="custom-control custom-switch custom-switch-success"
+                        >
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            formControlName="is_disability"
+                            id="customSwitch112"
+                            checked
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="customSwitch112"
+                          >
+                            <span class="switch-icon-left"
+                              ><i data-feather="check"></i
+                            ></span>
+                            <span class="switch-icon-right"
+                              ><i data-feather="x"></i
+                            ></span>
+                          </label>
+                          ¿Presenta discapacidad?
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-1" *ngIf="activeField == false">
+                      <div class="form-group">
+                        <div
+                          class="custom-control custom-switch custom-switch-success"
+                        >
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="customSwitch113"
+                            formControlName="is_old"
+                            checked
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="customSwitch113"
+                          >
+                            <span class="switch-icon-left"
+                              ><i data-feather="check"></i
+                            ></span>
+                            <span class="switch-icon-right"
+                              ><i data-feather="x"></i
+                            ></span>
+                          </label>
+                          ¿Es tercera edad?
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12" *ngIf="activeField == false">
+                      <div class="form-group">
+                        <div
+                          class="custom-control custom-switch custom-switch-success"
+                        >
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            formControlName="is_bond"
+                            id="customSwitch114"
+                            checked
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="customSwitch114"
+                          >
+                            <span class="switch-icon-left"
+                              ><i data-feather="check"></i
+                            ></span>
+                            <span class="switch-icon-right"
+                              ><i data-feather="x"></i
+                            ></span>
+                          </label>
+                          ¿Posee bono de desarrollo humano?
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h5 class="mb-2" *ngIf="activeField == true">
+                    Representante legal
+                  </h5>
+                  <div class="row" *ngIf="activeField == true">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="firstname_representative">Nombres</label>
+                        <input
+                          type="text"
+                          id="fname-representative"
+                          class="form-control"
+                          formControlName="firstname_representative"
+                          placeholder="Nombres"
+                          name="fname-representative"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid(
+                              'firstname_representative'
+                            ),
+                            'is-valid': isControlValid(
+                              'firstname_representative'
+                            )
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('firstname_representative')"
+                        >
+                          Nombres ingresados correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            controlHasError(
+                              'required',
+                              'firstname_representative'
+                            )
+                          "
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('firstname_representative')?.errors
+                              ?.serverError
+                          "
+                        >
+                          {{
+                            editForm.get("firstname_representative")?.errors
+                              ?.serverError
+                          }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="username">Apellidos</label>
+                        <input
+                          type="text"
+                          id="lname-representative"
+                          class="form-control"
+                          formControlName="lastname_representative"
+                          placeholder="Apellidos"
+                          name="razon-social"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid(
+                              'lastname_representative'
+                            ),
+                            'is-valid': isControlValid(
+                              'lastname_representative'
+                            )
+                          }"
+                        />
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('lastname_representative')"
+                        >
+                          Apellidos ingresados correctamente
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            controlHasError(
+                              'required',
+                              'lastname_representative'
+                            )
+                          "
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('lastname_representative')?.errors
+                              ?.serverError
+                          "
+                        >
+                          {{
+                            editForm.get("lastname_representative")?.errors
+                              ?.serverError
+                          }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="phone_representative">Celular</label>
+                        <ngx-intl-tel-input
+                          [cssClass]="'custom form-control'"
+                          [preferredCountries]="preferredCountries2"
+                          [enableAutoCountrySelect]="true"
+                          [enablePlaceholder]="true"
+                          [searchCountryFlag]="true"
+                          [searchCountryField]="[
+                            SearchCountryField2.Iso2,
+                            SearchCountryField2.Name
+                          ]"
+                          [selectFirstCountry]="false"
+                          [selectedCountryISO]="CountryISO.Ecuador"
+                          [phoneValidation]="true"
+                          [separateDialCode]="separateDialCode2"
+                          [numberFormat]="PhoneNumberFormat2.National"
+                          name="phone-representative"
+                          formControlName="phone_representative"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid(
+                              'phone_representative'
+                            ),
+                            'is-valid': isControlValid('phone_representative')
+                          }"
+                        >
+                        </ngx-intl-tel-input>
+                        <div
+                          class="valid-feedback"
+                          *ngIf="isControlValid('phone_representative')"
+                        >
+                          Teléfono ingresado correctamente
+                        </div>
+                        <div
+                          *ngIf="
+                            !editForm.controls['phone_representative']
+                              .invalid == false
+                          "
+                          class="invalid-feedback"
+                        >
+                          El teléfono ingresado no es correcto
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            controlHasError('required', 'phone_representative')
+                          "
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="
+                            editForm.get('phone_representative')?.errors
+                              ?.serverError
+                          "
+                        >
+                          {{
+                            editForm.get("phone_representative")?.errors
+                              ?.serverError
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr />
+
+                  <div class="d-flex justify-content-end">
+                    <button
+                      class="btn btn-primary btn-next"
+                      (click)="submit(false, true)"
+                      rippleEffect
+                    >
+                      <span class="align-middle d-sm-inline-block d-none"
+                        >Siguiente</span
+                      >
+                      <i
+                        data-feather="arrow-right"
+                        class="align-middle ml-sm-25 ml-0"
+                      ></i>
+                    </button>
+                  </div>
+                </span>
+              </form>
+            </div>
+            <div id="customer-files" class="content">
+              <app-customer-documentation
+                (nextStep)="nextStep()"
+                [customerId]="itemModel.id"
+              ></app-customer-documentation>
+            </div>
+            <div id="address" class="content">
+              <form>
+                <div class="d-flex justify-content-end">
+                  <button
+                    class="btn btn-primary btn-next"
+                    (click)="submit(false, true)"
+                    rippleEffect
+                  >
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Siguiente</span
+                    >
+                    <i
+                      data-feather="arrow-right"
+                      class="align-middle ml-sm-25 ml-0"
+                    ></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div id="customer-contacts" class="content">
+              <app-customer-contact
+                [customerId]="itemModel.id"
+              ></app-customer-contact>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!--/ Horizontal Wizard -->
+
+    <!-- /Vertical Wizard -->
+
+    <!-- /Modern Vertical Wizard -->
+  </div>
+</div>
