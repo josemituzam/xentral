@@ -1,14 +1,47 @@
 <?php
 
-namespace App\Http\Controllers\Tenant\Customer;
+namespace App\Http\Controllers\Tenant\Isp\Commercial\Customer;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Tenant\Customer\IspCustomer;
+use App\Http\Controllers\Tenant\Api\ApiR2Controller;
+use App\Http\Controllers\Tenant\File\FileController;
 use App\Http\Utils\Helpers;
+use App\Models\Tenant\Isp\Commercial\Customer\IspCustomer;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class IspCustomerController extends Controller
 {
+
+    public function storeDocument(Request $request)
+    {
+        $methodsR2 = new ApiR2Controller();
+        $methodFiles = new FileController();
+        $typeFile = $methodsR2->saveFile();
+
+        if ($request->file('fileContent')) {
+            $file = $request->file('fileContent');
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $file_name = str_replace(' ', '', $filename);
+           // $pathFile = Storage::disk('s3')->put($typeFile->key_file_name . $file_name,  File::get($file));
+        }
+
+        if ($request->ideContent) {
+            $image = $request->ideContent;  // your base64 encoded
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName =  time();
+           // $pathImage = Storage::disk('s3')->put($typeFile->key_image_name . $imageName, base64_decode($image));
+            $path = $typeFile->key_image_name . $imageName;
+
+
+            //$url = Storage::url($path);
+
+            $methodFiles->saveFiles($imageName, $path);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -89,10 +122,45 @@ class IspCustomerController extends Controller
      */
     public function store(Request $request)
     {
+        //return $request->all();
         $validator = IspCustomer::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
         }
+
+        if ($request->photo) {
+            $methods = new ApiR2Controller();
+            $typeFile = $methods->saveFile();
+            $image = $request->photo;  // your base64 encoded
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName =  time();
+            //Storage::disk('s3')->put($typeFile->key_image_name . $imageName, base64_decode($image));
+            $input['photo'] = $imageName;
+        }
+
+        //Storage::disk('public')->put($imageName, base64_decode($image)); 
+
+
+        /* $S3 = S3Client::factory([
+            'version' => 'latest',
+            'region' => 'auto',
+            'credentials' => array(
+                'key' => $config['S3']['key'],
+                'secret' => $config['S3']['secret']
+            )
+        ]);
+
+        $res = $S3->putObject([
+            'Bucket' => $config['S3']['bucket'],
+            'Key' => "PATH_TO_FILE{$docname}",
+            'Body' => fopen($filepath, 'rb'),
+            'ACL' => 'public-read'
+        ]); */
+
+
+
+
         $input['address'] = $request->address;
         $input['email'] = $request->email;
         $input['firstname'] = $request->firstname;
@@ -137,9 +205,9 @@ class IspCustomerController extends Controller
      * @param  \App\Models\IspCustomer  $ispCustomer
      * @return \Illuminate\Http\Response
      */
-    public function edit(IspCustomer $ispCustomer)
+    public function edit($id)
     {
-        //
+        return IspCustomer::find($id);
     }
 
     /**

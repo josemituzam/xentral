@@ -31,6 +31,8 @@ class CreateIspCustomersTable extends Migration
              */
             $table->string('identification', 100)->nullable(false);
 
+            $table->string('photo', 100)->nullable(false);
+
             //Type People
             $table->enum('type_people', ['PN', 'PJ'])->nullable(true);
             /*

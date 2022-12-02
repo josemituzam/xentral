@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Tenant\Customer;
+namespace App\Http\Controllers\Tenant\Isp\Commercial\Customer;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Tenant\Customer\IspContactCustomer;
-
-
+use App\Models\Tenant\Isp\Commercial\Customer\IspContactCustomer;
 
 class IspContactCustomerController extends Controller
 {
@@ -21,12 +19,13 @@ class IspContactCustomerController extends Controller
         //  return $request->all();
 
         $arrayContact = $request->contacts;
+        IspContactCustomer::where('customer_id', $request->id)->delete();
+
         for ($i = 0; $i < count($arrayContact); $i++) {
-            /*  if ($arrayContact[$i]["name"] == null) {
-            return response()->json(['errors' => [
-                'error' => ['Los campos de dejar de hacer no pueden quedar vacíos.'],
-            ]], 422);
-        }*/
+            $validator = IspContactCustomer::createdRules($arrayContact[$i]);
+            if ($validator->fails()) {
+                return response()->json(['isvalid' => $i, 'errors' => $validator->messages()], 422);
+            }
             $objData = [
                 'customer_id'  =>  $request->id,
                 'name'  => $arrayContact[$i]["name"],
@@ -37,5 +36,11 @@ class IspContactCustomerController extends Controller
             ];
             IspContactCustomer::create($objData);
         }
+    }
+
+
+    public function edit($id)
+    {
+        return IspContactCustomer::where('customer_id', $id)->get();
     }
 }

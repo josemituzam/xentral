@@ -1,29 +1,31 @@
 <?php
 
-namespace App\Models\Tenant\Customer;
+namespace App\Models\Tenant\Isp\Commercial\Contract;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
 
-class IspContactCustomer extends Model
+class IspAnotherProvider extends Model
 {
+    use HasFactory;
+
     use
         HasFactory,
+        Notifiable,
         Uuids,
         LogsActivity,
         CausesActivity;
 
     protected $fillable = [
-        'customer_id',
         'name',
-        'name_parent',
-        'email',
-        'type_number',
-        'phone',
+        'long_code',
+        'short_code',
+        'is_active',
         'created_by',
-        'updated_by',
+        'updated_by'
     ];
 }

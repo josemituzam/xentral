@@ -18,7 +18,7 @@ class CreateIspContactCustomersTable extends Migration
             $table->uuid('customer_id')->nullable(true);
             $table->string('name', 100)->nullable(false);
             $table->string('name_parent', 100)->nullable(false);
-            $table->string('email')->unique()->nullable(true);
+            $table->string('email')->nullable(true);
             //Type Phone
             $table->enum('type_number', ['FIJ', 'MOV'])->nullable(true);
             /*

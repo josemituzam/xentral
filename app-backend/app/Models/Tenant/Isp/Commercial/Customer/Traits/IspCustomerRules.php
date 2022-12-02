@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Tenant\Customer\Traits;
+namespace App\Models\Tenant\Isp\Commercial\Customer\Traits;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;

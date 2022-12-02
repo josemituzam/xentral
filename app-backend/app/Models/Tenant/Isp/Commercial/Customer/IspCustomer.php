@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Tenant\Customer;
+namespace App\Models\Tenant\Isp\Commercial\Customer;
 
-use App\Models\Tenant\Customer\Traits\IspCustomerRules;
+use App\Models\Tenant\Isp\Commercial\Customer\Traits\IspCustomerRules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
@@ -34,6 +34,7 @@ class IspCustomer extends Model
         'type_gender',
         'address',
         'type_number',
+        'photo',
         'phone',
         'email',
         'is_accounting',

@@ -20,6 +20,7 @@ class CreateRequestDomainsTable extends Migration
             $table->string('domain_name');
             $table->string('photo');
             $table->string('company_name');
+            $table->string('country', 100);
             $table->string('url');
             $table->string('password');
             $table->string('tenant_id')->nullable();
