@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant\Isp\Commercial\Contract;
 
+use App\Models\Tenant\Isp\Commercial\Plan\IspPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
@@ -22,7 +23,8 @@ class IspContractPlan extends Model
         'plan_id',
         'installation_cost',
         'month_cost',
-        'installation_promotion',
+
+        'compartition',
         'minimun_permanence_id',
         'permanence_cost',
         'is_permanence_cost',
@@ -30,4 +32,9 @@ class IspContractPlan extends Model
         'updated_by',
         'deleted_by'
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(IspPlan::class, 'plan_id');
+    }
 }

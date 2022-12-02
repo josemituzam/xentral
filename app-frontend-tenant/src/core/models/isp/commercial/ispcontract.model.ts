@@ -2,8 +2,7 @@ export class IspContract {
 
     id !: string;
     emission_at!: any;
-    contract_plan_id!: any;
-    type_service!: string;
+    plan_id!: string;
     break_at !: string;
     customer_id !: string;
     username !: string;
@@ -12,6 +11,8 @@ export class IspContract {
     contract_version_id !: string;
     payment_id !: string;
     adviser_id !: string;
+
+    last_mile_id!: string;
 
     is_permanence_cost !: boolean;
     permanence_cost!: string;
@@ -25,11 +26,15 @@ export class IspContract {
     is_not_cut_for_debt !: boolean;
     is_not_generate_invoice_service !: boolean;
 
+    compartition !: string;
+    minimun_permanence_id !: string;
+    installation_cost !: string;
+    month_cost !: string;
+
     clear(): void {
-        this.id = null;
+        this.id = undefined;
         this.emission_at = null;
-        this.contract_plan_id = null;
-        this.type_service = null;
+        this.plan_id = null;
         this.break_at = null;
         this.customer_id = null;
         this.username = null;
@@ -50,6 +55,11 @@ export class IspContract {
         this.is_apply_arcotel = false;
         this.is_not_cut_for_debt = false;
         this.is_not_generate_invoice_service = true;
+
+        this.compartition = null;
+        this.minimun_permanence_id = null;
+        this.installation_cost = null;
+        this.month_cost = null;
 
     }
 }

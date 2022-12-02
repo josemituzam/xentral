@@ -41,10 +41,10 @@ const routes: Routes = [
     path: 'contract/add',
     component: ContractEditComponent,
   },
-  /*{
-    path: 'plan/edit/:id',
-    component: PlanEditComponent,
-  },*/
+  {
+    path: 'contract/edit/:id',
+    component: ContractEditComponent,
+  },
 ];
 export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
 @NgModule({

@@ -20,6 +20,7 @@ use App\Models\Tenant\Service\DomainService as DomainServiceTenant;
 use App\Models\Landlord\Service\Service  as ServiceLandlord;
 use App\Models\Tenant\Api\ApiR2 as ApiR2Tenant;
 use App\Models\Tenant\Service\Service as ServiceTenant;
+use App\Models\Tenant\Setting\Company\Company;
 use Aws\Credentials\Credentials;
 use Aws\S3\S3Client;
 use Database\Seeders\tenant\DatabaseSeeder;
@@ -180,6 +181,11 @@ class RequestDomainController extends Controller
 
         ServiceTenant::truncate();
         DomainServiceTenant::truncate();
+
+        Company::create([
+            'name' => $objRequestDomain->company_name,
+            "country" => $objRequestDomain->country,
+        ]);
 
         for ($i = 0; $i < $objService->count(); $i++) {
             $objServiceTenant =  ServiceTenant::create([

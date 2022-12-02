@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant\Isp\Commercial\Contract\IspContract;
 use App\Http\Utils\Helpers;
 use App\Models\Tenant\Isp\Commercial\Contract\IspAnotherProvider;
+use App\Models\Tenant\Isp\Commercial\Contract\IspContractPlan;
 use App\Models\Tenant\Isp\Commercial\Customer\IspCustomer;
 
 use App\Models\Tenant\Isp\Commercial\Plan\IspPlan;
@@ -165,7 +166,45 @@ class IspContractController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = IspContract::createdRules($request->all());
+        if ($validator->fails()) {
+            return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
+        }
+        $objCp = [
+            'plan_id' => $request->plan_id,
+            'installation_cost' => $request->installation_cost,
+            'month_cost' => $request->month_cost,
+            'minimun_permanence_id'  => $request->minimun_permanence_id,
+            'permanence_cost' => $request->permanence_cost,
+            'is_permanence_cost' => $request->is_permanence_cost,
+            'compartition' => $request->compartition,
+        ];
+        $dataCp = IspContractPlan::create($objCp);
+
+        $input['emission_at'] = $request->emission_at;
+        $input['contract_plan_id'] =  $dataCp->id;
+        $input['break_at'] = $request->break_at;
+        $input['customer_id'] = $request->customer_id;
+        $input['username'] = $request->username;
+        $input['sector_id'] = $request->sector_id;
+        $input['address_contract'] = $request->address_contract;
+        $input['contract_version_id'] = $request->contract_version_id;
+        $input['address_contract'] = $request->address_contract;
+        $input['another_provider_id'] = $request->another_provider_id;
+        $input['payment_id'] = $request->payment_id;
+        $input['adviser_id'] = $request->adviser_id;
+        $input['status_id'] = $request->status_id;
+        $input['is_reconnection_cost'] = $request->is_reconnection_cost;
+        $input['reconnection_cost'] = $request->reconnection_cost;
+        $input['is_from_another_provider'] = $request->is_from_another_provider;
+        $input['is_pay_to_invoice'] = $request->is_pay_to_invoice;
+        $input['is_apply_arcotel'] = $request->is_apply_arcotel;
+        $input['is_not_cut_for_debt'] = $request->is_not_cut_for_debt;
+        $input['is_not_generate_invoice_service'] = $request->is_not_generate_invoice_service;
+        $obj = IspContract::create($input);
+        return response()->json([
+            'obj'  => $obj
+        ]);
     }
 
     /**
@@ -185,9 +224,12 @@ class IspContractController extends Controller
      * @param  \App\Models\IspContract  $ispContract
      * @return \Illuminate\Http\Response
      */
-    public function edit(IspContract $ispContract)
+    public function edit($id)
     {
-        //
+        $obj = IspContract::with('ispcontractplan', 'ispcontractplan.plan', 'ispsector', 'ispcustomer')->find($id);
+        return response()->json([
+            'obj'  => $obj,
+        ]);
     }
 
     /**

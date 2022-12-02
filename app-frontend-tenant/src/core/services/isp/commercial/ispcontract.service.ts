@@ -21,6 +21,10 @@ export class IspContractService {
         this.API_SERVICE_URL = `${this.REST_API}/ispcontract`;
     }
 
+    getContractId(id: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/${id}/edit`);
+    }
+
     create(data: IspContract): Observable<any> {
         const httpHeaders = new HttpHeaders();
         httpHeaders.set("Content-Type", "application/json");

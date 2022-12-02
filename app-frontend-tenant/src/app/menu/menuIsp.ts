@@ -17,7 +17,7 @@ export const menuIsp: CoreMenu[] = [
         id: 'apps',
         type: 'section',
         title: 'Apps & Pages',
-        translate: 'MENU.APPS.ISP.SECTION',
+        translate: 'MENU.ISP.SECTION',
         icon: 'package',
         children: [
             {

@@ -15,13 +15,12 @@ class CreateIspContractsTable extends Migration
     {
         Schema::create('isp_contracts', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('username', 100)->nullable(true);
 
             $table->date('emission_at')->nullable(true);
             $table->date('break_at', 100)->nullable(true);
-
-            $table->string('type_service', 100)->nullable(true);
             $table->string('address_contract', 200)->nullable(true);
-            $table->string('reconnection_cost', 100)->nullable(true);
+            $table->string('address_contract', 200)->nullable(true);
 
             $table->uuid('sector_id')->nullable(true);
             $table->uuid('customer_id')->nullable(true);

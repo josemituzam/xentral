@@ -108,7 +108,7 @@
           [footerHeight]="50"
           [scrollbarH]="true"
         >
-          <ngx-datatable-column name="Name" [width]="50">
+          <ngx-datatable-column name="Name" [width]="200">
             <ng-template let-column="column" ngx-datatable-header-template>
               Cliente
             </ng-template>
@@ -167,7 +167,7 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Identifier" [width]="50">
+          <ngx-datatable-column name="Identifier" [width]="200">
             <ng-template let-column="column" ngx-datatable-header-template>
               Identificador
             </ng-template>
@@ -181,7 +181,7 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Address" [width]="50">
+          <ngx-datatable-column name="Address" [width]="200">
             <ng-template let-column="column" ngx-datatable-header-template>
               Dirección
             </ng-template>
@@ -194,7 +194,7 @@
               {{ row.address }}
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Activo" prop="is_active" [width]="30">
+          <ngx-datatable-column name="Activo" prop="is_active" [width]="100">
             <ng-template
               ngx-datatable-cell-template
               let-rowIndex="rowIndex"

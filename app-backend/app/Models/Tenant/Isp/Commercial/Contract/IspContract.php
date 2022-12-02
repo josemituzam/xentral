@@ -4,6 +4,9 @@ namespace App\Models\Tenant\Isp\Commercial\Contract;
 
 use App\Models\Tenant\Isp\Commercial\Contract\Traits\IspContractRules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Tenant\Isp\Commercial\Contract\IspContractPlan;
+use App\Models\Tenant\Isp\Commercial\Customer\IspCustomer;
+use App\Models\Tenant\Isp\Commercial\Sector\IspSector;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,7 +28,6 @@ class IspContract extends Model
     protected $fillable = [
         'emission_at',
         'contract_plan_id',
-        'type_service',
         'break_at',
         'customer_id',
         'username',
@@ -51,4 +53,19 @@ class IspContract extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function ispcontractplan()
+    {
+        return $this->belongsTo(IspContractPlan::class, 'contract_plan_id');
+    }
+
+    public function ispsector()
+    {
+        return $this->belongsTo(IspSector::class, 'sector_id');
+    }
+
+    public function ispcustomer()
+    {
+        return $this->belongsTo(IspCustomer::class, 'customer_id');
+    }
 }

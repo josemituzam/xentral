@@ -18,9 +18,8 @@ class CreateIspContractPlansTable extends Migration
             $table->uuid('plan_id')->nullable(true);
             $table->string('installation_cost', 100)->nullable(true);
             $table->string('month_cost', 100)->nullable(true);
-            $table->string('installation_promotion', 100)->nullable(true);
             $table->uuid('minimun_permanence_id')->nullable(true);
-
+            $table->string('compartition', 100)->nullable(false);
             $table->boolean('is_permanence_cost')->default(false);
             $table->string('permanence_cost', 100)->nullable(true);
 

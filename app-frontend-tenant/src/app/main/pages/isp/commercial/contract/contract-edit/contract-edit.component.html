@@ -5,8 +5,14 @@
     <section class="app-user-edit">
       <div class="card">
         <div class="card-body">
-          <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
-            <li ngbNavItem>
+          <ul
+            ngbNav
+            #navWithIcons="ngbNav"
+            [(activeId)]="active"
+            (navChange)="onNavChange($event)"
+            class="nav-tabs"
+          >
+            <li [ngbNavItem]="1">
               <a ngbNavLink><span [data-feather]="'cast'"></span> General</a>
               <ng-template ngbNavContent>
                 <form class="form-validate" [formGroup]="editForm">
@@ -21,7 +27,10 @@
                         <span class="align-middle">General</span>
                       </h4>
                     </div>
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="basicTextarea">Fecha de emisión</label>
                         <input
@@ -33,7 +42,10 @@
                         />
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="basicTextarea">Cliente</label>
                         <ng-select
@@ -47,10 +59,20 @@
                           [typeahead]="customersInput$"
                           (change)="getCustomerAddress($event)"
                         >
+                          <ng-template
+                            ng-option-tmp
+                            ng-label-tmp
+                            let-item="item"
+                          >
+                            {{ item.fullname }}
+                          </ng-template>
                         </ng-select>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Alias del contrato</label>
                         <input
@@ -63,7 +85,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="basicTextarea">Forma de pago</label>
                         <ng-select
@@ -86,13 +111,17 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="basicTextarea">Versión del contrato</label>
                         <ng-select
                           [items]="templateContractList"
                           [clearable]="false"
                           name="selecttemplatecontract"
+                          formControlName="contract_version_id"
                           bindLabel="name"
                           bindValue="id"
                           placeholder="Seleccione"
@@ -108,7 +137,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="basicTextarea"
                           >Vendedor (Nombres y apellidos)</label
@@ -117,6 +149,8 @@
                           [clearable]="false"
                           name="selectplan"
                           bindLabel="name"
+                          name="selecttemplatecontract"
+                          formControlName="adviser_id"
                           bindValue="id"
                           placeholder="Seleccione"
                         >
@@ -280,7 +314,10 @@
                       </ngb-alert>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Última milla</label>
                         <ng-select
@@ -289,6 +326,7 @@
                           name="selectcustomer"
                           bindLabel="name"
                           bindValue="id"
+                          formControlName="last_mile_id"
                           placeholder="Seleccione"
                           (change)="getPlan($event)"
                         >
@@ -303,7 +341,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Planes</label>
                         <ng-select
@@ -326,7 +367,10 @@
                         </ng-select>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="basicTextarea">Día de corte</label>
                         <input
@@ -339,7 +383,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Compartición</label>
                         <ng-select
@@ -362,7 +409,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Permanencia mínima</label>
                         <ng-select
@@ -385,7 +435,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Costo de instalación</label>
                         <input
@@ -398,7 +451,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Costo mensual</label>
                         <input
@@ -413,6 +469,7 @@
 
                     <div
                       class="col-lg-4 col-md-4 d-flex align-items-center justify-content-center"
+                      formGroupName="contractGroup"
                     >
                       <div class="form-group">
                         <div
@@ -442,7 +499,10 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div
+                      class="col-lg-4 col-md-4"
+                      formGroupName="contractGroup"
+                    >
                       <div class="form-group">
                         <label for="birth">Costo de permanencia</label>
                         <input
@@ -467,7 +527,10 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6">
-                      <div class="col-lg-12 col-md-12">
+                      <div
+                        class="col-lg-12 col-md-12"
+                        formGroupName="contractGroup"
+                      >
                         <div class="form-group">
                           <label for="birth">Dirección de instalación</label>
                           <input
@@ -495,31 +558,33 @@
 
                       <div [ngbCollapse]="isCollapsed0">
                         <div class="col-lg-12 col-md-12">
-                          <div class="form-group">
-                            <label for="birth">Sectores</label>
-                            <ng-select
-                              [items]="sectorList"
-                              [clearable]="false"
-                              name="selectsector"
-                              formControlName="sector_id"
-                              bindLabel="sector_name"
-                              bindValue="sector_uuid"
-                              placeholder="Seleccione"
-                              (change)="setLocation($event)"
-                            >
-                              <ng-template
-                                ng-option-tmp
-                                ng-label-tmp
-                                let-item="item"
+                          <div formGroupName="contractGroup">
+                            <div class="form-group">
+                              <label for="birth">Sectores</label>
+                              <ng-select
+                                [items]="sectorList"
+                                [clearable]="false"
+                                name="selectsector"
+                                formControlName="sector_id"
+                                bindLabel="sector_name"
+                                bindValue="sector_uuid"
+                                placeholder="Seleccione"
+                                (change)="setLocation($event)"
                               >
-                                {{ item.sector_name }}
-                              </ng-template>
-                            </ng-select>
-                            <p>
-                              <small class="text-muted"
-                                >Seleccione o cree una nueva locación</small
-                              >
-                            </p>
+                                <ng-template
+                                  ng-option-tmp
+                                  ng-label-tmp
+                                  let-item="item"
+                                >
+                                  {{ item.sector_name }}
+                                </ng-template>
+                              </ng-select>
+                              <p>
+                                <small class="text-muted"
+                                  >Seleccione o cree una nueva locación</small
+                                >
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -669,7 +734,7 @@
                                 <label for="name">Localidad</label>
                                 <ng-select
                                   [items]="locationList"
-                                  [addTag]="selectAddTagMethod"
+                                  [addTag]="selectAddLocation"
                                   formControlName="location"
                                   placeholder="Seleccione o cree una nueva parroquia"
                                   [hideSelected]="true"
@@ -845,251 +910,259 @@
                     </div>
 
                     <div class="col-12">
-                      <div class="table-responsive">
-                        <table class="table">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <div class="form-group">
-                                  <div
-                                    class="custom-control custom-switch custom-switch-success"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      class="custom-control-input"
-                                      id="customSwitch01"
-                                      formControlName="is_reconnection_cost"
-                                      (change)="inputReconnection($event)"
-                                      checked
-                                    />
-                                    <label
-                                      class="custom-control-label"
-                                      for="customSwitch01"
+                      <form class="form-validate" formGroupName="contractGroup">
+                        <div class="table-responsive">
+                          <table class="table">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <div class="form-group">
+                                    <div
+                                      class="custom-control custom-switch custom-switch-success"
                                     >
-                                      <span class="switch-icon-left"
-                                        ><i data-feather="check"></i
-                                      ></span>
-                                      <span class="switch-icon-right"
-                                        ><i data-feather="x"></i
-                                      ></span>
-                                    </label>
-                                    ¿Aplica costo de reconexión?
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        id="customSwitch01"
+                                        formControlName="is_reconnection_cost"
+                                        (change)="inputReconnection($event)"
+                                        checked
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="customSwitch01"
+                                      >
+                                        <span class="switch-icon-left"
+                                          ><i data-feather="check"></i
+                                        ></span>
+                                        <span class="switch-icon-right"
+                                          ><i data-feather="x"></i
+                                        ></span>
+                                      </label>
+                                      ¿Aplica costo de reconexión?
+                                    </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="form-group">
-                                  <label for="birth">Costo de reconexión</label>
-                                  <input
-                                    type="text"
-                                    id="firstname"
-                                    class="form-control"
-                                    formControlName="reconnection_cost"
-                                    name="firstname"
-                                  />
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <div class="form-group">
-                                  <div
-                                    class="custom-control custom-switch custom-switch-success"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      class="custom-control-input"
-                                      id="customSwitch02"
-                                      formControlName="is_from_another_provider"
-                                      checked
-                                      (change)="inputSupplier($event)"
-                                    />
-                                    <label
-                                      class="custom-control-label"
-                                      for="customSwitch02"
+                                </td>
+                                <td>
+                                  <div class="form-group">
+                                    <label for="birth"
+                                      >Costo de reconexión</label
                                     >
-                                      <span class="switch-icon-left"
-                                        ><i data-feather="check"></i
-                                      ></span>
-                                      <span class="switch-icon-right"
-                                        ><i data-feather="x"></i
-                                      ></span>
-                                    </label>
-                                    ¿Viene de otro proveedor?
+                                    <input
+                                      type="text"
+                                      id="firstname"
+                                      class="form-control"
+                                      formControlName="reconnection_cost"
+                                      name="firstname"
+                                    />
                                   </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="form-group">
-                                  <label for="birth">Proveedor anterior</label>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div class="form-group">
+                                    <div
+                                      class="custom-control custom-switch custom-switch-success"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        id="customSwitch02"
+                                        formControlName="is_from_another_provider"
+                                        checked
+                                        (change)="inputSupplier($event)"
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="customSwitch02"
+                                      >
+                                        <span class="switch-icon-left"
+                                          ><i data-feather="check"></i
+                                        ></span>
+                                        <span class="switch-icon-right"
+                                          ><i data-feather="x"></i
+                                        ></span>
+                                      </label>
+                                      ¿Viene de otro proveedor?
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="form-group">
+                                    <label for="birth"
+                                      >Proveedor anterior</label
+                                    >
 
-                                  <ng-select
-                                    appendTo="body"
-                                    [items]="anotherProviderList"
-                                    [addTag]="selectAddTagMethod"
-                                    formControlName="another_provider_id"
-                                    placeholder="Seleccione"
-                                    [hideSelected]="true"
-                                    bindLabel="name"
-                                    bindValue="name"
-                                  >
-                                    <ng-template
-                                      ng-label-tmp
-                                      let-item="item"
-                                      let-clear="clear"
+                                    <ng-select
+                                      appendTo="body"
+                                      [items]="anotherProviderList"
+                                      [addTag]="selectAddProvider"
+                                      formControlName="another_provider_id"
+                                      placeholder="Seleccione"
+                                      [hideSelected]="true"
+                                      bindLabel="name"
+                                      bindValue="name"
                                     >
-                                      <span class="ng-value-label">
-                                        {{ item.name }}</span
+                                      <ng-template
+                                        ng-label-tmp
+                                        let-item="item"
+                                        let-clear="clear"
                                       >
-                                      <span
-                                        class="ng-value-icon right"
-                                        (click)="clear(item)"
-                                        aria-hidden="true"
-                                        >×</span
+                                        <span class="ng-value-label">
+                                          {{ item.name }}</span
+                                        >
+                                        <span
+                                          class="ng-value-icon right"
+                                          (click)="clear(item)"
+                                          aria-hidden="true"
+                                          >×</span
+                                        >
+                                      </ng-template>
+                                    </ng-select>
+                                    <p>
+                                      <small class="text-muted"
+                                        >Seleccione o cree un nuevo
+                                        proveedor</small
                                       >
-                                    </ng-template>
-                                  </ng-select>
-                                  <p>
-                                    <small class="text-muted"
-                                      >Seleccione o cree un nuevo
-                                      proveedor</small
-                                    >
-                                  </p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                                    </p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </form>
                     </div>
 
                     <div class="col-12">
-                      <div class="table-responsive">
-                        <table class="table">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <div class="form-group">
-                                  <div
-                                    class="custom-control custom-switch custom-switch-success"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      class="custom-control-input"
-                                      formControlName="is_pay_to_invoice"
-                                      id="customSwitch04"
-                                      checked
-                                    />
-                                    <label
-                                      class="custom-control-label"
-                                      for="customSwitch04"
+                      <form class="form-validate" formGroupName="contractGroup">
+                        <div class="table-responsive">
+                          <table class="table">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <div class="form-group">
+                                    <div
+                                      class="custom-control custom-switch custom-switch-success"
                                     >
-                                      <span class="switch-icon-left"
-                                        ><i data-feather="check"></i
-                                      ></span>
-                                      <span class="switch-icon-right"
-                                        ><i data-feather="x"></i
-                                      ></span>
-                                    </label>
-                                    ¿Paga contra factura?
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        formControlName="is_pay_to_invoice"
+                                        id="customSwitch04"
+                                        checked
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="customSwitch04"
+                                      >
+                                        <span class="switch-icon-left"
+                                          ><i data-feather="check"></i
+                                        ></span>
+                                        <span class="switch-icon-right"
+                                          ><i data-feather="x"></i
+                                        ></span>
+                                      </label>
+                                      ¿Paga contra factura?
+                                    </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="form-group">
-                                  <div
-                                    class="custom-control custom-switch custom-switch-success"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      class="custom-control-input"
-                                      formControlName="is_apply_arcotel"
-                                      id="customSwitch05"
-                                      checked
-                                    />
-                                    <label
-                                      class="custom-control-label"
-                                      for="customSwitch05"
+                                </td>
+                                <td>
+                                  <div class="form-group">
+                                    <div
+                                      class="custom-control custom-switch custom-switch-success"
                                     >
-                                      <span class="switch-icon-left"
-                                        ><i data-feather="check"></i
-                                      ></span>
-                                      <span class="switch-icon-right"
-                                        ><i data-feather="x"></i
-                                      ></span>
-                                    </label>
-                                    ¿Aplica Arcotel?
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        formControlName="is_apply_arcotel"
+                                        id="customSwitch05"
+                                        checked
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="customSwitch05"
+                                      >
+                                        <span class="switch-icon-left"
+                                          ><i data-feather="check"></i
+                                        ></span>
+                                        <span class="switch-icon-right"
+                                          ><i data-feather="x"></i
+                                        ></span>
+                                      </label>
+                                      ¿Aplica Arcotel?
+                                    </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="form-group">
-                                  <div
-                                    class="custom-control custom-switch custom-switch-success"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      class="custom-control-input"
-                                      formControlName="is_not_cut_for_debt"
-                                      id="customSwitch06"
-                                      checked
-                                    />
-                                    <label
-                                      class="custom-control-label"
-                                      for="customSwitch06"
+                                </td>
+                                <td>
+                                  <div class="form-group">
+                                    <div
+                                      class="custom-control custom-switch custom-switch-success"
                                     >
-                                      <span class="switch-icon-left"
-                                        ><i data-feather="check"></i
-                                      ></span>
-                                      <span class="switch-icon-right"
-                                        ><i data-feather="x"></i
-                                      ></span>
-                                    </label>
-                                    No cortar por deuda
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        formControlName="is_not_cut_for_debt"
+                                        id="customSwitch06"
+                                        checked
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="customSwitch06"
+                                      >
+                                        <span class="switch-icon-left"
+                                          ><i data-feather="check"></i
+                                        ></span>
+                                        <span class="switch-icon-right"
+                                          ><i data-feather="x"></i
+                                        ></span>
+                                      </label>
+                                      No cortar por deuda
+                                    </div>
                                   </div>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <div class="form-group">
-                                  <div
-                                    class="custom-control custom-switch custom-switch-success"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      class="custom-control-input"
-                                      formControlName="is_not_generate_invoice_service"
-                                      id="customSwitch08"
-                                      checked
-                                    />
-                                    <label
-                                      class="custom-control-label"
-                                      for="customSwitch08"
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div class="form-group">
+                                    <div
+                                      class="custom-control custom-switch custom-switch-success"
                                     >
-                                      <span class="switch-icon-left"
-                                        ><i data-feather="check"></i
-                                      ></span>
-                                      <span class="switch-icon-right"
-                                        ><i data-feather="x"></i
-                                      ></span>
-                                    </label>
-                                    ¿No generar factura sin el servicio?
+                                      <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        formControlName="is_not_generate_invoice_service"
+                                        id="customSwitch08"
+                                        checked
+                                      />
+                                      <label
+                                        class="custom-control-label"
+                                        for="customSwitch08"
+                                      >
+                                        <span class="switch-icon-left"
+                                          ><i data-feather="check"></i
+                                        ></span>
+                                        <span class="switch-icon-right"
+                                          ><i data-feather="x"></i
+                                        ></span>
+                                      </label>
+                                      ¿No generar factura sin el servicio?
+                                    </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td></td>
-                              <td></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </form>
                     </div>
 
                     <div class="col-12 flex-column mt-2">
                       <div class="row d-flex justify-content-end">
                         <button
-                          (click)="submit(false, true)"
+                          (click)="submit()"
                           [disabled]="loading"
                           type="submit"
                           class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
@@ -1107,22 +1180,16 @@
                 </form>
               </ng-template>
             </li>
-            <li ngbNavItem>
+            <li [ngbNavItem]="2" [disabled]="!itemModel.id">
               <a ngbNavLink
-                ><span [data-feather]="'settings'"></span> Contrato</a
+                ><span [data-feather]="'clipboard'"></span> Contrato</a
               >
               <ng-template ngbNavContent>
                 <app-contract-template></app-contract-template>
               </ng-template>
             </li>
-            <li ngbNavItem [disabled]="true">
-              <a href="javascript:void(0)" ngbNavLink
-                ><span [data-feather]="'lock'"></span> Disabled</a
-              >
-              <ng-template ngbNavContent> </ng-template>
-            </li>
-            <li ngbNavItem>
-              <a ngbNavLink><span [data-feather]="'award'"></span> Account</a>
+            <li [ngbNavItem]="3" [disabled]="!itemModel.id">
+              <a ngbNavLink><span [data-feather]="'phone'"></span> Contactos</a>
               <ng-template ngbNavContent> </ng-template>
             </li>
           </ul>
