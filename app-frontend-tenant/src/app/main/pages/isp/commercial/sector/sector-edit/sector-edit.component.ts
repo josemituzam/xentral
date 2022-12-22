@@ -425,9 +425,9 @@ export class SectorEditComponent implements OnInit, AfterViewInit {
                   lng: parseFloat(item.objSector.longitude),
                 };
               });
-              this.itemModel.city = item.objSector?.location?.city
-              this.itemModel.state = item.objSector?.location?.state
-              this.itemModel.location = item.objSector?.location?.location
+              this.itemModel.city = item.objSector?.get_location?.city
+              this.itemModel.state = item.objSector?.get_location?.state
+              this.itemModel.location = item.objSector?.get_location?.location
               this.initForm();
               this.cdr.detectChanges();
             }

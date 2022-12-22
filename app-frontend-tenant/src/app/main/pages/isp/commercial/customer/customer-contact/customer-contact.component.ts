@@ -15,7 +15,7 @@ import { repeaterAnimation } from '../customer-edit/form-repeater.animation';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { IspCustomerService } from 'core/services/isp/commercial/ispcustomer.service';
 import { IspCustomer } from 'core/models/isp/commercial/ispcustomer.model';
-
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-customer-contact',
@@ -35,6 +35,7 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
 
   // Public
   @Input() customerId: string;
+  @Input() type: string;
 
   public activeNav = 0;
   public active = 2;
@@ -107,10 +108,20 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
 
   addRecord() {
     const item = this.fb.group({
-      name: '',
-      name_parent: '',
-      email: '',
-      phone: '0',
+      name: [null,
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(100),
+        ])],
+      name_parent: [null,
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(100),
+        ])],
+      email: ['',
+        Validators.compose([Validators.maxLength(100), Validators.email])],
+      phone: [null,
+        Validators.compose([Validators.maxLength(100)])],
       type_number: 'MOV',
     });
     this.contacts.push(item);
@@ -135,6 +146,7 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
    * @param form
    */
   submit() {
+    this.loading = true;
     const controls = this.editForm.controls;
     /** check form */
     if (this.editForm.invalid) {
@@ -153,6 +165,16 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
 
     const editedItem = this.prepareItem();
     this.addItem(editedItem);
+  }
+
+
+  setMessageSuccess(message: string) {
+    Swal.fire({
+      icon: 'success',
+      title: `${message}`,
+      showConfirmButton: false,
+      timer: 1500
+    })
   }
 
   addItem(_item: any) {
@@ -177,10 +199,9 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
       })
     ).subscribe((res: any) => {
       if (res) {
-        if (this.customerId) {
-          this.getContactCustomer(this.customerId)
-
-        }
+        this.setMessageSuccess("Guardado Correctamente")
+        this.loading = false;
+        this.cdr.detectChanges();
       }
     });
     this.subscriptions.push(sbCreate);
@@ -195,8 +216,9 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
     this.itemModel = new IspCustomer();
     this.itemModel.clear();
     this.initForm();
-
-    if (this.customerId) {
+    console.log(this.type)
+    console.log(this.customerId)
+    if (this.type == 'UPD') {
       this.getContactCustomer(this.customerId);
     } else {
       this.addRecord();
@@ -209,26 +231,26 @@ export class CustomerContactsComponent implements OnInit, OnDestroy {
   getContactCustomer(id: string) {
     this._service.getContactCustomer(id).subscribe(res => {
       if (res) {
-        console.log(res)
-        //this.initForm();
-        for (let item of res) {
-          var phone = JSON.parse(item.phone)
-          const obj = this.fb.group({
-            name: item.name,
-            name_parent: item.name_parent,
-            email: item.email,
-            phone: typeof JSON.parse(item?.phone) !== "string" ? phone?.number : phone,
-            type_number: item.type_number,
-          });
+        if (res.length > 0) {
+          for (let item of res) {
+            var phone = JSON.parse(item.phone)
+            const obj = this.fb.group({
+              name: item.name,
+              name_parent: item.name_parent,
+              email: item.email,
+              phone: typeof JSON.parse(item?.phone) !== "string" ? phone?.number : phone,
+              type_number: item.type_number,
+            });
 
-          this.contacts.push(obj);
+            this.contacts.push(obj);
+          }
+        } else {
+          this.addRecord();
         }
 
-        this.cdr.detectChanges();
-        // this.initForm();
 
-        /* this.initForm();
-         this.addRecord(); */
+
+        this.cdr.detectChanges();
       }
     }
       , err => {

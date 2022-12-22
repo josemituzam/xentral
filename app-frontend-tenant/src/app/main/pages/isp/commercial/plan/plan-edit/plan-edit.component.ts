@@ -34,8 +34,8 @@ export class PlanEditComponent implements OnInit, OnDestroy {
   public getType: any = [{ id: 'K', name: 'K' },
   { id: 'M', name: 'M' }];
 
-  public getCompartition: any = [{ id: 'A', name: '1:1' },
-  { id: 'B', name: '1:2' }, { id: 'C', name: '1:4' }, { id: 'D', name: '1:8' }];
+  public getCompartition: any = [{ id: '1:1', name: '1:1' },
+    { id: '1:2', name: '1:2' }, { id: '1:4', name: '1:4' }, { id: '1:8', name: '1:8' }];
 
   public birthDateOptions: FlatpickrOptions = {
     altInput: true
@@ -71,20 +71,62 @@ export class PlanEditComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.editForm = this.fb.group({
-      name: [this.itemModel.name],
-      description: [this.itemModel.description],
-      last_mile_id: [this.itemModel.last_mile_id],
-      increase: [this.itemModel.increase],
-      type_increase: [this.itemModel.type_increase],
-      downfall: [this.itemModel.downfall],
-      type_downfall: [this.itemModel.type_downfall],
-      compartition: [this.itemModel.compartition],
-      installation_cost: [this.itemModel.installation_cost],
-      month_cost: [this.itemModel.month_cost],
-      penalty_amount: [this.itemModel.penalty_amount],
-      meters_free: [this.itemModel.meters_free],
-      additional_meter_cost: [this.itemModel.additional_meter_cost],
-      minimun_permanence_id: [this.itemModel.minimun_permanence_id],
+      name: [
+        this.itemModel.name,
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
+      ],
+      description: [
+        this.itemModel.description,
+        Validators.compose([Validators.maxLength(299)]),
+      ],
+      last_mile_id: [
+        this.itemModel.last_mile_id,
+        Validators.compose([Validators.required]),
+      ],
+      increase: [
+        this.itemModel.increase,
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
+      ],
+      type_increase: [
+        this.itemModel.type_increase,
+        Validators.compose([Validators.required]),
+      ],
+      downfall: [
+        this.itemModel.downfall,
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
+      ],
+      type_downfall: [
+        this.itemModel.type_downfall,
+        Validators.compose([Validators.required]),
+      ],
+      compartition: [
+        this.itemModel.compartition,
+        Validators.compose([Validators.required]),
+      ],
+      installation_cost: [
+        this.itemModel.installation_cost,
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
+      ],
+      month_cost: [
+        this.itemModel.month_cost,
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
+      ],
+      penalty_amount: [
+        this.itemModel.penalty_amount,
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
+      ],
+      meters_free: [
+        this.itemModel.meters_free,
+        Validators.compose([Validators.maxLength(100)]),
+      ],
+      additional_meter_cost: [
+        this.itemModel.additional_meter_cost,
+        Validators.compose([Validators.required]),
+      ],
+      minimun_permanence_id: [
+        this.itemModel.minimun_permanence_id,
+        Validators.compose([Validators.required]),
+      ],
     });
   }
 
@@ -236,12 +278,12 @@ export class PlanEditComponent implements OnInit, OnDestroy {
           (item: any) => {
             if (item) {
               this.itemModel = item.objPlan;
-              this.itemModel.installation_cost = item.objPlan?.plandetail[0]?.installation_cost;
-              this.itemModel.month_cost = item.objPlan?.plandetail[0]?.month_cost;
-              this.itemModel.penalty_amount = item.objPlan?.plandetail[0]?.penalty_amount;
-              this.itemModel.meters_free = item.objPlan?.plandetail[0]?.meters_free;
-              this.itemModel.additional_meter_cost = item.objPlan?.plandetail[0]?.additional_meter_cost;
-              this.itemModel.minimun_permanence_id = item.objPlan?.plandetail[0]?.minimun_permanence_id;
+              this.itemModel.installation_cost = item.objPlan?.get_plan_detail[0]?.installation_cost;
+              this.itemModel.month_cost = item.objPlan?.get_plan_detail[0]?.month_cost;
+              this.itemModel.penalty_amount = item.objPlan?.get_plan_detail[0]?.penalty_amount;
+              this.itemModel.meters_free = item.objPlan?.get_plan_detail[0]?.meters_free;
+              this.itemModel.additional_meter_cost = item.objPlan?.get_plan_detail[0]?.additional_meter_cost;
+              this.itemModel.minimun_permanence_id = item.objPlan?.get_plan_detail[0]?.minimun_permanence_id;
               this.initForm();
               this.cdr.detectChanges();
             }
@@ -297,5 +339,26 @@ export class PlanEditComponent implements OnInit, OnDestroy {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+  // helpers for View
+  isControlValid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.valid && (control.dirty || control.touched);
+  }
+
+  isControlInvalid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.invalid && (control.dirty || control.touched);
+  }
+
+  controlHasError(validation: string, controlName: string) {
+    const control = this.editForm.controls[controlName];
+    return control.hasError(validation) && (control.dirty || control.touched);
+  }
+
+  isControlTouched(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.dirty || control.touched;
   }
 }

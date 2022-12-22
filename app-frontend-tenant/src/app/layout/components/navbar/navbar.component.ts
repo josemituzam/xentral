@@ -132,7 +132,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   setLanguage(language): void {
     // Set the selected language for the navbar on change
     this.selectedLanguage = language;
-
+    console.log(language);
     // Use the selected language id for translations
     this._translateService.use(language);
 
@@ -176,6 +176,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .logout()
       .subscribe((res: any) => {
         localStorage.clear();
+        
         this._router.navigate(['/auth/login']);
       });
   }

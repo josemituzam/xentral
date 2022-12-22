@@ -30,6 +30,12 @@ import { ContractEditComponent } from './contract-edit/contract-edit.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { CardSnippetModule } from '@core/components/card-snippet/card-snippet.module';
 import { ContractTemplateComponent } from './contract-template/contract-template.component';
+import { ContractContactsComponent } from './contract-contact/contract-contact.component';
+import { ContractSignedComponent } from './contract-signed/contract-signed.component';
+import { SafePipe } from '@core/pipes/safe.pipe';
+import { ContractLinkComponent } from './contract-template/contract-link/contract-link.component';
+import { ContractSignedModalComponent } from './contract-list/contract-signed-modal/contract-signed-modal.component';
+import { UrlSignedExpiredComponent } from './contract-signed/url-signed-expired/url-signed-expired.component';
 
 // routing
 const routes: Routes = [
@@ -48,7 +54,7 @@ const routes: Routes = [
 ];
 export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
 @NgModule({
-  declarations: [ContractListComponent, ContractEditComponent, ContractTemplateComponent],
+  declarations: [ContractLinkComponent, ContractListComponent, ContractEditComponent, ContractTemplateComponent, ContractContactsComponent, ContractSignedModalComponent, ],
   imports: [
     CardSnippetModule,
     NgxIntlTelInputModule,
@@ -71,6 +77,6 @@ export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
     GoogleMapsModule,
     CKEditorModule
   ],
-  providers: [ContractListService, DatePipe, TypesUtilsService],
+  providers: [ContractListService, DatePipe, TypesUtilsService, SafePipe],
 })
 export class ContractModule { }

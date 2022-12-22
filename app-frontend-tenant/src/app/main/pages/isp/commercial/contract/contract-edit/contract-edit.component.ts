@@ -60,8 +60,8 @@ export class ContractEditComponent implements OnInit, OnDestroy {
     public isCollapsed0 = false;
     public isCollapsed1 = true;
 
-    public getCompartition: any = [{ id: 'A', name: '1:1' },
-    { id: 'B', name: '1:2' }, { id: 'C', name: '1:4' }, { id: 'D', name: '1:8' }];
+    public getCompartition: any = [{ id: '1:1', name: '1:1' },
+    { id: '1:2', name: '1:2' }, { id: '1:4', name: '1:4' }, { id: '1:8', name: '1:8' }];
 
     public birthDateOptions: FlatpickrOptions = {
         altInput: true
@@ -119,7 +119,6 @@ export class ContractEditComponent implements OnInit, OnDestroy {
 
 
     onNavChange(changeEvent: NgbNavChangeEvent) {
-        console.log("onNavChange: ", changeEvent.nextId);
         if (changeEvent.nextId === 1) {
             let currentUrl = this.router.url;
             this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
@@ -161,8 +160,6 @@ export class ContractEditComponent implements OnInit, OnDestroy {
                         const validationErrors = errorMessage.error.errors;
                         Object.keys(validationErrors).forEach((prop) => {
                             const formControl = this.editForm.get("sectorGroup").get(prop);
-                            console.log(formControl)
-                            console.log(prop)
                             if (formControl) {
                                 formControl.setErrors({
                                     serverError: validationErrors[prop],
@@ -228,7 +225,6 @@ export class ContractEditComponent implements OnInit, OnDestroy {
     }
 
     getCity($event) {
-        console.log($event);
         this.editForm.controls['sectorGroup'].get('city').setValue(null);
         this.center = {
             lat: parseFloat($event.latitude),
@@ -270,7 +266,7 @@ export class ContractEditComponent implements OnInit, OnDestroy {
             contractGroup: this.fb.group({
                 emission_at: [this.itemModel.emission_at == null ? today : this.itemModel.emission_at],
                 adviser_id: [this.itemModel.adviser_id],
-                break_at: [this.itemModel.break_at == null ? today : this.itemModel.break_at],
+                break_day: [this.itemModel.break_day],
                 customer_id: [
                     this.itemModel.customer_id
                 ],
@@ -392,7 +388,6 @@ export class ContractEditComponent implements OnInit, OnDestroy {
             return;
         }
         const editedItem = this.prepareItem();
-        console.log(editedItem);
         if (this.itemModel.id) {
             this.updateItem(editedItem);
             return;
@@ -401,7 +396,6 @@ export class ContractEditComponent implements OnInit, OnDestroy {
     }
 
     goBackWithout() {
-        console.log("goBackWithout...");
         this.router.navigate(['/isp/contract/list'], { relativeTo: this.activatedRoute });
     }
 
@@ -474,6 +468,23 @@ export class ContractEditComponent implements OnInit, OnDestroy {
         })
     }
 
+    beakList: any[];
+    selectAddTagMethod(name) {
+        return { id: '0', name: name };
+    }
+    getBreakDay() {
+        this._service.getBreakDay().subscribe(res => {
+            if (res) {
+                this.beakList = res;
+            }
+        }
+            , err => {
+                console.log("Estatus: ", err);
+            }
+        );
+    }
+
+
 
     prepareItem(): IspContract {
         const controls = this.editForm.controls.contractGroup;
@@ -491,7 +502,7 @@ export class ContractEditComponent implements OnInit, OnDestroy {
         _item.address_contract = controls["controls"]["address_contract"].value;
         _item.adviser_id = controls["controls"]["adviser_id"].value;
         _item.another_provider_id = controls["controls"]["another_provider_id"].value;
-        _item.break_at = controls["controls"]["break_at"].value;
+        _item.break_day = controls["controls"]["break_day"].value;
         _item.plan_id = controls["controls"]["plan_id"].value;
         _item.contract_version_id = controls["controls"]["contract_version_id"].value;
         _item.customer_id = controls["controls"]["customer_id"].value;
@@ -527,11 +538,11 @@ export class ContractEditComponent implements OnInit, OnDestroy {
 
         this.itemModel = new IspContract();
         this.itemModel.clear();
-        console.log(this.itemModel.id);
         this.initForm();
         this.getCustomers();
         this.getPayments();
         this.getLastMiles();
+        this.getBreakDay();
         this.getSector();
         this.getState();
         this.getMinimunPermanence();
@@ -546,46 +557,50 @@ export class ContractEditComponent implements OnInit, OnDestroy {
 
             if (id && id.length > 0) {
                 this.setHeader("Editar", '../../list');
-                this._service.getContractId(id).subscribe(
-                    (item: any) => {
-                        if (item) {
-                            this.itemModel = item.obj;
-                            this.itemModel.compartition = item.obj?.ispcontractplan?.compartition;
-                            this.itemModel.last_mile_id = item.obj?.ispcontractplan?.plan?.last_mile_id;
-                            this.itemModel.minimun_permanence_id = item.obj?.ispcontractplan?.minimun_permanence_id;
-                            this.itemModel.installation_cost = item.obj?.ispcontractplan?.installation_cost;
-                            this.itemModel.month_cost = item.obj?.ispcontractplan?.month_cost;
-                            this.itemModel.is_permanence_cost = item.obj?.ispcontractplan?.is_permanence_cost;
-                            this.itemModel.permanence_cost = item.obj?.ispcontractplan?.permanence_cost;
-                            this.getPlan({ id: item.obj?.ispcontractplan?.plan?.last_mile_id });
-                            this.itemModel.plan_id = item.obj?.ispcontractplan?.plan_id;
-                            var array = []
-                            array.push(item.obj?.ispcustomer)
-                            this.customers$ = of(array);
-                            this.marker = {
-                                position: {
-                                    lat: parseFloat(item.obj?.ispsector?.latitude),
-                                    lng: parseFloat(item.obj?.ispsector?.longitude),
-                                },
-                            };
-                            navigator.geolocation.getCurrentPosition((position) => {
-                                this.center = {
-                                    lat: parseFloat(item.obj?.ispsector?.latitude),
-                                    lng: parseFloat(item.obj?.ispsector?.longitude),
-                                };
-                            });
-                            this.zoom = 15;
-                            this.setInputs(item.obj?.is_permanence_cost, item.obj?.is_reconnection_cost, item.obj?.is_from_another_provider)
-                            this.initForm();
-                            this.cdr.detectChanges();
-                        }
-                    },
-                    (error) => { },
-                    () => { }
-                );
+                this.getContract(id);
             }
         });
 
+    }
+
+    getContract(id: string) {
+        this._service.getContractId(id).subscribe(
+            (item: any) => {
+                if (item) {
+                    this.itemModel = item.obj;
+                    this.itemModel.compartition = item.obj?.get_contract_plan?.compartition;
+                    this.itemModel.last_mile_id = item.obj?.get_contract_plan?.get_plan?.last_mile_id;
+                    this.itemModel.minimun_permanence_id = item.obj?.get_contract_plan?.minimun_permanence_id;
+                    this.itemModel.installation_cost = item.obj?.get_contract_plan?.installation_cost;
+                    this.itemModel.month_cost = item.obj?.get_contract_plan?.month_cost;
+                    this.itemModel.is_permanence_cost = item.obj?.get_contract_plan?.is_permanence_cost;
+                    this.itemModel.permanence_cost = item.obj?.get_contract_plan?.permanence_cost;
+                    this.getPlan({ id: item.obj?.get_contract_plan?.get_plan?.last_mile_id });
+                    this.itemModel.plan_id = item.obj?.get_contract_plan?.plan_id;
+                    var array = []
+                    array.push(item.obj?.get_customer)
+                    this.customers$ = of(array);
+                    this.marker = {
+                        position: {
+                            lat: parseFloat(item.obj?.get_sector?.latitude),
+                            lng: parseFloat(item.obj?.get_sector?.longitude),
+                        },
+                    };
+                    navigator.geolocation.getCurrentPosition(() => {
+                        this.center = {
+                            lat: parseFloat(item.obj?.get_sector?.latitude),
+                            lng: parseFloat(item.obj?.get_sector?.longitude),
+                        };
+                    });
+                    this.zoom = 15;
+                    this.setInputs(item.obj?.is_permanence_cost, item.obj?.is_reconnection_cost, item.obj?.is_from_another_provider)
+                    this.initForm();
+                    this.cdr.detectChanges();
+                }
+            },
+            (error) => { },
+            () => { }
+        );
     }
 
 
@@ -596,7 +611,6 @@ export class ContractEditComponent implements OnInit, OnDestroy {
     selectedMovie: any;
     minLengthTerm = 3;
     getCustomers() {
-        console.log(this.customersInput$);
         this.customers$ = concat(
             of([]), // default items
             this.customersInput$.pipe(
@@ -607,7 +621,6 @@ export class ContractEditComponent implements OnInit, OnDestroy {
                 debounceTime(800),
                 tap(() => this.customerLoading = true),
                 switchMap(term => {
-                    console.log(term);
                     return this._service.getCustomers(term).pipe(
                         catchError(() => of([])), // empty list on error
                         tap(() => this.customerLoading = false)
@@ -650,17 +663,15 @@ export class ContractEditComponent implements OnInit, OnDestroy {
         this.editForm.controls['contractGroup'].get('installation_cost').setValue(null);
         this.editForm.controls['contractGroup'].get('month_cost').setValue(null);
         this.editForm.controls['contractGroup'].get('plan_id').setValue(null);
-        console.log($event.id);
         this._service.getPlans($event.id).subscribe((data) => {
-            console.log(data);
             this.planList = data
         });
     }
     getPlanSelected($event) {
         this.editForm.controls['contractGroup'].get('compartition').setValue($event.compartition);
-        this.editForm.controls['contractGroup'].get('minimun_permanence_id').setValue($event?.plandetail[0]?.minimun_permanence_id);
-        this.editForm.controls['contractGroup'].get('installation_cost').setValue($event?.plandetail[0]?.installation_cost);
-        this.editForm.controls['contractGroup'].get('month_cost').setValue($event?.plandetail[0]?.month_cost);
+        this.editForm.controls['contractGroup'].get('minimun_permanence_id').setValue($event?.get_plan_detail[0]?.minimun_permanence_id);
+        this.editForm.controls['contractGroup'].get('installation_cost').setValue($event?.get_plan_detail[0]?.installation_cost);
+        this.editForm.controls['contractGroup'].get('month_cost').setValue($event?.get_plan_detail[0]?.month_cost);
         this.selectedPlan = $event;
 
     }

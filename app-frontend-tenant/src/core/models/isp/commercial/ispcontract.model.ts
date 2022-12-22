@@ -3,7 +3,7 @@ export class IspContract {
     id !: string;
     emission_at!: any;
     plan_id!: string;
-    break_at !: string;
+    break_day !: string;
     customer_id !: string;
     username !: string;
     sector_id !: string;
@@ -35,7 +35,7 @@ export class IspContract {
         this.id = undefined;
         this.emission_at = null;
         this.plan_id = null;
-        this.break_at = null;
+        this.break_day = null;
         this.customer_id = null;
         this.username = null;
         this.sector_id = null;

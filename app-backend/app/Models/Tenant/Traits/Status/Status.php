@@ -23,6 +23,7 @@ class Status extends Model
     protected $fillable = [
         'name',
         'type',
+        'short_code',
         'class',
         'service'
     ];

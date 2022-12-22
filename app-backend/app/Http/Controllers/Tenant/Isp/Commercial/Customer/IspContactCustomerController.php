@@ -16,8 +16,6 @@ class IspContactCustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //  return $request->all();
-
         $arrayContact = $request->contacts;
         IspContactCustomer::where('customer_id', $request->id)->delete();
 
@@ -36,8 +34,25 @@ class IspContactCustomerController extends Controller
             ];
             IspContactCustomer::create($objData);
         }
+
+        return response()->json([
+            'msg'  => '1'
+        ]);
     }
 
+    public function validateContact($customerId)
+    {
+        $obj = IspContactCustomer::where('customer_id', $customerId)->count();
+        if ($obj > 0) {
+            return response()->json([
+                'msg'  => '1'
+            ]);
+        } else {
+            return response()->json([
+                'msg'  => '0'
+            ]);
+        }
+    }
 
     public function edit($id)
     {

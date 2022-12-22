@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
 import { ContractListService } from './contract-list.service';
+import { ContractSignedModalComponent } from './contract-signed-modal/contract-signed-modal.component';
 
 @Component({
   selector: 'app-contract-list',
@@ -124,6 +125,21 @@ export class ContractListComponent implements OnInit {
     })
   }
 
+  contractSigned(id: any, type: any) {
+    const modalRef = this.modalService.open(ContractSignedModalComponent, {
+      centered: true,
+      backdrop: 'static',
+      size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
+    });
+    modalRef.componentInstance.id = id;
+    modalRef.componentInstance.type = type;
+    if (type == 'uploadContract')
+      modalRef.result.then(
+        () => this.getRowData(),
+        () => { }
+      );
+  }
+
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
 
@@ -189,6 +205,9 @@ export class ContractListComponent implements OnInit {
     });
   }
 
+  hack(val) {
+    return JSON.parse(val);
+  }
   getRowData() {
     this._service.getDataTableRows(this.searchValue, this.selectedOption, this.curPages, this.sortBy, this.isActive).subscribe(res => {
       if (res) {

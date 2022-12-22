@@ -226,7 +226,6 @@ export class CustomerListComponent implements OnInit {
           }
           this.rows.push(obj);
         }
-        console.log(this.rows);
         this.activeTable = true;
         this.pageSizes = res['last_page'];
         this.curPages = res['current_page'];

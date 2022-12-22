@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant\Isp\Commercial\Contract;
 
+use App\Models\Tenant\Isp\Commercial\Plan\IspMinimunPermanence;
 use App\Models\Tenant\Isp\Commercial\Plan\IspPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,8 +34,13 @@ class IspContractPlan extends Model
         'deleted_by'
     ];
 
-    public function plan()
+    public function getPlan()
     {
         return $this->belongsTo(IspPlan::class, 'plan_id');
+    }
+
+    public function getMinimunPermanence()
+    {
+        return $this->belongsTo(IspMinimunPermanence::class, 'minimun_permanence_id');
     }
 }

@@ -28,24 +28,6 @@ use Illuminate\Support\Facades\File;
 
 class RequestDomainController extends Controller
 {
-    public function uploadStookFile(Request $request)
-    {
-        $fileExtension = $request->file('image')->getClientOriginalExtension();
-        $fileFullName = "testFile" . '.' . $fileExtension;
-
-        // Try upload file to Stook
-        try {
-            $s3 = App::make('aws')->createClient('s3');
-            $s3->putObject(array(
-                'Bucket'     => "test-bucket",
-                'Key'        => $fileFullName,
-                'SourceFile' => $request->file('image')->getRealPath(),
-            ));
-        } catch (\Exception $exception) {
-            throw new \Exception('File could not upload to stook account.');
-        }
-    }
-
     /**
      * Retorna los registros desde la base de datos
      *
@@ -182,11 +164,6 @@ class RequestDomainController extends Controller
         ServiceTenant::truncate();
         DomainServiceTenant::truncate();
 
-        Company::create([
-            'name' => $objRequestDomain->company_name,
-            "country" => $objRequestDomain->country,
-        ]);
-
         for ($i = 0; $i < $objService->count(); $i++) {
             $objServiceTenant =  ServiceTenant::create([
                 'name' => $objService[$i]->name,
@@ -262,7 +239,7 @@ class RequestDomainController extends Controller
      */
     public function store(Request $request)
     {
-       // return $request->all();
+        // return $request->all();
         $validator = RequestDomain::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
@@ -325,7 +302,7 @@ class RequestDomainController extends Controller
         $objApi = ApiCloudfare::where('short_code', '=', $varEnv)->get();
         $methods = new ApiCloudfareController();
         foreach ($objApi as $item) {
-            $methods->createSubDomain($objRequestDomain->domain_name, $item);
+            // $methods->createSubDomain($objRequestDomain->domain_name, $item);
         }
         return $objTenant;
     }
@@ -354,7 +331,7 @@ class RequestDomainController extends Controller
         ));
         $s3_client->waitUntil('BucketExists', array('Bucket' => $bucket_name));
 
-        $s3_client->putObject(array(
+      /*  $s3_client->putObject(array(
             'Bucket' => $bucket_name,
             'Key'    => $key_image_name,
         ));
@@ -362,7 +339,7 @@ class RequestDomainController extends Controller
         $s3_client->putObject(array(
             'Bucket' => $bucket_name,
             'Key'    => $key_file_name,
-        ));
+        )); */
 
         return $objR2;
     }
@@ -376,7 +353,7 @@ class RequestDomainController extends Controller
             $serviceId[] = $s->service_id;
         endforeach;
         $objService = ServiceLandlord::whereIn('id', $serviceId)->get();
-        //$objR2 = $this->createBucketS3($objRequestDomain);
+        $objR2 = $this->createBucketS3($objRequestDomain);
 
         tenancy()->initialize($objTenant);
 
@@ -407,7 +384,12 @@ class RequestDomainController extends Controller
             ]);
         }
 
-        /*ApiR2Tenant::create([
+        Company::create([
+            'name' => $objRequestDomain->company_name,
+            "country" => $objRequestDomain->country,
+        ]);
+
+        ApiR2Tenant::create([
             'bucket_name'  => $objRequestDomain->domain_name,
             'account_id' => $objR2->account_id,
             'access_key_id' => $objR2->access_key_id,
@@ -417,7 +399,7 @@ class RequestDomainController extends Controller
             'short_code' =>  $objR2->short_code,
             'long_code' =>  $objR2->long_code,
         ]);
- */
+
         tenancy()->end();
     }
 

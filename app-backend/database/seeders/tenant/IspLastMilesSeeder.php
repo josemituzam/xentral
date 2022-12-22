@@ -16,12 +16,12 @@ class IspLastMilesSeeder extends Seeder
     {
         $obj = [
             [
-                'name' => 'FIBRA',
+                'name' => 'Fibra',
                 'description' => 'Fibra',
                 'short_code' => 'UM-01'
             ],
             [
-                'name' => 'INALÁMBRICA',
+                'name' => 'Inalámbrico',
                 'description' => 'Inalámbrica',
                 'short_code' => 'UM-02'
             ]

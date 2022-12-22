@@ -1,0 +1,764 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-body">
+          <ul ngbNav #nav="ngbNav" class="nav nav-pills">
+            <li ngbNavItem>
+              <a ngbNavLink class="d-flex align-items-center">
+                <i data-feather="info" class="mr-sm-50"></i
+                ><span class="d-none d-sm-block">Información</span></a
+              >
+              <ng-template ngbNavContent>
+                <div
+                  class="tab-pane"
+                  id="information"
+                  aria-labelledby="information-tab"
+                  role="tabpanel"
+                >
+                  <!-- users edit Info form start  -->
+                  <form class="form-validate" [formGroup]="editForm">
+                    <div class="row mt-1">
+                      <div class="col-12">
+                        <h4 class="mb-1">
+                          <i
+                            data-feather="globe"
+                            [size]="16"
+                            class="mr-75 font-medium-4"
+                          ></i>
+                          <span class="align-middle">General</span>
+                        </h4>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Razón social</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            formControlName="name_company"
+                            placeholder=""
+                            name="website"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('name_company'),
+                              'is-valid': isControlValid('name_company')
+                            }"
+                          />
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('name_company')"
+                          >
+                            Razón social ingresada correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="controlHasError('required', 'name_company')"
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="controlHasError('maxlength', 'name_company')"
+                          >
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('name_company')?.errors?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("name_company")?.errors?.serverError
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Nombre comercial</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            formControlName="name_commercial"
+                            placeholder=""
+                            name="website"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('name_commercial'),
+                              'is-valid': isControlValid('name_commercial')
+                            }"
+                          />
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('name_commercial')"
+                          >
+                            Nombre comercial ingresado correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('required', 'name_commercial')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('maxlength', 'name_commercial')
+                            "
+                          >
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('name_commercial')?.errors
+                                ?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("name_commercial")?.errors
+                                ?.serverError
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="website">Tipo de identificación</label>
+                          <ng-select
+                            [(ngModel)]="typeIdentificator"
+                            [items]="getTypeIdentification"
+                            [clearable]="false"
+                            name="selecttypeidentification"
+                            formControlName="type_identification"
+                            bindValue="id"
+                            bindLabel="name"
+                            placeholder="Seleccione de la lista"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid(
+                                'type_identification'
+                              ),
+                              'is-valid': isControlValid('type_identification')
+                            }"
+                          >
+                            <ng-template
+                              ng-option-tmp
+                              ng-label-tmp
+                              let-item="item"
+                            >
+                              {{ item.name }}
+                            </ng-template>
+                          </ng-select>
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('type_identification')"
+                          >
+                            Tipo de identificación ingresada correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('required', 'type_identification')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError(
+                                'maxlength',
+                                'type_identification'
+                              )
+                            "
+                          >
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('type_identification')?.errors
+                                ?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("type_identification")?.errors
+                                ?.serverError
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 mb-2">
+                        <div class="form-group">
+                          <label for="website">Identificador</label>
+                          <input
+                            type="text"
+                            id="identificator"
+                            class="form-control"
+                            name="identificator-customer"
+                            formControlName="identification"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('identification'),
+                              'is-valid': isControlValid('identification')
+                            }"
+                          />
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('identification')"
+                          >
+                            Identificación ingresada correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('required', 'identification')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('maxlength', 'identification')
+                            "
+                          >
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('identification')?.errors
+                                ?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("identification")?.errors
+                                ?.serverError
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <div
+                            class="custom-control custom-switch custom-switch-success"
+                          >
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="customSwitch112"
+                              formControlName="is_accounting"
+                              checked
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="customSwitch112"
+                            >
+                              <span class="switch-icon-left"
+                                ><i data-feather="check"></i
+                              ></span>
+                              <span class="switch-icon-right"
+                                ><i data-feather="x"></i
+                              ></span>
+                            </label>
+                            Obligado a llevar contablidad
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <div
+                            class="custom-control custom-switch custom-switch-success"
+                          >
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="customSwitch113"
+                              formControlName="is_special"
+                              checked
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="customSwitch113"
+                            >
+                              <span class="switch-icon-left"
+                                ><i data-feather="check"></i
+                              ></span>
+                              <span class="switch-icon-right"
+                                ><i data-feather="x"></i
+                              ></span>
+                            </label>
+                            Contribuyente especial
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <h4 class="mb-1 mt-2">
+                          <i
+                            data-feather="map-pin"
+                            [size]="16"
+                            class="mr-75 font-medium-4"
+                          ></i>
+                          <span class="align-middle">Contacto y ubicación</span>
+                        </h4>
+                      </div>
+                      <div class="col-lg-4 col-md-6">
+                        <div class="form-group">
+                          <label for="website">Dirección</label>
+                          <input
+                            type="text"
+                            id="identificator"
+                            class="form-control"
+                            name="identificator-customer"
+                            formControlName="address"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('address'),
+                              'is-valid': isControlValid('address')
+                            }"
+                          />
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('address')"
+                          >
+                            Identificación ingresada correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="controlHasError('required', 'address')"
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="controlHasError('maxlength', 'address')"
+                          >
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="editForm.get('address')?.errors?.serverError"
+                          >
+                            {{ editForm.get("address")?.errors?.serverError }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-6">
+                        <div class="form-group">
+                          <label for="phone_principal"
+                            >Teléfono principal</label
+                          >
+                          <ngx-intl-tel-input
+                            [cssClass]="'custom form-control'"
+                            [preferredCountries]="preferredCountries"
+                            [enableAutoCountrySelect]="true"
+                            [enablePlaceholder]="true"
+                            [searchCountryFlag]="true"
+                            [searchCountryField]="[
+                              SearchCountryField.Iso2,
+                              SearchCountryField.Name
+                            ]"
+                            [selectFirstCountry]="false"
+                            [selectedCountryISO]="CountryISO.Ecuador"
+                            [phoneValidation]="true"
+                            [separateDialCode]="separateDialCode"
+                            [numberFormat]="PhoneNumberFormat.National"
+                            name="phone-movil"
+                            formControlName="phone_principal"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('phone_principal'),
+                              'is-valid': isControlValid('phone_principal')
+                            }"
+                          >
+                          </ngx-intl-tel-input>
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('phone_principal')"
+                          >
+                            Teléfono ingresado correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('maxlength', 'phone_principal')
+                            "
+                          >
+                            {{ "Máximo: " }} 10
+                          </div>
+                          <div
+                            *ngIf="
+                              !editForm.controls['phone_principal'].invalid ==
+                              false
+                            "
+                            class="invalid-feedback"
+                          >
+                            El teléfono ingresado no es correcto
+                          </div>
+
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('required', 'phone_principal')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('phone_principal')?.errors
+                                ?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("phone_principal")?.errors
+                                ?.serverError
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-6">
+                        <div class="form-group">
+                          <label for="phone_secondary"
+                            >Teléfono secundario</label
+                          >
+                          <ngx-intl-tel-input
+                            [cssClass]="'custom form-control'"
+                            [preferredCountries]="preferredCountries"
+                            [enableAutoCountrySelect]="true"
+                            [enablePlaceholder]="true"
+                            [searchCountryFlag]="true"
+                            [searchCountryField]="[
+                              SearchCountryField.Iso2,
+                              SearchCountryField.Name
+                            ]"
+                            [selectFirstCountry]="false"
+                            [selectedCountryISO]="CountryISO.Ecuador"
+                            [phoneValidation]="true"
+                            [separateDialCode]="separateDialCode"
+                            [numberFormat]="PhoneNumberFormat.National"
+                            name="phone-movil"
+                            formControlName="phone_secondary"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('phone_secondary'),
+                              'is-valid': isControlValid('phone_secondary')
+                            }"
+                          >
+                          </ngx-intl-tel-input>
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('phone_secondary')"
+                          >
+                            Teléfono ingresado correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('maxlength', 'phone_secondary')
+                            "
+                          >
+                            {{ "Máximo: " }} 10
+                          </div>
+                          <div
+                            *ngIf="
+                              !editForm.controls['phone_secondary'].invalid ==
+                              false
+                            "
+                            class="invalid-feedback"
+                          >
+                            El teléfono ingresado no es correcto
+                          </div>
+
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('required', 'phone_secondary')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('phone_secondary')?.errors
+                                ?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("phone_secondary")?.errors
+                                ?.serverError
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <h4 class="mb-1 mt-2">
+                          <i
+                            data-feather="tool"
+                            [size]="16"
+                            class="mr-75 font-medium-4"
+                          ></i>
+                          <span class="align-middle">Parámetros globales</span>
+                        </h4>
+                      </div>
+
+                      <div class="col-lg-4 col-md-4">
+                        <div class="form-group">
+                          <label for="website">Dias de corte</label>
+                          <ng-select
+                            [items]="beakList"
+                            [addTag]="selectAddTagMethod"
+                            placeholder="Seleccione"
+                            [hideSelected]="true"
+                            formControlName="break_day"
+                            bindLabel="name"
+                            multiple="true"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('break_day'),
+                              'is-valid': isControlValid('break_day')
+                            }"
+                          >
+                            <ng-template
+                              ng-label-tmp
+                              let-item="item"
+                              let-clear="clear"
+                            >
+                              <span class="ng-value-label">
+                                {{ item.name }}</span
+                              >
+                              <span
+                                class="ng-value-icon right"
+                                (click)="clear(item)"
+                                aria-hidden="true"
+                                >×</span
+                              >
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-4">
+                        <div class="form-group">
+                          <label for="website">Precisión decimal</label>
+                          <input
+                            type="text"
+                            id="identificator"
+                            class="form-control"
+                            name="identificator-customer"
+                            formControlName="decimal"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-4">
+                        <div class="form-group">
+                          <label for="website"> API key Google Maps</label>
+                          <input
+                            type="text"
+                            id="identificator"
+                            class="form-control"
+                            name="identificator-customer"
+                            formControlName="google_key"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="col-12 d-flex flex-row-reverse flex-column mt-2"
+                      >
+                        <button
+                          (click)="submit()"
+                          [disabled]="loading"
+                          type="submit"
+                          class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                          rippleEffect
+                        >
+                          <span
+                            *ngIf="loading"
+                            class="spinner-border spinner-border-sm mr-1"
+                          ></span>
+                          Guardar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- users edit Info form ends -->
+                </div>
+              </ng-template>
+            </li>
+            <li ngbNavItem>
+              <a ngbNavLink class="d-flex align-items-center">
+                <i data-feather="key" class="mr-sm-50"></i
+                ><span class="d-none d-sm-block">Firma electrónica</span></a
+              >
+              <ng-template ngbNavContent>
+                <!-- Information Tab starts -->
+
+                <!-- Information Tab ends -->
+              </ng-template>
+            </li>
+            <li ngbNavItem>
+              <a ngbNavLink class="d-flex align-items-center"
+                ><i data-feather="share-2" class="mr-sm-50"></i
+                ><span class="d-none d-sm-block">Correos</span></a
+              >
+              <ng-template ngbNavContent>
+                <div
+                  class="tab-pane"
+                  id="information"
+                  aria-labelledby="information-tab"
+                  role="tabpanel"
+                >
+                  <!-- users edit Info form start  -->
+                  <form class="form-validate">
+                    <div class="row mt-1">
+                      <div class="col-12">
+                        <h4 class="mb-1">
+                          <i
+                            data-feather="globe"
+                            [size]="16"
+                            class="mr-75 font-medium-4"
+                          ></i>
+                          <span class="align-middle">General</span>
+                        </h4>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Principal)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Secundario)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <h4 class="mb-1">
+                          <i
+                            data-feather="tool"
+                            [size]="16"
+                            class="mr-75 font-medium-4"
+                          ></i>
+                          <span class="align-middle">Soporte</span>
+                        </h4>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Principal)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Secundario)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <h4 class="mb-1">
+                          <i
+                            data-feather="trello"
+                            [size]="16"
+                            class="mr-75 font-medium-4"
+                          ></i>
+                          <span class="align-middle">Facturación</span>
+                        </h4>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Principal)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Secundario)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <h4 class="mb-1">
+                          <i
+                            data-feather="book-open"
+                            [size]="16"
+                            class="mr-75 font-medium-4"
+                          ></i>
+                          <span class="align-middle">Información</span>
+                        </h4>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Principal)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                          <label for="birth">Email (Secundario)</label>
+                          <input
+                            id="website"
+                            type="text"
+                            class="form-control"
+                            placeholder=""
+                            name="website"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

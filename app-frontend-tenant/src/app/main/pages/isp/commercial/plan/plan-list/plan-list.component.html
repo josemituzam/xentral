@@ -87,12 +87,12 @@
           [rowHeight]="100"
           class="bootstrap core-bootstrap"
           [limit]="selectedOption"
-          [columnMode]="ColumnMode.force"
+          columnMode="force"
           [headerHeight]="50"
           [footerHeight]="50"
           [scrollbarH]="true"
         >
-          <ngx-datatable-column name="Plan" prop="name" [width]="50">
+          <ngx-datatable-column name="Plan" prop="name" [width]="300">
             <ng-template
               ngx-datatable-cell-template
               let-rowIndex="rowIndex"
@@ -110,12 +110,12 @@
                     <div
                       class=""
                       [ngClass]="
-                        row?.lastmile?.short_code == 'UM-02'
+                        row?.get_last_mile?.short_code == 'UM-02'
                           ? 'badge badge-pill badge-light-success'
                           : 'badge badge-pill badge-light-secondary'
                       "
                     >
-                      {{ row?.lastmile?.name }}
+                      {{ row?.get_last_mile?.name }}
                     </div>
                   </td>
                 </tr>
@@ -123,7 +123,7 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Características" [width]="50">
+          <ngx-datatable-column name="Características" [width]="200">
             <ng-template
               let-rowIndex="rowIndex"
               let-value="value"
@@ -138,19 +138,13 @@
                   <td>Bajada: {{ row.downfall }} {{ row.type_downfall }}</td>
                 </tr>
                 <tr>
-                  <td>
-                    Compartición:
-                    <span *ngIf="row.compartition == 'A'"> 1:1 </span>
-                    <span *ngIf="row.compartition == 'B'"> 1:2 </span>
-                    <span *ngIf="row.compartition == 'C'"> 1:4 </span>
-                    <span *ngIf="row.compartition == 'D'"> 1:8 </span>
-                  </td>
+                  <td>Compartición: {{ row.compartition }}</td>
                 </tr>
               </table>
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Costos" [width]="50">
+          <ngx-datatable-column name="Costos" [width]="200">
             <ng-template
               let-rowIndex="rowIndex"
               let-value="value"
@@ -161,29 +155,29 @@
                 <tr>
                   <td>
                     C. instalación:
-                    {{ row?.plandetail[0]?.installation_cost }}
+                    {{ row?.get_plan_detail[0]?.installation_cost }}
                   </td>
                 </tr>
                 <tr>
-                  <td>C. mensual: {{ row?.plandetail[0]?.month_cost }}</td>
+                  <td>C. mensual: {{ row?.get_plan_detail[0]?.month_cost }}</td>
                 </tr>
                 <tr>
                   <td>
                     M. penalidad:
-                    {{ row?.plandetail[0]?.penalty_amount }}
+                    {{ row?.get_plan_detail[0]?.penalty_amount }}
                   </td>
                 </tr>
                 <tr>
                   <td>
                     C. metro adicional:
-                    {{ row?.plandetail[0]?.additional_meter_cost }}
+                    {{ row?.get_plan_detail[0]?.additional_meter_cost }}
                   </td>
                 </tr>
               </table>
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Condiciones" [width]="50">
+          <ngx-datatable-column name="Condiciones" [width]="200">
             <ng-template
               let-rowIndex="rowIndex"
               let-value="value"
@@ -194,18 +188,19 @@
                 <tr>
                   <td>
                     M. gratis:
-                    {{ row?.plandetail[0]?.meters_free }}
+                    {{ row?.get_plan_detail[0]?.meters_free }}
                   </td>
                 </tr>
                 <tr>
-                  <td>P. mínima: {{ row?.plandetail[0]?.minimunpermanence?.name }}</td>
+                  <td>
+                    P. mínima: {{ row?.get_plan_detail[0]?.get_minimun_permanence?.name }}
+                  </td>
                 </tr>
               </table>
             </ng-template>
           </ngx-datatable-column>
 
-
-          <ngx-datatable-column name="Activo" prop="is_active" [width]="50">
+          <ngx-datatable-column name="Activo" prop="is_active" [width]="100">
             <ng-template
               ngx-datatable-cell-template
               let-rowIndex="rowIndex"
@@ -233,8 +228,12 @@
                 </label>
               </div>
             </ng-template>
-          </ngx-datatable-column> 
-          <ngx-datatable-column name="Acciones" [width]="40" [sortable]="false">
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            name="Acciones"
+            [width]="100"
+            [sortable]="false"
+          >
             <ng-template ngx-datatable-cell-template let-row="row">
               <div ngbDropdown container="body">
                 <button

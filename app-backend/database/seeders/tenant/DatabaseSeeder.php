@@ -14,6 +14,7 @@ use Database\Seeders\tenant\StatusSeeder;
 use Database\Seeders\tenant\PaymentSeeder;
 use Database\Seeders\tenant\TemplateContractSeeder;
 use Database\Seeders\tenant\IspAnotherProviderSeeder;
+use Database\Seeders\tenant\SequentialSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -38,6 +39,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PaymentSeeder::class);
         $this->call(TemplateContractSeeder::class);
         $this->call(IspAnotherProviderSeeder::class);
+        $this->call(SequentialSeeder::class);
         $this->enableForeignKeys();
         Model::reguard();
     }

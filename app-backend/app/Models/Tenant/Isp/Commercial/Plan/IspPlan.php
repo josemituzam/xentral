@@ -41,12 +41,12 @@ class IspPlan extends Model
         'deleted_by'
     ];
 
-    public function lastmile()
+    public function getLastMile()
     {
         return $this->belongsTo(IspLastMiles::class, 'last_mile_id');
     }
 
-    public function plandetail()
+    public function getPlanDetail()
     {
         return $this->hasMany(IspPlanDetail::class, 'plan_id');
     }

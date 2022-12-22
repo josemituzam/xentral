@@ -1,0 +1,108 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-body">
+          <form class="form-validate" [formGroup]="editForm">
+            <div class="row mt-1">
+              <div class="col-lg-4 col-md-4">
+                <div class="form-group">
+                  <label for="birth">Sucursal</label>
+                  <input
+                    id="website"
+                    type="text"
+                    class="form-control"
+                    formControlName="branch_id"
+                    placeholder=""
+                    name="website"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4">
+                <div class="form-group">
+                  <label for="birth">Código</label>
+                  <input
+                    id="website"
+                    type="text"
+                    class="form-control"
+                    formControlName="code"
+                    placeholder=""
+                    name="website"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4">
+                <div class="form-group">
+                  <label for="birth">Secuencial inicial</label>
+                  <input
+                    id="website"
+                    type="text"
+                    class="form-control"
+                    formControlName="sequential_init"
+                    placeholder=""
+                    name="website"
+                  />
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6">
+                <div class="form-group">
+                  <label for="website">Descripción</label>
+                  <textarea
+                    class="form-control"
+                    id="basicTextarea"
+                    formControlName="description" 
+                    rows="3"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 d-flex align-items-center" >
+                <div class="form-group">
+                  <div
+                    class="custom-control custom-switch custom-switch-success"
+                  >
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch113"
+                      formControlName="is_apply_invoice"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch113">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                    Aplica facturación electrónica
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 d-flex flex-row-reverse flex-column mt-2">
+                <button
+                  (click)="submit()"
+                  [disabled]="loading"
+                  type="submit"
+                  class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                  rippleEffect
+                >
+                  <span
+                    *ngIf="loading"
+                    class="spinner-border spinner-border-sm mr-1"
+                  ></span>
+                  Guardar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

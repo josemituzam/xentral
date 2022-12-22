@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, of, forkJoin, EMPTY } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { catchError, map, mergeMap, expand, switchMap, tap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 @Injectable()
 export class UserListService {
   public rows: any;
@@ -23,7 +22,7 @@ export class UserListService {
    * @param {HttpClient} _httpClient
    */
   constructor(private _httpClient: HttpClient) {
-    this.API_SERVICE_URL = `${this.REST_API}/service`;
+    this.API_SERVICE_URL = `${this.REST_API}/user-detail`;
     // Set the defaults
     this.recordListChange = new BehaviorSubject({});
   }
@@ -53,5 +52,9 @@ export class UserListService {
           return of(res);
         })
       );
+  }
+
+  delete(id: string): Observable<any> {
+    return this._httpClient.delete<any>(`${this.API_SERVICE_URL}/${id}`);
   }
 }

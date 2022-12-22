@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormArray,
@@ -13,6 +13,8 @@ import { IspCustomer } from 'core/models/isp/commercial/ispcustomer.model';
 import { FileUploader } from 'ng2-file-upload';
 import { CropperComponent } from 'angular-cropperjs';
 import { catchError, delay, finalize, tap } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FileModalComponent } from './file-modal/file-modal.component';
 const URL = 'https://your-url.com';
 @Component({
   selector: 'app-customer-documentation',
@@ -20,7 +22,7 @@ const URL = 'https://your-url.com';
   styleUrls: ['./customer-documentation.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CustomerDocumentationComponent implements OnInit, OnDestroy {
+export class CustomerDocumentationComponent implements OnInit {
 
   //imageICO: any = "https://upload.wikimedia.org/wikipedia/commons/f/f3/C%C3%A9dula_electr%C3%B3nica_Ecuador_%28Enero_2021%29.png";
   // Public
@@ -66,7 +68,7 @@ export class CustomerDocumentationComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
   @Output() nextStep: EventEmitter<any> = new EventEmitter();
-
+  public filesList: any[];
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -77,149 +79,11 @@ export class CustomerDocumentationComponent implements OnInit, OnDestroy {
    * @param {Router} router
    * @param {UserEditService} _userEditService
    */
-  constructor(private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
+  constructor(private modalService: NgbModal, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
     this._unsubscribeAll = new Subject();
     this.urlLastValue = this.url.substr(this.url.lastIndexOf('/') + 1);
   }
 
-  // Public Methods
-  // -----------------------------------------------------------------------------------------------------
-
-  initForm() {
-    this.editForm = this.fb.group({
-      filename: [""],
-      fileContent: [""],
-      ideName: [""],
-      ideContent: [""],
-    });
-
-  }
-
-  public getCroppedImage() {
-    this.croppedResult = this.angularCrooper.cropper.getCroppedCanvas().toDataURL();
-    this.editForm.get("ideContent").setValue(this.croppedResult);
-  }
-
-  public getFileTwo(event: EventEmitter<File[]>) {
-    const file: File = event[0];
-    const name = file.name;
-    this.titleTwoFile = name;
-    console.log(file)
-    console.log(name)
-    this.editForm.get("fileContent").setValue(file);
-    this.editForm.get("filename").setValue(name);
-  }
-
-
-  public getFileOne(event: EventEmitter<File[]>) {
-    const file: File = event[0];
-    const name = file.name;
-    this.titleOneFile = name;
-    console.log(file);
-    this.editForm.get("ideName").setValue(name);
-
-    this.readBase64(file)
-      .then(function (data) {
-        console.log(data);
-      })
-
-  }
-
-  public readBase64(file): Promise<any> {
-    var reader = new FileReader();
-    var future = new Promise((resolve, reject) => {
-      reader.addEventListener("load", () => {
-        resolve(reader.result);
-
-        this.photoIde = reader.result;
-
-      }, false);
-
-
-      reader.addEventListener("error", function (event) {
-        reject(event);
-      }, false);
-
-      reader.readAsDataURL(file);
-    });
-    return future;
-  }
-
-
-  prepareItem(): any {
-    const controls = this.editForm.controls;
-    const formData = new FormData();
-    formData.append("id", this.customerId);
-    formData.append("filename", controls["filename"].value);
-    formData.append("fileContent", controls["fileContent"].value);
-    formData.append("ideName", controls["ideName"].value);
-    formData.append("ideContent", controls["ideContent"].value);
-
-
-    /*const _item = {
-      id: this.customerId,
-      filename: controls["filename"].value,
-      fileContent: controls["fileContent"].value,
-      ideName: controls["ideName"].value,
-      ideContent: controls["ideContent"].value
-    };*/
-    return formData;
-  }
-
-
-
-  /**
-   * Submit
-   *
-   * @param form
-   */
-  submit() {
-    // this.nextStep.emit();
-    // return;
-    const controls = this.editForm.controls;
-    /** check form */
-    if (this.editForm.invalid) {
-      Object.keys(controls).forEach((controlName) => {
-        console.log(
-          "invalid editForm " + controlName + " = ",
-          controls[controlName].status
-        );
-        controls[controlName].markAsTouched();
-      });
-      this.loading = false;
-      this.cdr.detectChanges();
-      return;
-    }
-    const editedItem = this.prepareItem();
-    console.log(editedItem);
-    this.addItem(editedItem);
-  }
-
-  addItem(_item: any) {
-    const sbCreate = this._service.uploadContent(_item).pipe(
-      catchError((errorMessage) => {
-        console.log(errorMessage);
-        if (errorMessage.status == 422) {
-          const validationErrors = errorMessage.error.errors;
-          Object.keys(validationErrors).forEach(prop => {
-            const formControl = this.editForm.get(prop);
-            if (formControl) {
-              formControl.setErrors({
-                serverError: validationErrors[prop]
-              })
-            }
-          }
-          )
-        }
-        this.loading = false;
-        this.cdr.detectChanges();
-        return of(null);
-      })
-    ).subscribe((res: any) => {
-      //  this.nextStep.emit();
-    });
-    this.subscriptions.push(sbCreate);
-  }
 
   // Lifecycle Hooks
   // -----------------------------------------------------------------------------------------------------
@@ -227,40 +91,44 @@ export class CustomerDocumentationComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
-    this.initForm();
-
+    this.getFiles(this.customerId)
   }
 
-
-
-  /**
-   * On destroy
-   */
-  ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
+  getFiles(customerId: string) {
+    this._service.getFiles(customerId).subscribe(res => {
+      if (res) {
+        this.filesList = res;
+      }
+    }
+      , err => {
+        console.log("Estatus: ", err);
+      }
+    );
   }
 
-
-  // helpers for View
-  isControlValid(controlName: string): boolean {
-    const control = this.editForm.controls[controlName];
-    return control.valid && (control.dirty || control.touched);
+  upload(obj: any) {
+    const modalRef = this.modalService.open(FileModalComponent, {
+      centered: true,
+      backdrop: 'static',
+      size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
+    });
+    console.log(obj);
+    modalRef.componentInstance.fileId = obj.id;
+    modalRef.componentInstance.type = obj.type
+    modalRef.componentInstance.title = obj.name;
+    modalRef.result.then(
+      () => this.getFiles(this.customerId),
+      () => { }
+    );
   }
 
-  isControlInvalid(controlName: string): boolean {
-    const control = this.editForm.controls[controlName];
-    return control.invalid && (control.dirty || control.touched);
-  }
-
-  controlHasError(validation: string, controlName: string) {
-    const control = this.editForm.controls[controlName];
-    return control.hasError(validation) && (control.dirty || control.touched);
-  }
-
-  isControlTouched(controlName: string): boolean {
-    const control = this.editForm.controls[controlName];
-    return control.dirty || control.touched;
+  download(path) {
+    const link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', path);
+    link.setAttribute('download', `products.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 }

@@ -3,6 +3,7 @@
     <app-content-header [contentHeader]="contentHeader"></app-content-header>
     <!-- User List -->
     <section class="users-list-wrapper">
+      <!-- users filter start -->
       <div class="card">
         <h5 class="card-header">Filtros</h5>
         <div class="card-body">
@@ -32,6 +33,7 @@
         </div>
       </div>
       <!-- users filter end -->
+
       <div class="card">
         <div class="row">
           <div class="col-md-6 col-12">
@@ -67,7 +69,11 @@
                   (keyup)="filterUpdate($event)"
                   (search)="filterUpdate($event)"
               /></label>
-              <button class="btn btn-primary ml-1" routerLink="/manager/user/add" rippleEffect>
+              <button
+                class="btn btn-primary ml-1"
+                routerLink="../../user/add"
+                rippleEffect
+              >
                 <i
                   data-feather="plus"
                   class="d-sm-none d-inline-block mr-0 mr-sm-1"
@@ -78,9 +84,8 @@
           </div>
         </div>
         <ngx-datatable
-          (sort)="onSort($event)"
           [rows]="rows"
-          [rowHeight]="75"
+          [rowHeight]="50"
           class="bootstrap core-bootstrap"
           [limit]="selectedOption"
           [columnMode]="ColumnMode.force"
@@ -89,21 +94,12 @@
           [scrollbarH]="true"
         >
           <ngx-datatable-column
-            name="Nombres"
-            prop="fullname"
-            [width]="50"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
             name="Email"
             prop="email"
-            [width]="50"
+            [width]="200"
           ></ngx-datatable-column>
-          <ngx-datatable-column
-            name="Áreas"
-            prop="section"
-            [width]="50"
-          ></ngx-datatable-column>
-          <ngx-datatable-column name="Acciones" [width]="40" [sortable]="false">
+
+          <ngx-datatable-column name="Actions" [width]="40" [sortable]="false">
             <ng-template ngx-datatable-cell-template let-row="row">
               <div ngbDropdown container="body">
                 <button
@@ -118,29 +114,22 @@
                   ></span>
                 </button>
                 <div ngbDropdownMenu>
-                  <!-- <a
-                    routerLink="/apps/user/user-view/{{ row.id }}"
+                  <a
+                    routerLink="/manager/user/edit/{{ row.id }}"
                     ngbDropdownItem
-                    ><span
-                      [data-feather]="'file-text'"
-                      [size]="16"
-                      [class]="'mr-50'"
-                    ></span>
-                    Detalles</a
-                  > --><a ngbDropdownItem (click)="edit(row)"
                     ><span
                       [data-feather]="'edit'"
                       [size]="16"
                       [class]="'mr-50'"
                     ></span>
-                    Editar</a
-                  ><a (click)="delete(row.id)" ngbDropdownItem
+                    Edit</a
+                  ><a href="javascript:;" ngbDropdownItem
                     ><span
                       [data-feather]="'trash'"
                       [size]="16"
                       [class]="'mr-50'"
                     ></span>
-                    Eliminar</a
+                    Delete</a
                   >
                 </div>
               </div>
@@ -185,6 +174,5 @@
   </div>
 
   <!-- New User Sidebar -->
-
   <!--/ New User Sidebar -->
 </div>

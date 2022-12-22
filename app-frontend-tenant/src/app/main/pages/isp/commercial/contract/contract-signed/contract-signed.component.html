@@ -1,0 +1,144 @@
+<div class="auth-wrapper auth-v1 px-2">
+  <div class="auth-inner py-2">
+    <section class="app-user-view">
+      <!-- User Card & Plan Starts -->
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+          <div class="card user-card">
+            <div class="card-body" *ngIf="isSigned == 0">
+              <ngb-alert [type]="'success'" [dismissible]="false">
+                <h4 class="alert-heading">
+                  Estimado(a).-<strong> {{ customer }} </strong>
+                </h4>
+                <div class="alert-body">
+                  Tome las siguientes consideraciones: <br />
+                  1.- El enlace caducará en 4 horas. <br />
+                  2.- Se pedirá una acción de verificación al guardar la firma.
+                  <br />3.- Cuando todas las firmas sean validadas, el contrato
+                  podrá ser visualizado con sus firmas.
+                  <br />
+                  4.- Si refresca el navegador, deberá escribir nuevamente todas
+                  las firmas solicitadas.
+                </div>
+              </ngb-alert>
+            </div>
+            <div class="card-body" *ngIf="isSigned == 1">
+              <ngb-alert [type]="'success'" [dismissible]="false">
+                <h4 class="alert-heading">
+                  Bienvenido(a) <strong> {{ customer }} </strong> al grupo
+                  selecto de personas con el internet más veloz.
+                </h4>
+              </ngb-alert>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- User Card starts-->
+        <div class="col-xl-7 col-lg-6 col-md-6">
+          <div class="card user-card">
+            <div class="card-body">
+              <div
+                [ngClass]="
+                  isSigned == 1 ? 'row d-flex justify-content-center' : 'row'
+                "
+              >
+                <iframe
+                  [src]="path | safe : 'resourceUrl'"
+                  width="750px"
+                  height="500px"
+                >
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /User Card Ends-->
+
+        <!-- Plan Card starts-->
+        <div class="col-xl-5 col-lg-6 col-md-6">
+          <div class="card">
+            <!-------------------------------------------->
+            <div class="card-body">
+              <div class="row mb-2">
+                <div class="col-lg-12">
+                  <div class="firma-digital--body">
+                    <canvas
+                      #firmaDigital
+                      width="475px"
+                      height="200px"
+                      style="touch-action: none"
+                    >
+                    </canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="isSigned == 0">
+                <div class="col-lg-6 d-flex justify-content-center mb-2">
+                  <button class="btn btn-warning" (click)="deshacer()">
+                    Deshacer
+                  </button>
+                </div>
+                <div class="col-lg-6 d-flex justify-content-center mb-2">
+                  <button class="btn btn-danger" (click)="limpiarFirma()">
+                    Borrar
+                  </button>
+                </div>
+
+                <div class="col-lg-12 mb-2" *ngIf="signaturesCount == 1">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          Firma: <strong> {{ signatures?.description }}</strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Descripción:
+                          <strong> {{ signatures?.description }}</strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Firma obligatoria:
+                          <strong> {{ signatures?.is_required }}</strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="col-lg-12" *ngIf="signaturesCount == 1">
+                  <button
+                    [disabled]="loadingSave"
+                    class="btn btn-block btn-info"
+                    (click)="submit()"
+                  >
+                    <span
+                      *ngIf="loadingSave"
+                      class="spinner-border spinner-border-sm mr-1"
+                    ></span>
+                    Guardar
+                  </button>
+                </div>
+                <div class="col-lg-12" *ngIf="signaturesCount == 0">
+                  <button class="btn btn-block btn-success" [disabled]="loadinFinish" (click)="finish()">
+                    <span
+                      *ngIf="loadinFinish"
+                      class="spinner-border spinner-border-sm mr-1"
+                    ></span>
+                    Finalizar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-------------------------------------------->
+          </div>
+        </div>
+        <!-- /Plan CardEnds -->
+      </div>
+    </section>
+  </div>
+</div>

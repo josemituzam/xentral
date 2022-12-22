@@ -20,6 +20,14 @@ export class JwtInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (
+      request.url.includes('/v1/client/contract/signed') == true 
+      || request.url.includes('/v1/client/contract/signature/save') == true
+      || request.url.includes('/v1/client/contract/signature/finish') == true
+    ) {
+      return next.handle(request);
+    }
+
+    if (
       request.url.indexOf('/v1/client/auth/login') < 0
     ) {
       const currentUser = this._authenticationService.currentUserValue;

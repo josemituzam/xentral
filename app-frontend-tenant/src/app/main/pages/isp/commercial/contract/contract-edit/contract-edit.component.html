@@ -13,7 +13,6 @@
             class="nav-tabs"
           >
             <li [ngbNavItem]="1">
-              <a ngbNavLink><span [data-feather]="'cast'"></span> General</a>
               <ng-template ngbNavContent>
                 <form class="form-validate" [formGroup]="editForm">
                   <div class="row mt-1">
@@ -207,7 +206,7 @@
                                     Costo de instalación:
                                     <strong
                                       >{{
-                                        selectedPlan?.plandetail[0]
+                                        selectedPlan?.get_plan_detail[0]
                                           ?.installation_cost
                                       }}
                                     </strong>
@@ -218,7 +217,8 @@
                                     Costo mensual:
                                     <strong>
                                       {{
-                                        selectedPlan?.plandetail[0]?.month_cost
+                                        selectedPlan?.get_plan_detail[0]
+                                          ?.month_cost
                                       }}
                                     </strong>
                                   </td>
@@ -228,7 +228,7 @@
                                     Monto de penalidad:
                                     <strong>
                                       {{
-                                        selectedPlan?.plandetail[0]
+                                        selectedPlan?.get_plan_detail[0]
                                           ?.penalty_amount
                                       }}
                                     </strong>
@@ -239,7 +239,7 @@
                                     Costo de metro adicional:
                                     <strong>
                                       {{
-                                        selectedPlan?.plandetail[0]
+                                        selectedPlan?.get_plan_detail[0]
                                           ?.additional_meter_cost
                                       }}
                                     </strong>
@@ -264,26 +264,7 @@
                                 <tr>
                                   <td>
                                     Compartición:
-                                    <span
-                                      *ngIf="selectedPlan.compartition == 'A'"
-                                    >
-                                      1:1
-                                    </span>
-                                    <span
-                                      *ngIf="selectedPlan.compartition == 'B'"
-                                    >
-                                      1:2
-                                    </span>
-                                    <span
-                                      *ngIf="selectedPlan.compartition == 'C'"
-                                    >
-                                      1:4
-                                    </span>
-                                    <span
-                                      *ngIf="selectedPlan.compartition == 'D'"
-                                    >
-                                      1:8
-                                    </span>
+                                    {{ selectedPlan.compartition }}
                                   </td>
                                 </tr>
                               </table>
@@ -294,7 +275,8 @@
                                   <td>
                                     Metros gratis:
                                     {{
-                                      selectedPlan?.plandetail[0]?.meters_free
+                                      selectedPlan?.get_plan_detail[0]
+                                        ?.meters_free
                                     }}
                                   </td>
                                 </tr>
@@ -302,8 +284,8 @@
                                   <td>
                                     Permanencia mínima:
                                     {{
-                                      selectedPlan?.plandetail[0]
-                                        ?.minimunpermanence?.name
+                                      selectedPlan?.get_plan_detail[0]
+                                        ?.get_minimun_permanence?.name
                                     }}
                                   </td>
                                 </tr>
@@ -373,13 +355,22 @@
                     >
                       <div class="form-group">
                         <label for="basicTextarea">Día de corte</label>
-                        <input
-                          type="date"
-                          id="f-emission"
-                          class="form-control"
-                          formControlName="break_at"
-                          name="f-created"
-                        />
+                        <ng-select
+                          [items]="beakList"
+                          [addTag]="selectAddTagMethod"
+                          placeholder="Seleccione"
+                          [hideSelected]="true"
+                          formControlName="break_day"
+                          bindLabel="name"
+                        >
+                          <ng-template
+                            ng-label-tmp
+                            let-item="item"
+                            let-clear="clear"
+                          >
+                            <span class="ng-value-label"> {{ item.name }}</span>
+                          </ng-template>
+                        </ng-select>
                       </div>
                     </div>
 
@@ -1185,12 +1176,30 @@
                 ><span [data-feather]="'clipboard'"></span> Contrato</a
               >
               <ng-template ngbNavContent>
-                <app-contract-template></app-contract-template>
+                <app-contract-template
+                  (newItemEvent)="getContract($event)"
+                  [isGenerated]="
+                    itemModel?.get_customer_contract_template?.is_generated
+                  "
+                  [isSigned]="
+                    itemModel?.get_customer_contract_template?.is_signed
+                  "
+                  [contractId]="itemModel.id"
+                  [template]="itemModel?.get_customer_contract_template?.html"
+                  [contractTemplateId]="
+                    itemModel?.get_customer_contract_template?.id
+                  "
+                ></app-contract-template>
               </ng-template>
             </li>
             <li [ngbNavItem]="3" [disabled]="!itemModel.id">
               <a ngbNavLink><span [data-feather]="'phone'"></span> Contactos</a>
-              <ng-template ngbNavContent> </ng-template>
+              <ng-template ngbNavContent>
+                <app-contract-contact
+                  [contractId]="itemModel.id"
+                  [customerContact]="itemModel.get_contact_contract"
+                ></app-contract-contact
+              ></ng-template>
             </li>
           </ul>
           <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>

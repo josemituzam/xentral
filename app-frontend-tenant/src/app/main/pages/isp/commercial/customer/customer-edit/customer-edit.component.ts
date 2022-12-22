@@ -16,10 +16,9 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { IspCustomerService } from 'core/services/isp/commercial/ispcustomer.service';
 import { IspCustomer } from 'core/models/isp/commercial/ispcustomer.model';
-import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
-import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
-import { CropperComponent } from 'angular-cropperjs';
+import { CustomerCameraComponent } from '../customer-camera/customer-camera.component';
 @Component({
   selector: 'app-customer-edit',
   templateUrl: './customer-edit.component.html',
@@ -28,86 +27,7 @@ import { CropperComponent } from 'angular-cropperjs';
 })
 export class CustomerEditComponent implements OnInit, OnDestroy {
 
-  public hexp = 500;
-  public wexp = 500;
-
-  /* Camera */
-  public croppedResult: string;
-
-
-  @ViewChild('angularCropper') angularCrooper: CropperComponent;
-
-  public mostrarWebcam = false;
-  public permitirCambioCamara = true;
-  public multiplesCamarasDisponibles = false;
-  public dispositivoId: string;
-  public opcionesVideo: MediaTrackConstraints = {
-    //width: {ideal: 1024};
-    //height: {ideal: 576}
-  }
-  // Errores al iniciar la cámara 
-  public errors: WebcamInitError[] = [];
-
-  // Ultima captura o foto 
-  public imagenWebcam: WebcamImage = null;
-
-  // Cada Trigger para una nueva captura o foto 
-  public trigger: Subject<void> = new Subject<void>();
-
-  // Cambiar a la siguiente o anterior cámara 
-  private siguienteWebcam: Subject<boolean | string> = new Subject<boolean | string>();
-
-  public triggerCaptura(): void {
-    this.imagenWebcam = null;
-    this.mostrarWebcam = false;
-    this.trigger.next();
-  }
-
-  public toggleWebcam(): void {
-    // this.loadingCamera = false;
-    this.mostrarWebcam = !this.mostrarWebcam;
-    /*setTimeout(() => {
-      this.loadingCamera = true;
-    }, 1000);*/
-    this.imagenWebcam = null;
-  }
-
-  public getCroppedImage() {
-    this.croppedResult = this.angularCrooper.cropper.getCroppedCanvas().toDataURL();
-    console.log(this.croppedResult)
-    this.editForm.get("contentFile").setValue(this.croppedResult);
-  }
-
-  public handleInitError(error: WebcamInitError): void {
-    this.errors.push(error);
-  }
-
-  public showNextWebcam(directionOnDeviceId: boolean | string): void {
-    this.siguienteWebcam.next(directionOnDeviceId);
-  }
-
-  public handleImage(imagenWebcam: WebcamImage): void {
-    console.info('Imagen de la webcam recibida: ', imagenWebcam);
-    this.imagenWebcam = imagenWebcam;
-  }
-
-  public cameraSwitched(dispositivoId: string): void {
-    console.log('Dispositivo Actual: ' + dispositivoId);
-    this.dispositivoId = dispositivoId;
-  }
-
-  public get triggerObservable(): Observable<void> {
-    return this.trigger.asObservable();
-  }
-
-  public get nextWebcamObservable(): Observable<boolean | string> {
-    return this.siguienteWebcam.asObservable();
-  }
-  /* Camera */
-
-
-
-
+  public croppedResult = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
   separateDialCode = true;
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
@@ -135,7 +55,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   public avatarImage: string;
   public contentHeader: object
   public loading = false;
-  public loadingWith = false;
   public typePeople = 'PN';
   public typeIdentificator = 'IDE'
   public typeNumber = 'MOV'
@@ -152,11 +71,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
   editForm: FormGroup;
   itemModel: IspCustomer;
   subscriptions: Subscription[] = [];
-
-
-
-
-
 
   public getTypePeople: any = [
     { id: 'PN', name: 'Persona Natural' },
@@ -186,10 +100,80 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
    * @param {Router} router
    * @param {UserEditService} _userEditService
    */
-  constructor(private datePipe: DatePipe, private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
+  constructor(private modalService: NgbModal, private datePipe: DatePipe, private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
     this._unsubscribeAll = new Subject();
     this.urlLastValue = this.url.substr(this.url.lastIndexOf('/') + 1);
   }
+
+
+  ///////////////////////////////////////////////////////////
+  public loadingValidate = false;
+  public disableBtnIdentifier = false;
+  setType($event) {
+    if ($event.id == 'PTE') {
+      this.disableBtnIdentifier = true;
+    } else {
+      this.disableBtnIdentifier = false;
+    }
+    this.cdr.detectChanges();
+  }
+
+
+  validateCustomer() {
+    this.loadingValidate = true;
+    const ide = this.editForm.get('identification').value;
+    const type = this.editForm.get('type_identification').value;
+    if (!ide) {
+
+      Swal.fire({
+        icon: 'error',
+        title: `No se ha digitado nada en el campo de identificación`,
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.loadingValidate = false;
+      this.cdr.detectChanges();
+      return;
+
+    }
+    this._service.validateCustomer(ide, type).subscribe(res => {
+      if (res) {
+        if (type == 'IDE') {
+          if (!res?.data?.error) {
+            var fullname = res?.data?.Nombres_y_apellidos;
+            var lastnameSplit = fullname?.split(' ', 2)
+            var lastname = lastnameSplit.join(' ');
+            this.editForm.get("lastname").setValue(lastname);
+
+            var firstnametArray = [];
+            var firstnameSplit = fullname?.split(' ');
+            for (let i = 2; i < firstnameSplit.length; i++) {
+              firstnametArray.push(firstnameSplit[i]);
+            }
+
+            var firstname = firstnametArray.join(' ');
+            this.editForm.get("firstname").setValue(firstname);
+          }
+        } else {
+
+        }
+
+
+
+        this.loadingValidate = false;
+        this.cdr.detectChanges();
+      }
+    }
+      , err => {
+        console.log("Estatus: ", err);
+        this.loadingValidate = false;
+        this.cdr.detectChanges();
+      }
+    );
+
+  }
+
+  ///////////////////////////////////////////////////////
 
   initForm() {
     if (this.activeField == false) {
@@ -248,6 +232,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         is_bond: [
           this.itemModel.is_bond
         ],
+        contentFile: [""],
       });
     } else {
       this.editForm = this.fb.group({
@@ -303,6 +288,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           this.itemModel.phone_representative,
           Validators.compose([Validators.required]),
         ],
+        contentFile: [""],
       });
     }
   }
@@ -313,6 +299,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     const _item = new IspCustomer();
     _item.clear();
     if (this.activeField == false) {
+      _item.id = this.itemModel.id;
       _item.type_people = controls["type_people"].value;
       _item.type_identification = controls["type_identification"].value;
       _item.identification = controls["identification"].value;
@@ -328,9 +315,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       _item.is_disability = controls["is_disability"].value;
       _item.is_old = controls["is_old"].value;
       _item.is_bond = controls["is_bond"].value;
+      _item.photo = controls["contentFile"].value;
       return _item;
     } else {
       if (this.activeField == true) {
+        _item.id = this.itemModel.id;
         _item.type_people = controls["type_people"].value;
         _item.type_identification = controls["type_identification"].value;
         _item.identification = controls["identification"].value;
@@ -344,6 +333,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         _item.firstname_representative = controls["firstname_representative"].value;
         _item.lastname_representative = controls["lastname_representative"].value;
         _item.phone_representative = controls["phone_representative"].value;
+        _item.photo = controls["contentFile"].value;
         return _item;
       }
     }
@@ -388,13 +378,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
    *
    * @param form
    */
-  submit(withBack: boolean = false, back: boolean = false) {
+  submit() {
 
-    if (back == true) {
-      this.loading = true;
-    } else {
-      this.loadingWith = true;
-    }
+
+    this.loading = true;
+
 
     const controls = this.editForm.controls;
     /** check form */
@@ -406,18 +394,17 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         );
         controls[controlName].markAsTouched();
       });
-      this.loadingWith = false;
       this.loading = false;
       this.cdr.detectChanges();
       return;
     }
     const editedItem = this.prepareItem();
-    this.addItem(editedItem, withBack, back);
+    this.updateItem(editedItem);
   }
 
-  addItem(_item: IspCustomer, withBack: boolean = false, back: boolean = false) {
+  updateItem(_item: IspCustomer) {
 
-    const sbCreate = this._service.create(_item).pipe(
+    const sbCreate = this._service.update(_item).pipe(
       catchError((errorMessage) => {
         console.log(errorMessage);
         if (errorMessage.status == 422) {
@@ -433,27 +420,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           )
         }
         this.loading = false;
-        this.loadingWith = false;
         this.cdr.detectChanges();
         return of(null);
       })
     ).subscribe((res: any) => {
       if (res) {
-        console.log(res);
         this.itemModel = res.obj;
         this.loading = false;
-        this.loadingWith = false;
         this.setMessageSuccess("Guardado Correctamente")
-        if (back) {
-          console.log("si tiene back");
-          // this.goBackWithout();
-          return;
-        }
-        if (withBack) {
-          console.log("si tiene withBack");
-          //  this.refreshItem();
-          return;
-        }
       }
     });
     this.subscriptions.push(sbCreate);
@@ -481,6 +455,21 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     this.router.navigate([url], { relativeTo: this.activatedRoute });
   }
 
+  modalCamera() {
+    const modalRef = this.modalService.open(CustomerCameraComponent, {
+      centered: true,
+      backdrop: 'static',
+      size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
+    });
+
+    modalRef.result.then((result) => {
+      if (result) {
+        this.croppedResult = result;
+        this.editForm.get("contentFile").setValue(result);
+      }
+    });
+  }
+
 
 
   // Lifecycle Hooks
@@ -489,10 +478,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
-    WebcamUtil.getAvailableVideoInputs()
-      .then((mediaDevices: MediaDeviceInfo[]) => {
-        this.multiplesCamarasDisponibles = mediaDevices && mediaDevices.length > 1;
-      });
+    this.refresh = true;
     this.contentHeader = {
       headerTitle: 'Editando cliente',
       actionButton: true,
@@ -502,7 +488,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
           {
             name: 'Registros',
             isLink: true,
-            link: '../../customer/list'
+            link: '../../list'
           },
         ]
       }
@@ -516,13 +502,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     this.activatedRoute.params.subscribe(params => {
       const id = params.id;
-      console.log("params.id ", id);
       this._service.getCustomerId(id).subscribe(res => {
         if (res) {
-          console.log(res);
           this.itemModel = res;
-          var phone = JSON.parse(res.phone)
-          JSON.parse(res.phone)
+          this.changeTypePeople({ id: res.type_people });
+          if (res.photo != null) {
+            this.croppedResult = res.photo;
+          }
+
           if (res.type_number == 'MOV') {
             this.titleNumber = 'Móvil';
             this.activeMovField = true;
@@ -530,13 +517,22 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             this.titleNumber = 'Fijo';
             this.activeMovField = false;
           }
-          // this.editForm.controls['phone'].setValue(null);
 
-          this.editForm.controls['type_number'].setValue(res.type_number);
-          //this.itemModel.clear();
-          this.initForm();
-          this.editForm.controls['phone'].setValue(typeof JSON.parse(res?.phone) !== "string" ? phone?.number : phone);
+          setTimeout(() => this.refresh = false, 1500);
+
+
+
+          /////////////////////////////////////
+          var phone_representative = JSON.parse(res.phone_representative)
+          this.itemModel.phone_representative = typeof JSON.parse(res?.phone_representative) !== "string" ? phone_representative?.internationalNumber : phone_representative;
+          /////////////////////////////////////
+          var phone = JSON.parse(res.phone)
+          this.itemModel.phone = typeof JSON.parse(res?.phone) !== "string" ? phone?.internationalNumber : phone;
+          /////////////////////////////////////
           this.getDate();
+          this.initForm();
+
+          this.editForm.get('type_people').disable();
         }
       }
         , err => {

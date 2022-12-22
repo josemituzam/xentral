@@ -1,11 +1,144 @@
 <div class="content-wrapper container-xxl p-0">
-  <div class="content-body">
-    <ckeditor 
-    name="myckeditor"
-    required
-    [config]="ckeConfig" 
-    debounce="500" 
-    (ngModelChange)="onChange($event)">
-  </ckeditor>
+  <div class="content-body" [formGroup]="editForm">
+    <div class="row mb-2">
+      <div class="col-lg-12 col-md-12 col-12 d-flex justify-content-center">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button
+            (click)="downloadPdf()"
+            [disabled]="loadingDownload"
+            type="button"
+            class="btn btn-outline-primary"
+            [disabled]="isGenerated == 0"
+            rippleEffect
+          >
+            <span
+              *ngIf="loadingDownload"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            <span [data-feather]="'download'"></span> Descargar Contrato
+          </button>
+          <button
+            type="button"
+            [disabled]="loading"
+            class="btn btn-outline-success"
+            [disabled]="isGenerated == 1"
+            (click)="submit()"
+            rippleEffect
+          >
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            <span [data-feather]="'refresh-ccw'"></span> Generar Contrato
+          </button>
+          <button
+            type="button"
+            [disabled]="loadingLink"
+            class="btn btn-outline-primary"
+            [disabled]="isGenerated == 0 || isSigned == 1"
+            (click)="linkGenerated()"
+            rippleEffect
+          >
+            <span
+              *ngIf="loadingLink"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            <span [data-feather]="'link'"> </span> Generar Enlace Temporal
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-12">
+        <ckeditor
+          name="myckeditor"
+          required
+          [config]="ckeConfig"
+          debounce="500"
+          (ngModelChange)="onChange($event)"
+          formControlName="html"
+        >
+        </ckeditor>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5>Gestión de firmas</h5>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="py-1">Firma</th>
+                    <th class="py-1">Descripción</th>
+                    <th class="py-1">Firma activa</th>
+                    <th class="py-1">Firma obligatoria</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of signatureList; let i = index">
+                    <td class="py-1">{{ item.name }}</td>
+                    <td class="py-1">{{ item.description }}</td>
+                    <td class="py-1">
+                      <div
+                        class="custom-control custom-switch custom-switch-success"
+                      >
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id="customSwitch{{ i * 2 }}"
+                          [checked]="item.is_active == 1 ? true : false"
+                          (change)="activeChange($event, item.id)"
+                          [disabled]="isGenerated == 0 ? false : true"
+                        />
+                        <label
+                          class="custom-control-label"
+                          for="customSwitch{{ i * 2 }}"
+                        >
+                          <span class="switch-icon-left"
+                            ><i data-feather="check"></i
+                          ></span>
+                          <span class="switch-icon-right"
+                            ><i data-feather="x"></i
+                          ></span>
+                        </label>
+                      </div>
+                    </td>
+                    <td class="py-1">
+                      <div
+                        class="custom-control custom-switch custom-switch-success"
+                      >
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id="custom{{ i }}"
+                          [checked]="item.is_required == 1 ? true : false"
+                          (change)="requiredChange($event, item.id)"
+                          [disabled]="
+                            item.is_active == 1 && isGenerated == 0
+                              ? false
+                              : true
+                          "
+                        />
+                        <label class="custom-control-label" for="custom{{ i }}">
+                          <span class="switch-icon-left"
+                            ><i data-feather="check"></i
+                          ></span>
+                          <span class="switch-icon-right"
+                            ><i data-feather="x"></i
+                          ></span>
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

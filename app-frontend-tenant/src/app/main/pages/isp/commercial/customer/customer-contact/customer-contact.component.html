@@ -1,3 +1,13 @@
+<ngb-alert [type]="'warning'" class="mt-1" [dismissible]="false">
+  <div class="alert-body">
+    <span [data-feather]="'info'" [class]="'mr-50 align-middle'"></span>
+    <span
+      >Para guardar los registros debe dar click en el botón de
+      <strong>Guardar</strong></span
+    >
+  </div>
+</ngb-alert>
+
 <div class="d-flex justify-content-between mb-2">
   <button
     class="btn btn-icon btn-primary"
@@ -11,9 +21,11 @@
   <button
     (click)="submit()"
     type="submit"
+    [disabled]="loading"
     class="btn btn-success mb-1 mb-sm-0 mr-0 mr-sm-1"
     rippleEffect
   >
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
     Guardar
   </button>
 </div>
@@ -37,7 +49,9 @@
             placeholder="Contacto"
             [ngClass]="{
               'is-invalid':
-                editForm.get('contacts')?.controls[i]?.controls?.name?.invalid
+                !editForm.get('contacts')?.controls[i]?.controls?.name?.valid,
+              'is-valid':
+                editForm.get('contacts')?.controls[i]?.controls?.name?.valid
             }"
           />
           <div class="invalid-feedback">
@@ -45,6 +59,30 @@
               editForm.get("contacts")?.controls[i]?.controls?.name?.errors
                 ?.serverError
             }}
+          </div>
+          <div
+            *ngIf="
+              editForm.get('contacts')?.controls[i]?.controls?.name?.errors
+                ?.maxlength
+            "
+            class="invalid-feedback"
+          >
+            {{ "Máximo: " }} 100
+          </div>
+          <div
+            *ngIf="
+              editForm.get('contacts')?.controls[i]?.controls?.name?.errors
+                ?.required
+            "
+            class="invalid-feedback"
+          >
+            {{ "El elemento es requerido" }}
+          </div>
+          <div
+            *ngIf="editForm.get('contacts')?.controls[i]?.controls?.name?.valid"
+            class="valid-feedback"
+          >
+            Contacto ingresado correctamente
           </div>
         </div>
       </div>
@@ -62,8 +100,11 @@
             placeholder="Parentesco"
             [ngClass]="{
               'is-invalid':
+                !editForm.get('contacts')?.controls[i]?.controls?.name_parent
+                  ?.valid,
+              'is-valid':
                 editForm.get('contacts')?.controls[i]?.controls?.name_parent
-                  ?.invalid
+                  ?.valid
             }"
           />
           <div class="invalid-feedback">
@@ -71,6 +112,33 @@
               editForm.get("contacts")?.controls[i]?.controls?.name_parent
                 ?.errors?.serverError
             }}
+          </div>
+          <div
+            *ngIf="
+              editForm.get('contacts')?.controls[i]?.controls?.name_parent
+                ?.errors?.maxlength
+            "
+            class="invalid-feedback"
+          >
+            {{ "Máximo: " }} 100
+          </div>
+          <div
+            *ngIf="
+              editForm.get('contacts')?.controls[i]?.controls?.name_parent
+                ?.errors?.required
+            "
+            class="invalid-feedback"
+          >
+            {{ "El elemento es requerido" }}
+          </div>
+          <div
+            *ngIf="
+              editForm.get('contacts')?.controls[i]?.controls?.name_parent
+                ?.valid
+            "
+            class="valid-feedback"
+          >
+            Parentesco ingresado correctamente
           </div>
         </div>
       </div>
@@ -204,9 +272,9 @@
   </div>
 </form>
 
-<div class="d-flex justify-content-end">
+<!-- <div class="d-flex justify-content-end">
   <button class="btn btn-danger btn-next" (click)="submit()" rippleEffect>
     <span class="align-middle d-sm-inline-block d-none">Finalizar</span>
     <i data-feather="save" class="align-middle ml-sm-25 ml-0"></i>
   </button>
-</div>
+</div> -->

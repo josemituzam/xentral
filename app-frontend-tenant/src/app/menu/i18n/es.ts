@@ -14,11 +14,12 @@ export const locale = {
                     BRANCH: 'Sucursales',
                     SALES: 'Puntos de venta'
                 },
+                ZONESALE: 'Zonas comerciales',
             },
 
             // ISP
             DASHBOARD: 'Dashboard',
-            ISP: {
+            MODULE: {
                 SECTION: 'Módulos',
                 COMMERCIAL: {
                     COLLAPSIBLE: 'Comercial',
@@ -35,8 +36,14 @@ export const locale = {
                 TABLEOFSERVICE: {
                     COLLAPSIBLE: 'Mesa de servicios',
                     NEWTICKET: 'Nuevo ticket',
-                    METICKET: 'Mis tickets',
+                    OPENTICKET: 'Tickets abiertos',
+                    CLOSETICKET: 'Tickets cerrados',
                 },
+            },
+
+            SETTING: {
+                SECTION: 'Configuraciones',
+                TEMPLATE: 'Plantillas',
             },
             //INVOICE: 'Facturación',
         }

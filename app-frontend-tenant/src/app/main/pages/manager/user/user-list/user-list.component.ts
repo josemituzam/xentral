@@ -3,12 +3,13 @@ import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+
 import { CoreConfigService } from '@core/services/config.service';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
-import { UserListService } from './user-list.service';
+import { Router } from "@angular/router";
+import { FormControl } from '@angular/forms';
 import Swal from 'sweetalert2'
-
+import { UserListService } from './user-list.service';
 
 @Component({
   selector: 'app-user-list',
@@ -29,9 +30,6 @@ export class UserListComponent implements OnInit {
   itemsPerPage = new FormControl('10');
   searchQuery = new FormControl('');
 
-  public currentVisible: number = 3;
-
-
   public ColumnMode = ColumnMode;
   public temp = [];
   public selectedStatus = [];
@@ -50,15 +48,16 @@ export class UserListComponent implements OnInit {
   public contentHeader: object
 
   /**
-   * Constructor
-   *
-   * @param {CoreConfigService} _coreConfigService
-   * @param {ServiceListService} _service
-   * @param {CoreSidebarService} _coreSidebarService
-   */
+     * Constructor
+     *
+     * @param {CoreConfigService} _coreConfigService
+     * @param {SectorListService} _service
+     * @param {CoreSidebarService} _coreSidebarService
+     */
   constructor(
     private _service: UserListService,
     private _coreSidebarService: CoreSidebarService,
+    private _router: Router,
     private _coreConfigService: CoreConfigService,
     // private cdr: ChangeDetectorRef,
   ) {
@@ -70,12 +69,10 @@ export class UserListComponent implements OnInit {
     { is_active: 0, name: 'Inactivo', icon: 'fa fa-times' },
   ];
 
-
   filterByStatus(event) {
     this.isActive = event ? event.is_active : '';
     this.getRowData();
   }
-
 
   onCheckboxChange($event, id) {
     var band = 0;
@@ -98,7 +95,6 @@ export class UserListComponent implements OnInit {
   }
 
 
-
   delete(id: string) {
     Swal.fire({
       title: '¿Desea eliminar el registro?',
@@ -110,14 +106,20 @@ export class UserListComponent implements OnInit {
       confirmButtonText: 'Eliminar'
     }).then((result) => {
       if (result.isConfirmed) {
-
+        this._service
+          .delete(id).subscribe({
+            next: (res) => {
+              Swal.fire(
+                'Eliminado!',
+                'Tu registro ha sido eliminado.',
+                'success'
+              )
+              this.getRowData();
+            }
+          })
       }
     })
   }
-
-  // Public Methods
-  // -----------------------------------------------------------------------------------------------------
-
   onSort(event) {
     this.sortBy = event?.column?.prop;
     this.getRowData();
@@ -147,12 +149,6 @@ export class UserListComponent implements OnInit {
   toggleSidebar(name): void {
     this._coreSidebarService.getSidebarRegistry(name).toggleOpen();
   }
-
-  // Lifecycle Hooks
-  // -----------------------------------------------------------------------------------------------------
-  /**
-   * On init
-   */
   ngOnInit(): void {
     this.contentHeader = {
       headerTitle: 'Usuarios',
@@ -191,7 +187,6 @@ export class UserListComponent implements OnInit {
     }
     );
   }
-
   handlePageChange(event: any): void {
     this.curPages = event.page;
     this.getRowData();
@@ -205,4 +200,5 @@ export class UserListComponent implements OnInit {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
+
 }

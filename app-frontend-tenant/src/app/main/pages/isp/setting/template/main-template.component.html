@@ -1,0 +1,78 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <section id="pricing-plan">
+      <!-- pricing plan cards -->
+      <div class="row pricing-card">
+        <div
+          class="col-12 col-sm-offset-2 col-sm-10 col-md-12 col-lg-offset-2 col-lg-10 mx-auto"
+        >
+          <div class="row">
+            <!-- standard plan -->
+            <div class="col-12 col-md-6">
+              <div class="card standard-pricing popular text-center">
+                <div class="card-body">
+                  <img
+                    src="assets/images/isp/contract.svg"
+                    class="mb-1"
+                    width="23%"
+                    height="23%"
+                    alt="svg img"
+                  />
+                  <h2>Contratos</h2>
+                  <button
+                    [routerLink]="['/isp/template/contract/list']"
+                    class="btn btn-outline-primary btn-block mt-2"
+                    rippleEffect
+                  >
+                    PLANTILLAS
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!--/ standard plan -->
+
+            <!-- standard plan -->
+            <div class="col-12 col-md-6">
+              <div class="card standard-pricing popular text-center">
+                <div class="card-body">
+                  <img
+                    src="assets/images/isp/invoice.svg"
+                    class="mb-1"
+                    alt="svg img"
+                    width="20%"
+                    height="20%"
+                  />
+                  <h2>Facturas</h2>
+                  <button
+                    [routerLink]="['/pages/login']"
+                    class="btn btn-outline-primary btn-block mt-2"
+                    rippleEffect
+                  >
+                    COBROS
+                  </button>
+                  <button
+                    [routerLink]="['/pages/login']"
+                    class="btn btn-outline-primary btn-block mt-2"
+                    rippleEffect
+                  >
+                    FACTURAS
+                  </button>
+                  <button
+                    [routerLink]="['/pages/login']"
+                    class="btn btn-outline-primary btn-block mt-2"
+                    rippleEffect
+                  >
+                    ANTICIPOS
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!--/ standard plan -->
+            <!--/ standard plan -->
+          </div>
+        </div>
+      </div>
+      <!--/ pricing plan cards -->
+    </section>
+  </div>
+</div>

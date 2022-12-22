@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { CompanyModule } from './company/company.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ServiceModule } from './services/service.module';
+import { ZoneSaleModule } from './zone-sale/zone-sale.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ServiceModule } from './services/service.module';
     FormsModule,
     UserModule,
     CompanyModule,
-    NgxDatatableModule,
+    ZoneSaleModule,
+    NgxDatatableModule
   ],
 
   providers: []

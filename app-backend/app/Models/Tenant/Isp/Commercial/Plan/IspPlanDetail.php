@@ -31,7 +31,7 @@ class IspPlanDetail extends Model
         'minimun_permanence_id'
     ];
 
-    public function minimunpermanence()
+    public function getMinimunPermanence()
     {
         return $this->belongsTo(IspMinimunPermanence::class, 'minimun_permanence_id');
     }

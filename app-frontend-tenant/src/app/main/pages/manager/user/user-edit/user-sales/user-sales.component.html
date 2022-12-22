@@ -1,0 +1,33 @@
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="py-1">Punto de venta</th>
+        <th class="py-1">Descripción</th>
+        <th class="py-1">Asignar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of saleList; let i = index">
+        <td class="py-1">{{ item.branch_id }}</td>
+        <td class="py-1">{{ item.description }}</td>
+        <td class="py-1">
+          <div class="custom-control custom-switch custom-switch-success">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="customSwitch{{ i * 2 }}"
+              [checked]="item.is_active == 1 ? true : false"
+              (change)="setUserSale($event, item.id)"
+              [disabled]="isGenerated == 0 ? false : true"
+            />
+            <label class="custom-control-label" for="customSwitch{{ i * 2 }}">
+              <span class="switch-icon-left"><i data-feather="check"></i></span>
+              <span class="switch-icon-right"><i data-feather="x"></i></span>
+            </label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

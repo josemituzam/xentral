@@ -107,13 +107,13 @@
             >
               <table>
                 <tr>
-                  <td>Provincia: {{ row.location?.state }}</td>
+                  <td>Provincia: {{ row.get_location?.state }}</td>
                 </tr>
                 <tr>
-                  <td>Ciudad: {{ row.location?.city }}</td>
+                  <td>Ciudad: {{ row.get_location?.city }}</td>
                 </tr>
                 <tr>
-                  <td>Parroquia: {{ row?.location?.location }}</td>
+                  <td>Parroquia: {{ row?.get_location?.location }}</td>
                 </tr>
               </table>
             </ng-template>

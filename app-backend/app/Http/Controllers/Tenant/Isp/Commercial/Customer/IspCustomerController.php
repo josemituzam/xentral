@@ -5,41 +5,28 @@ namespace App\Http\Controllers\Tenant\Isp\Commercial\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Tenant\Api\ApiR2Controller;
-use App\Http\Controllers\Tenant\File\FileController;
 use App\Http\Utils\Helpers;
+use App\Models\Tenant\File\File as FileTenant;
 use App\Models\Tenant\Isp\Commercial\Customer\IspCustomer;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class IspCustomerController extends Controller
 {
 
-    public function storeDocument(Request $request)
+    public function validateCustomer($ide, $type)
     {
-        $methodsR2 = new ApiR2Controller();
-        $methodFiles = new FileController();
-        $typeFile = $methodsR2->saveFile();
-
-        if ($request->file('fileContent')) {
-            $file = $request->file('fileContent');
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $file_name = str_replace(' ', '', $filename);
-           // $pathFile = Storage::disk('s3')->put($typeFile->key_file_name . $file_name,  File::get($file));
+        if ($type == 'RUC') {
+            $url = 'https://webservices.ec/api/ruc/' . $ide;
+        } else {
+            $url = 'https://webservices.ec/api/cedula/' . $ide;
         }
 
-        if ($request->ideContent) {
-            $image = $request->ideContent;  // your base64 encoded
-            $image = str_replace('data:image/png;base64,', '', $image);
-            $image = str_replace(' ', '+', $image);
-            $imageName =  time();
-           // $pathImage = Storage::disk('s3')->put($typeFile->key_image_name . $imageName, base64_decode($image));
-            $path = $typeFile->key_image_name . $imageName;
-
-
-            //$url = Storage::url($path);
-
-            $methodFiles->saveFiles($imageName, $path);
-        }
+        return Http::withOptions([
+            'verify' => false,
+        ])->withHeaders([
+            'Authorization' => 'Bearer NWCG3zWTtTLmmyiV2CPYrItgYmxeePD6hbwOSfho'
+        ])->get($url);
     }
 
     /**
@@ -78,14 +65,14 @@ class IspCustomerController extends Controller
                             ->orWhere('identification', 'LIKE', "%{$request->q}%")
                             ->orWhere('address', 'LIKE', "%{$request->q}%");
                     });
-                })->paginate(
+                })->orderBy('created_at', 'DESC')->paginate(
                     request(
                         'perPage',
                         \Request::get('perPage') ?? 1
                     )
                 );
 
-            $sortedResult = $Filtred->getCollection()->sortBy(request(
+            $sortedResult = $Filtred->getCollection()->sortByDesc(request(
                 'sortBy',
                 \Request::get('sortBy') ?? 'created_at'
             ))->values();
@@ -94,6 +81,8 @@ class IspCustomerController extends Controller
             return $Filtred;
         }
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -113,59 +102,25 @@ class IspCustomerController extends Controller
         return response()->json(['success' => true]);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-        //return $request->all();
         $validator = IspCustomer::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
         }
 
-        if ($request->photo) {
-            $methods = new ApiR2Controller();
-            $typeFile = $methods->saveFile();
-            $image = $request->photo;  // your base64 encoded
-            $image = str_replace('data:image/png;base64,', '', $image);
-            $image = str_replace(' ', '+', $image);
-            $imageName =  time();
-            //Storage::disk('s3')->put($typeFile->key_image_name . $imageName, base64_decode($image));
-            $input['photo'] = $imageName;
-        }
-
-        //Storage::disk('public')->put($imageName, base64_decode($image)); 
-
-
-        /* $S3 = S3Client::factory([
-            'version' => 'latest',
-            'region' => 'auto',
-            'credentials' => array(
-                'key' => $config['S3']['key'],
-                'secret' => $config['S3']['secret']
-            )
-        ]);
-
-        $res = $S3->putObject([
-            'Bucket' => $config['S3']['bucket'],
-            'Key' => "PATH_TO_FILE{$docname}",
-            'Body' => fopen($filepath, 'rb'),
-            'ACL' => 'public-read'
-        ]); */
-
-
-
-
         $input['address'] = $request->address;
         $input['email'] = $request->email;
         $input['firstname'] = $request->firstname;
         $input['lastname'] = $request->lastname;
-        $input['fullname'] = $request->firstname . ' ' . $request->lastname;
+        $input['fullname'] = $request->name_company ? $request->name_company : $request->firstname . ' ' . $request->lastname;
         $input['firstname_representative'] = $request->firstname_representative;
         $input['identification'] = $request->identification;
         $input['is_accounting'] = $request->is_accounting;
@@ -180,13 +135,128 @@ class IspCustomerController extends Controller
         $input['type_gender'] = $request->type_gender;
         $input['type_identification'] = $request->type_identification;
         $input['type_number'] = $request->type_number;
+        $input['phone_representative'] = json_encode($request->phone_representative);
         $input['type_people'] = $request->type_people;
         $obj = IspCustomer::create($input);
+
+        //Creando el folder del cliente
+        Controller::createFolder('customer', $obj->id);
+        //Obteniendo el folder del cliente
+        $folder = Controller::getFolder('customer', $obj->id);
+
+        if ($request->photo) {
+            $methods = new ApiR2Controller();
+            $methods->setS3();
+            $image = $request->photo;  // your base64 encoded
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName =  time();
+            Storage::disk('s3')->put($folder['folderImage'] . $imageName, base64_decode($image));
+            IspCustomer::where('id', $obj->id)->update([
+                'photo' => $folder['folderImage'] . $imageName,
+            ]);
+        }
+
+
+
+        $this->createRecordFiles($obj->id, $obj->type_people);
+
 
         return response()->json([
             'obj'  => $obj
         ]);
     }
+
+    public function createRecordFiles($contextableId, $typePeople)
+    {
+        $objStatus = Controller::getStatus('file', 'isp', 'PTE');
+        if ($typePeople == 'PN') {
+            $obj = [
+                [
+                    'name' => 'Ruc Natural',
+                    'contextable_id' => $contextableId,
+                    'type' => 'file',
+                    'status_id' => $objStatus,
+                    'long_code' => 'RUCNATURAL',
+                    'short_code' => '1'
+                ],
+                [
+                    'name' => 'Pasaporte',
+                    'contextable_id' => $contextableId,
+                    'type' => 'image',
+                    'status_id' => $objStatus,
+                    'long_code' => 'PASAPORTE',
+                    'short_code' => '2'
+                ],
+                [
+                    'name' => 'Cédula Frontal',
+                    'contextable_id' => $contextableId,
+                    'type' => 'image',
+                    'status_id' => $objStatus,
+                    'long_code' => 'CEDULAFRONTAL',
+                    'short_code' => '4'
+                ],
+                [
+                    'name' => 'Cédula Posterior',
+                    'contextable_id' => $contextableId,
+                    'type' => 'image',
+                    'status_id' => $objStatus,
+                    'long_code' => 'CEDULAPOSTERIOR',
+                    'short_code' => '3'
+                ],
+            ];
+        } else {
+            if ($typePeople == 'PJ') {
+                $obj = [
+                    [
+                        'name' => 'Ruc Jurídico',
+                        'contextable_id' => $contextableId,
+                        'type' => 'file',
+                        'status_id' => $objStatus,
+                        'long_code' => 'RUCJURIDICO',
+                        'short_code' => '1'
+                    ],
+                    [
+                        'name' => 'Nombramiento',
+                        'contextable_id' => $contextableId,
+                        'type' => 'file',
+                        'status_id' => $objStatus,
+                        'long_code' => 'NOMBRAMIENTO',
+                        'short_code' => '2'
+                    ],
+                    [
+                        'name' => 'Cédula Frontal Jurídico',
+                        'contextable_id' => $contextableId,
+                        'type' => 'image',
+                        'status_id' => $objStatus,
+                        'long_code' => 'CEDULAFRONTALJURIDICO',
+                        'short_code' => '4'
+                    ],
+                    [
+                        'name' => 'Cédula Posterior Jurídico',
+                        'contextable_id' => $contextableId,
+                        'type' => 'image',
+                        'status_id' => $objStatus,
+                        'long_code' => 'CEDULAPOSTERIORJURIDICO',
+                        'short_code' => '3'
+                    ]
+                ];
+            }
+        }
+
+        foreach ($obj as $value) {
+            FileTenant::create([
+                'name' => $value["name"],
+                'contextable_id' => $value["contextable_id"],
+                'type' => $value["type"],
+                'status_id' => $value["status_id"],
+                'long_code' => $value["long_code"],
+                'short_code' => $value["short_code"],
+            ]);
+        }
+    }
+
+
 
     /**
      * Display the specified resource.
@@ -207,7 +277,13 @@ class IspCustomerController extends Controller
      */
     public function edit($id)
     {
-        return IspCustomer::find($id);
+        $obj = IspCustomer::find($id);
+        $methods = new ApiR2Controller();
+        $methods->setS3();
+        if ($obj->photo) {
+            $obj['photo'] = Storage::disk("s3")->temporaryUrl($obj->photo, now()->addMinutes(1440));
+        }
+        return $obj;
     }
 
     /**
@@ -217,9 +293,58 @@ class IspCustomerController extends Controller
      * @param  \App\Models\IspCustomer  $ispCustomer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, IspCustomer $ispCustomer)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = IspCustomer::updatedRules($request->all());
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()], 422);
+        }
+
+        $obj = IspCustomer::find($id);
+        $methods = new ApiR2Controller();
+        $methods->setS3();
+
+        //Obteniendo el folder
+        $folder = Controller::getFolder('customer', $obj->id);
+        if ($obj->photo != null) {
+            Storage::disk('s3')->delete($obj->photo);
+        }
+        if ($request->photo) {
+            $image = $request->photo;  // your base64 encoded
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName =  time();
+            Storage::disk('s3')->put($folder['folderImage'] . $imageName, base64_decode($image));
+            $obj->photo = $folder['folderImage'] . $imageName;
+        } else {
+            $input['photo'] = null;
+        }
+        $obj->address = $request->address;
+        $obj->email = $request->email;
+        $obj->firstname = $request->firstname;
+        $obj->lastname = $request->lastname;
+        $obj->fullname = $request->name_company ? $request->name_company : $request->firstname . ' ' . $request->lastname;
+        $obj->firstname_representative = $request->firstname_representative;
+        $obj->identification = $request->identification;
+        $obj->is_accounting = $request->is_accounting;
+        $obj->is_bond = $request->is_bond;
+        $obj->is_disability = $request->is_disability;
+        $obj->is_old = $request->is_old;
+        $obj->lastname_representative = $request->lastname_representative;
+        $obj->fullname_representative = $request->fullname_representative;
+        $obj->name_company = $request->name_company;
+        $obj->phone = json_encode($request->phone);
+        $obj->started_at = $request->started_at;
+        $obj->type_gender = $request->type_gender;
+        $obj->type_identification = $request->type_identification;
+        $obj->type_number = $request->type_number;
+        $obj->phone_representative = json_encode($request->phone_representative);
+        $obj->type_people = $request->type_people;
+        $obj->save();
+
+        return response()->json([
+            'obj'  => $obj
+        ]);
     }
 
     /**

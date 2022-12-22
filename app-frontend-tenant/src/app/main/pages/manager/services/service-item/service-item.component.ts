@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { EcommerceService } from 'app/main/apps/ecommerce/ecommerce.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { CoreMenuService } from '@core/components/core-menu/core-menu.service';
 
 @Component({
   selector: 'app-service-item',
@@ -22,7 +23,7 @@ export class ServiceItemComponent implements OnInit {
    *
    * @param {EcommerceService} _ecommerceService
    */
-  constructor(private _ecommerceService: EcommerceService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private _coreMenuService: CoreMenuService, private _ecommerceService: EcommerceService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -65,9 +66,15 @@ export class ServiceItemComponent implements OnInit {
   url(url: any): void {
     console.log("goBackWithoutId...");
     console.log(url);
-    this.router.navigate(['../../' + url + '/dashboard'], { relativeTo: this.activatedRoute }).then(() => {
-      location.reload();
-    });
+
+    if (url == 'isp') {
+      
+      this._coreMenuService.setCurrentMenu('isp');
+      this.router.navigate(['../../' + url + '/dashboard/soon']);
+    }
+    /* this.router.navigate(['../../' + url + '/dashboard/soon'], { relativeTo: this.activatedRoute }).then(() => {
+       location.reload();
+     });*/
     //this.router.navigateByUrl(baseUrl + url + '/dashboard');
 
   }

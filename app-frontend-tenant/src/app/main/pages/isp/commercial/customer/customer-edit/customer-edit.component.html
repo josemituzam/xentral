@@ -53,81 +53,25 @@
                   <form class="form-validate" [formGroup]="editForm">
                     <div class="row">
                       <div class="col-lg-12">
-                        <div
-                          *ngIf="mostrarWebcam || imagenWebcam"
-                          class="d-flex justify-content-center mb-5"
-                        >
-                          <webcam
-                            [height]="hexp"
-                            [width]="wexp"
-                            [trigger]="triggerObservable"
-                            (imageCapture)="handleImage($event)"
-                            *ngIf="mostrarWebcam"
-                            [switchCamera]="nextWebcamObservable"
-                            [imageQuality]="1"
-                            (cameraSwitched)="cameraSwitched($event)"
-                            (initError)="handleInitError($event)"
-                          ></webcam>
-
-                          <div class="row">
-                            <table class="table">
-                              <tbody>
-                                <tr>
-                                  <td *ngIf="imagenWebcam">
-                                    <div class="col-lg-9">
-                                      <angular-cropper
-                                        #angularCropper
-                                        [cropperOptions]="{
-                                          checkCrossOrigin: true
-                                        }"
-                                        [imageUrl]="imagenWebcam.imageAsDataUrl"
-                                      ></angular-cropper>
-                                    </div>
-                                  </td>
-                                  <td *ngIf="croppedResult">
-                                    <div class="col-lg-6">
-                                      Imágen final
-                                      <img
-                                        width="400px"
-                                        height="250px"
-                                        [src]="croppedResult"
-                                      />
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
+                        <div class="d-flex justify-content-center mb-2">
+                          <img
+                            style="border: 1px solid; color: greenyellow"
+                            class="img-fluid rounded"
+                            height="40%"
+                            width="30%"
+                            [src]="croppedResult"
+                            alt="User avatar"
+                          />
                         </div>
-                        <div
-                          class="d-flex justify-content-center"
-                          *ngIf="imagenWebcam"
-                        >
-                          <button
-                            class="btn btn-success mb-5"
-                            (click)="getCroppedImage()"
-                          >
-                            Recortar
-                          </button>
-                        </div>
-
+                      </div>
+                      <div class="col-lg-12">
                         <div class="d-flex justify-content-center">
-                          <div *ngIf="mostrarWebcam" class="px-2">
-                            <button
-                              class="btn btn-success mb-5"
-                              (click)="triggerCaptura()"
-                            >
-                              Tomar foto
-                            </button>
-                          </div>
-                          <div>
-                            <button
-                              class="btn btn-primary mb-2"
-                              (click)="toggleWebcam()"
-                            >
-                              Cámara
-                            </button>
-                          </div>
+                          <button
+                            class="btn btn-primary mb-2"
+                            (click)="modalCamera()"
+                          >
+                            Cámara
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -199,6 +143,7 @@
                             bindValue="id"
                             bindLabel="name"
                             placeholder="Seleccione de la lista"
+                            (change)="setType($event)"
                             [ngClass]="{
                               'is-invalid': isControlInvalid(
                                 'type_identification'
@@ -245,43 +190,72 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <label for="identificator">Identificación</label>
-                          <input
-                            type="text"
-                            id="identificator"
-                            class="form-control"
-                            placeholder="Identificador"
-                            formControlName="identification"
-                            name="identificator-customer"
-                            [ngClass]="{
-                              'is-invalid': isControlInvalid('identification'),
-                              'is-valid': isControlValid('identification')
-                            }"
-                          />
-                          <div
-                            class="valid-feedback"
-                            *ngIf="isControlValid('identification')"
-                          >
-                            Identificación ingresada correctamente
-                          </div>
-                          <div
-                            class="invalid-feedback"
-                            *ngIf="
-                              controlHasError('required', 'identification')
-                            "
-                          >
-                            {{ "El elemento es requerido" }}
-                          </div>
-                          <div
-                            class="invalid-feedback"
-                            *ngIf="
-                              editForm.get('identification')?.errors
-                                ?.serverError
-                            "
-                          >
-                            {{
-                              editForm.get("identification")?.errors
-                                ?.serverError
-                            }}
+
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              id="identificator"
+                              class="form-control"
+                              placeholder="Identificador"
+                              formControlName="identification"
+                              name="identificator-customer"
+                              [ngClass]="{
+                                'is-invalid':
+                                  isControlInvalid('identification'),
+                                'is-valid': isControlValid('identification')
+                              }"
+                            />
+
+                            <div class="input-group-append">
+                              <button
+                                (click)="validateCustomer()"
+                                [disabled]="loadingValidate"
+                                type="button"
+                                class="btn btn-outline-primary"
+                                [disabled]="disableBtnIdentifier"
+                                rippleEffect
+                              >
+                                <span
+                                  *ngIf="loadingValidate"
+                                  class="spinner-border spinner-border-sm mr-1"
+                                ></span>
+                                Buscar
+                              </button>
+                            </div>
+                            <div
+                              class="valid-feedback"
+                              *ngIf="isControlValid('identification')"
+                            >
+                              Identificación ingresada correctamente
+                            </div>
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                controlHasError('required', 'identification')
+                              "
+                            >
+                              {{ "El elemento es requerido" }}
+                            </div>
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                controlHasError('maxlength', 'identification')
+                              "
+                            >
+                              {{ "Máximo: " }} 100
+                            </div>
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                editForm.get('identification')?.errors
+                                  ?.serverError
+                              "
+                            >
+                              {{
+                                editForm.get("identification")?.errors
+                                  ?.serverError
+                              }}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -608,6 +582,14 @@
                           >
                             Teléfono ingresado correctamente
                           </div>
+
+                          <div
+                            *ngIf="!editForm.controls['phone'].invalid == false"
+                            class="invalid-feedback"
+                          >
+                            El teléfono ingresado no es correcto
+                          </div>
+
                           <div
                             class="invalid-feedback"
                             *ngIf="controlHasError('required', 'phone')"
@@ -920,6 +902,15 @@
                             Teléfono ingresado correctamente
                           </div>
                           <div
+                            *ngIf="
+                              !editForm.controls['phone_representative']
+                                .invalid == false
+                            "
+                            class="invalid-feedback"
+                          >
+                            El teléfono ingresado no es correcto
+                          </div>
+                          <div
                             class="invalid-feedback"
                             *ngIf="
                               controlHasError(
@@ -949,7 +940,7 @@
                     <div class="col-12 flex-column mt-2">
                       <div class="row d-flex justify-content-end">
                         <button
-                          (click)="submit(false, true)"
+                          (click)="submit()"
                           [disabled]="loading"
                           type="submit"
                           class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
@@ -991,6 +982,7 @@
 
               <ng-template ngbNavContent>
                 <app-customer-contact
+                  type="UPD"
                   [customerId]="itemModel.id"
                 ></app-customer-contact>
               </ng-template>

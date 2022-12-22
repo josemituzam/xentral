@@ -6,8 +6,10 @@ import { takeUntil } from 'rxjs/operators';
 
 import { CoreConfigService } from '@core/services/config.service';
 import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.service';
-
-
+import { Router } from "@angular/router";
+import { FormControl } from '@angular/forms';
+import Swal from 'sweetalert2'
+import { BranchListService } from './branch-list.service';
 
 @Component({
   selector: 'app-branch-list',
@@ -19,41 +21,23 @@ export class BranchListComponent implements OnInit {
   // Public
   public sidebarToggleRef = false;
   public rows;
+  public pageSizes: number;
+  public curPages: number = 1;
+  public rowCounts: number;
+  public sortBy: string = 'created_at'
   public selectedOption = 10;
+
+  itemsPerPage = new FormControl('10');
+  searchQuery = new FormControl('');
+
   public ColumnMode = ColumnMode;
   public temp = [];
+  public selectedStatus = [];
   public previousRoleFilter = '';
   public previousPlanFilter = '';
   public previousStatusFilter = '';
-
-  public selectRole: any = [
-    { name: 'All', value: '' },
-    { name: 'Admin', value: 'Admin' },
-    { name: 'Author', value: 'Author' },
-    { name: 'Editor', value: 'Editor' },
-    { name: 'Maintainer', value: 'Maintainer' },
-    { name: 'Subscriber', value: 'Subscriber' }
-  ];
-
-  public selectPlan: any = [
-    { name: 'All', value: '' },
-    { name: 'Basic', value: 'Basic' },
-    { name: 'Company', value: 'Company' },
-    { name: 'Enterprise', value: 'Enterprise' },
-    { name: 'Team', value: 'Team' }
-  ];
-
-  public selectStatus: any = [
-    { name: 'All', value: '' },
-    { name: 'Pending', value: 'Pending' },
-    { name: 'Active', value: 'Active' },
-    { name: 'Inactive', value: 'Inactive' }
-  ];
-
-  public selectedRole = [];
-  public selectedPlan = [];
-  public selectedStatus = [];
   public searchValue = '';
+  public isActive = '';
 
   // Decorator
   @ViewChild(DatatableComponent) table: DatatableComponent;
@@ -61,47 +45,100 @@ export class BranchListComponent implements OnInit {
   // Private
   private tempData = [];
   private _unsubscribeAll: Subject<any>;
+  public contentHeader: object
 
   /**
-   * Constructor
-   *
-   * @param {CoreConfigService} _coreConfigService
-   * @param {UserListService} _userListService
-   * @param {CoreSidebarService} _coreSidebarService
-   */
+     * Constructor
+     *
+     * @param {CoreConfigService} _coreConfigService
+     * @param {SectorListService} _service
+     * @param {CoreSidebarService} _coreSidebarService
+     */
   constructor(
-    //private _userListService: UserListService,
+    private _service: BranchListService,
     private _coreSidebarService: CoreSidebarService,
-    private _coreConfigService: CoreConfigService
+    private _router: Router,
+    private _coreConfigService: CoreConfigService,
+    // private cdr: ChangeDetectorRef,
   ) {
     this._unsubscribeAll = new Subject();
   }
 
-  // Public Methods
-  // -----------------------------------------------------------------------------------------------------
+  public getStatus: any = [
+    { is_active: 1, name: 'Activo', icon: 'fa fa-check' },
+    { is_active: 0, name: 'Inactivo', icon: 'fa fa-times' },
+  ];
 
+  filterByStatus(event) {
+    this.isActive = event ? event.is_active : '';
+    this.getRowData();
+  }
+
+  onCheckboxChange($event, id) {
+    var band = 0;
+    if ($event.target.checked == true) {
+      band = 1;
+    }
+    var obj = {
+      id: id,
+      is_active: band,
+    };
+    this._service.putActive(obj).subscribe(
+      (item: any) => {
+        if (item) {
+          this.getRowData();
+        }
+      },
+      (err) => {
+      }
+    );
+  }
+
+
+  delete(id: string) {
+    Swal.fire({
+      title: '¿Desea eliminar el registro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._service
+          .delete(id).subscribe({
+            next: (res) => {
+              Swal.fire(
+                'Eliminado!',
+                'Tu registro ha sido eliminado.',
+                'success'
+              )
+              this.getRowData();
+            }
+          })
+      }
+    })
+  }
+  onSort(event) {
+    this.sortBy = event?.column?.prop;
+    this.getRowData();
+
+  }
+
+  pageLimit(num: string) {
+    this.selectedOption = Number(num);
+    this.getRowData();
+  }
   /**
    * filterUpdate
    *
    * @param event
    */
   filterUpdate(event) {
-    // Reset ng-select on search
-    this.selectedRole = this.selectRole[0];
-    this.selectedPlan = this.selectPlan[0];
-    this.selectedStatus = this.selectStatus[0];
-
     const val = event.target.value.toLowerCase();
-
-    // Filter Our Data
-    const temp = this.tempData.filter(function (d) {
-      return d.fullName.toLowerCase().indexOf(val) !== -1 || !val;
-    });
-
-    // Update The Rows
-    this.rows = temp;
-    // Whenever The Filter Changes, Always Go Back To The First Page
-    this.table.offset = 0;
+    this.searchValue = val;
+    this.getRowData();
   }
 
   /**
@@ -112,89 +149,47 @@ export class BranchListComponent implements OnInit {
   toggleSidebar(name): void {
     this._coreSidebarService.getSidebarRegistry(name).toggleOpen();
   }
-
-  /**
-   * Filter By Roles
-   *
-   * @param event
-   */
-  filterByRole(event) {
-    const filter = event ? event.value : '';
-    this.previousRoleFilter = filter;
-    this.temp = this.filterRows(filter, this.previousPlanFilter, this.previousStatusFilter);
-    this.rows = this.temp;
-  }
-
-  /**
-   * Filter By Plan
-   *
-   * @param event
-   */
-  filterByPlan(event) {
-    const filter = event ? event.value : '';
-    this.previousPlanFilter = filter;
-    this.temp = this.filterRows(this.previousRoleFilter, filter, this.previousStatusFilter);
-    this.rows = this.temp;
-  }
-
-  /**
-   * Filter By Status
-   *
-   * @param event
-   */
-  filterByStatus(event) {
-    const filter = event ? event.value : '';
-    this.previousStatusFilter = filter;
-    this.temp = this.filterRows(this.previousRoleFilter, this.previousPlanFilter, filter);
-    this.rows = this.temp;
-  }
-
-  /**
-   * Filter Rows
-   *
-   * @param roleFilter
-   * @param planFilter
-   * @param statusFilter
-   */
-  filterRows(roleFilter, planFilter, statusFilter): any[] {
-    // Reset search on select change
-    this.searchValue = '';
-
-    roleFilter = roleFilter.toLowerCase();
-    planFilter = planFilter.toLowerCase();
-    statusFilter = statusFilter.toLowerCase();
-
-    return this.tempData.filter(row => {
-      const isPartialNameMatch = row.role.toLowerCase().indexOf(roleFilter) !== -1 || !roleFilter;
-      const isPartialGenderMatch = row.currentPlan.toLowerCase().indexOf(planFilter) !== -1 || !planFilter;
-      const isPartialStatusMatch = row.status.toLowerCase().indexOf(statusFilter) !== -1 || !statusFilter;
-      return isPartialNameMatch && isPartialGenderMatch && isPartialStatusMatch;
-    });
-  }
-
-  // Lifecycle Hooks
-  // -----------------------------------------------------------------------------------------------------
-  /**
-   * On init
-   */
   ngOnInit(): void {
+    this.contentHeader = {
+      headerTitle: 'Sucursales',
+      actionButton: true,
+      breadcrumb: {
+        type: '',
+        links: [
+          {
+            name: 'Registros',
+            isLink: false,
+            link: '/'
+          },
+        ]
+      }
+    }
+
     // Subscribe config change
     this._coreConfigService.config.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {
       //! If we have zoomIn route Transition then load datatable after 450ms(Transition will finish in 400ms)
       if (config.layout.animation === 'zoomIn') {
-        /* setTimeout(() => {
-           this._userListService.onUserListChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(response => {
-             this.rows = response;
-             this.tempData = this.rows;
-           });
-         }, 450);*/
+        this.getRowData();
       } else {
-        /*this._userListService.onUserListChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(response => {
-          this.rows = response;
-          this.tempData = this.rows;
-        });*/
+        this.getRowData();
       }
     });
+  }
+
+  getRowData() {
+    this._service.getDataTableRows(this.searchValue, this.selectedOption, this.curPages, this.sortBy, this.isActive).subscribe(res => {
+      if (res) {
+        this.rows = res['data'];
+        this.pageSizes = res['last_page'];
+        this.curPages = res['current_page'];
+        this.rowCounts = res['total'];
+      }
+    }
+    );
+  }
+  handlePageChange(event: any): void {
+    this.curPages = event.page;
+    this.getRowData();
   }
 
   /**
@@ -205,4 +200,5 @@ export class BranchListComponent implements OnInit {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
+
 }

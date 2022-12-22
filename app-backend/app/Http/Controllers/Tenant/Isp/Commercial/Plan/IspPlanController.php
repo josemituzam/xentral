@@ -49,7 +49,7 @@ class IspPlanController extends Controller
                 $param = array(0 => '=');
                 $type = 0;
             }
-            $service = IspPlan::with(['lastmile', 'plandetail', 'plandetail.minimunpermanence'])->where('deleted_at', '=', null);
+            $service = IspPlan::with(['getLastMile', 'getPlanDetail', 'getPlanDetail.getMinimunPermanence'])->where('deleted_at', '=', null);
 
             $Filtred = $helpers->filter($service, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
@@ -142,7 +142,7 @@ class IspPlanController extends Controller
      */
     public function edit($id)
     {
-        $objPlan = IspPlan::with('plandetail', 'plandetail.minimunpermanence')->find($id);
+        $objPlan = IspPlan::with('getPlanDetail', 'getPlanDetail.getMinimunPermanence')->find($id);
 
         return response()->json([
             'objPlan'  => $objPlan,

@@ -19,6 +19,7 @@ class CreateStatusesTable extends Migration
             $table->string('type', 100)->nullable(true);
             $table->string('class', 100)->nullable(true);
             $table->string('service', 100)->nullable(true);
+            $table->string('short_code', 5)->nullable(true);
             //
             $table->uuid('created_by')->nullable(true);
             $table->uuid('updated_by')->nullable(true);

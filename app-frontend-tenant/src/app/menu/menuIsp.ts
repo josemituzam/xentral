@@ -5,56 +5,56 @@ import { CoreMenu } from '@core/types';
 export const menuIsp: CoreMenu[] = [
     // Dashboard
     {
-        id: 'service',
-        title: 'Servicios',
+        id: 'dashboard',
+        title: 'Dashboard',
         translate: 'MENU.DASHBOARD',
         type: 'item',
         icon: 'home',
-        url: 'isp/dashboard'
+        url: 'isp/dashboard/soon'
     },
 
     {
         id: 'apps',
         type: 'section',
-        title: 'Apps & Pages',
-        translate: 'MENU.ISP.SECTION',
+        title: 'Módulos',
+        translate: 'MENU.MODULE.SECTION',
         icon: 'package',
         children: [
             {
                 id: 'commercial',
-                title: 'Commercial',
-                translate: 'MENU.ISP.COMMERCIAL.COLLAPSIBLE',
+                title: 'Comercial',
+                translate: 'MENU.MODULE.COMMERCIAL.COLLAPSIBLE',
                 type: 'collapsible',
                 icon: 'briefcase',
                 children: [
                     {
                         id: 'customer',
-                        title: 'Customer',
-                        translate: 'MENU.ISP.COMMERCIAL.CUSTOMER',
+                        title: 'Clientes',
+                        translate: 'MENU.MODULE.COMMERCIAL.CUSTOMER',
                         type: 'item',
                         icon: 'circle',
                         url: 'isp/customer/list'
                     },
                     {
                         id: 'contract',
-                        title: 'Contract',
-                        translate: 'MENU.ISP.COMMERCIAL.CONTRACTS',
+                        title: 'Contratos',
+                        translate: 'MENU.MODULE.COMMERCIAL.CONTRACTS',
                         type: 'item',
                         icon: 'circle',
                         url: 'isp/contract/list'
                     },
                     {
                         id: 'plan',
-                        title: 'Plan',
-                        translate: 'MENU.ISP.COMMERCIAL.PLANS',
+                        title: 'Planes',
+                        translate: 'MENU.MODULE.COMMERCIAL.PLANS',
                         type: 'item',
                         icon: 'circle',
                         url: 'isp/plan/list'
                     },
                     {
                         id: 'sector',
-                        title: 'Sector',
-                        translate: 'MENU.ISP.COMMERCIAL.SECTIONS',
+                        title: 'Sectores',
+                        translate: 'MENU.MODULE.COMMERCIAL.SECTIONS',
                         type: 'item',
                         icon: 'circle',
                         url: 'isp/sector/list'
@@ -63,15 +63,15 @@ export const menuIsp: CoreMenu[] = [
             },
             {
                 id: 'technicalarea',
-                title: 'Technical Area',
-                translate: 'MENU.ISP.TECHNICALAREA.COLLAPSIBLE',
+                title: 'Área técnica',
+                translate: 'MENU.MODULE.TECHNICALAREA.COLLAPSIBLE',
                 type: 'collapsible',
                 icon: 'cpu',
                 children: [
                     {
                         id: 'connection',
-                        title: 'Connection',
-                        translate: 'MENU.ISP.TECHNICALAREA.CONNECTION',
+                        title: 'Conexiones',
+                        translate: 'MENU.MODULE.TECHNICALAREA.CONNECTION',
                         type: 'item',
                         icon: 'circle',
                         url: '#'
@@ -79,10 +79,10 @@ export const menuIsp: CoreMenu[] = [
                     {
                         id: 'red',
                         title: 'Red',
-                        translate: 'MENU.ISP.TECHNICALAREA.RED',
+                        translate: 'MENU.MODULE.TECHNICALAREA.RED',
                         type: 'item',
                         icon: 'circle',
-                        url: '#'
+                        url: 'isp/red/main'
                     },
                 ]
             },
@@ -91,26 +91,34 @@ export const menuIsp: CoreMenu[] = [
 
             {
                 id: 'tableofservice',
-                title: 'Table of Service',
-                translate: 'MENU.ISP.TABLEOFSERVICE.COLLAPSIBLE',
+                title: 'Mesa de servicios',
+                translate: 'MENU.MODULE.TABLEOFSERVICE.COLLAPSIBLE',
                 type: 'collapsible',
                 icon: 'slack',
                 children: [
                     {
                         id: 'newticket',
-                        title: 'NewTicker',
-                        translate: 'MENU.ISP.TABLEOFSERVICE.NEWTICKET',
+                        title: 'Nuevo ticket',
+                        translate: 'MENU.MODULE.TABLEOFSERVICE.NEWTICKET',
                         type: 'item',
                         icon: 'circle',
                         url: '#'
                     },
                     {
-                        id: 'meticket',
-                        title: 'MeTicket',
-                        translate: 'MENU.ISP.TABLEOFSERVICE.METICKET',
+                        id: 'opentickets',
+                        title: 'Tickets abiertos',
+                        translate: 'MENU.MODULE.TABLEOFSERVICE.OPENTICKET',
                         type: 'item',
                         icon: 'circle',
-                        url: '#'
+                        url: 'isp/helpdesk/open/list'
+                    },
+                    {
+                        id: 'closetickets',
+                        title: 'Tickets cerrados',
+                        translate: 'MENU.MODULE.TABLEOFSERVICE.CLOSETICKET',
+                        type: 'item',
+                        icon: 'circle',
+                        url: 'isp/helpdesk/close/list'
                     },
                 ]
             },
@@ -119,6 +127,25 @@ export const menuIsp: CoreMenu[] = [
 
 
 
+        ]
+    },
+
+
+    {
+        id: 'setting',
+        type: 'section',
+        title: 'Configuraciones',
+        translate: 'MENU.SETTING.SECTION',
+        icon: 'package',
+        children: [
+            {
+                id: 'template',
+                title: 'Plantillas',
+                translate: 'MENU.SETTING.TEMPLATE',
+                type: 'item',
+                icon: 'clipboard',
+                url: 'isp/template/main'
+            },
         ]
     },
 

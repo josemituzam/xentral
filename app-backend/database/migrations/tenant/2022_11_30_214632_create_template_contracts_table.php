@@ -19,13 +19,15 @@ class CreateTemplateContractsTable extends Migration
             $table->string('description', 300)->nullable(true);
             $table->string('orientation', 100)->nullable(true);
 
-            $table->text('html')->nullable(true);
+            $table->longText('html')->nullable(true);
 
             $table->string('size', 50)->nullable(true);
             $table->string('margin_left', 50)->nullable(true);
             $table->string('margin_right', 50)->nullable(true);
             $table->string('margin_bottom', 50)->nullable(true);
             $table->string('margin_top', 50)->nullable(true);
+
+            $table->string('path', 500)->nullable(true);
 
             $table->string('template_code', 5)->nullable(true);
             $table->boolean('is_active')->default(true);

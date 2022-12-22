@@ -1,13 +1,20 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
+import { environment } from 'environments/environment';
+import { BehaviorSubject, Observable, of, forkJoin, EMPTY } from 'rxjs';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { mergeMap } from 'rxjs/operators';
 @Injectable()
-export class SalesListService implements Resolve<any> {
+export class SalesListService {
   public rows: any;
-  public onUserListChanged: BehaviorSubject<any>;
+  public recordListChange: BehaviorSubject<any>;
+  API: string;
+  API_SERVICE_URL: string;
+  /**
+   *
+   * @param {HttpClient} _http
+   */
+
+  protected readonly REST_API: string = environment.apiUrl;
 
   /**
    * Constructor
@@ -15,9 +22,12 @@ export class SalesListService implements Resolve<any> {
    * @param {HttpClient} _httpClient
    */
   constructor(private _httpClient: HttpClient) {
+    this.API_SERVICE_URL = `${this.REST_API}/sales`;
     // Set the defaults
-    this.onUserListChanged = new BehaviorSubject({});
+    this.recordListChange = new BehaviorSubject({});
   }
+
+
 
   /**
    * Resolver
@@ -26,24 +36,25 @@ export class SalesListService implements Resolve<any> {
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-    return new Promise<void>((resolve, reject) => {
-      Promise.all([this.getDataTableRows()]).then(() => {
-        resolve();
-      }, reject);
-    });
+  putActive(obj: any): Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'application/json');
+    return this._httpClient.put(this.API_SERVICE_URL + `/active/${obj.id}`, obj, { headers: httpHeaders });
   }
-
   /**
    * Get rows
    */
-  getDataTableRows(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this._httpClient.get('api/users-data').subscribe((response: any) => {
-        this.rows = [];
-        this.onUserListChanged.next(this.rows);
-        resolve(this.rows);
-      }, reject);
-    });
+
+  getDataTableRows(searchQuery: string, perPage: number, currentPage: number, sortBy: string, is_active: string): Observable<any[]> {
+    return this._httpClient.get<any>(this.API_SERVICE_URL
+      + `/index?q=${searchQuery}&perPage=${perPage}&page=${currentPage}&sortBy=${sortBy}&is_active=${is_active}`).pipe(
+        mergeMap((res) => {
+          return of(res);
+        })
+      );
+  }
+
+  delete(id: string): Observable<any> {
+    return this._httpClient.delete<any>(`${this.API_SERVICE_URL}/${id}`);
   }
 }

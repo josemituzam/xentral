@@ -1,6 +1,4 @@
-import {
-  Component, Inject, OnDestroy, OnInit, ElementRef, Renderer2
-} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
@@ -14,15 +12,13 @@ import { CoreSidebarService } from '@core/components/core-sidebar/core-sidebar.s
 import { CoreConfigService } from '@core/services/config.service';
 import { CoreLoadingScreenService } from '@core/services/loading-screen.service';
 import { CoreTranslationService } from '@core/services/translation.service';
-
-import { menu } from 'app/menu/menu';
 import { menuIsp } from 'app/menu/menuIsp';
+import { menu } from 'app/menu/menu';
 import { locale as menuEnglish } from 'app/menu/i18n/en';
 import { locale as menuSpanish } from 'app/menu/i18n/es';
 import { locale as menuFrench } from 'app/menu/i18n/fr';
 import { locale as menuGerman } from 'app/menu/i18n/de';
 import { locale as menuPortuguese } from 'app/menu/i18n/pt';
-
 
 @Component({
   selector: 'app-root',
@@ -33,8 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
   coreConfig: any;
   menu: any;
   menuIsp: any;
-  defaultLanguage: 'en'; // This language will be used as a fallback when a translation isn't found in the current language
-  appLanguage: 'en'; // Set application default language i.e fr
+  defaultLanguage: 'es'; // This language will be used as a fallback when a translation isn't found in the current language
+  appLanguage: 'es'; // Set application default language i.e fr
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -68,22 +64,17 @@ export class AppComponent implements OnInit, OnDestroy {
     // Get the application main menu
     this.menu = menu;
     this.menuIsp = menuIsp;
-    console.log(window.location.href.includes('isp'));
-    if (window.location.href.includes('isp')) {
-      console.log("entras aqui 1 ")
-      this._coreMenuService.register('main', this.menuIsp);
-    } else {
-      console.log("entras aqui 2 ")
-      this._coreMenuService.register('main', this.menu);
-    }
 
-
-    //console.log(this.router.url)
-
-
+    // Register the menu to the menu service
+    this._coreMenuService.register('main', this.menu);
+    this._coreMenuService.register('isp', this.menuIsp);
 
     // Set the main menu as our current menu
-    this._coreMenuService.setCurrentMenu('main');
+    if (window.location.href.includes('isp')) {
+      this._coreMenuService.setCurrentMenu('isp');
+    } else {
+      this._coreMenuService.setCurrentMenu('main');
+    }
 
     // Add languages to the translation service
     this._translateService.addLangs(['en', 'fr', 'de', 'pt', 'es']);
@@ -143,7 +134,7 @@ export class AppComponent implements OnInit, OnDestroy {
       // Set the default language to 'en' and then back to 'fr'.
 
       setTimeout(() => {
-        this._translateService.setDefaultLang('en');
+        this._translateService.setDefaultLang('es');
         this._translateService.setDefaultLang(appLanguage);
       });
 

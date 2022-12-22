@@ -42,7 +42,7 @@
           <div class="line">
             <i data-feather="chevron-right" class="font-medium-2"></i>
           </div>
-          <div class="step" data-target="#address">
+          <div class="step" data-target="#notes">
             <button class="step-trigger">
               <span class="bs-stepper-box">4</span>
               <span class="bs-stepper-label">
@@ -82,90 +82,26 @@
               <form class="form-validate" [formGroup]="editForm">
                 <span *ngIf="refresh == false">
                   <div class="row">
-                    <div
-                      class="col-lg-12"
-                      *ngIf="mostrarWebcam == true && showCapture == false"
-                    >
-                      <div class="d-flex justify-content-center mb-5">
-                        <webcam
-                          [height]="hexp"
-                          [width]="wexp"
-                          [trigger]="triggerObservable"
-                          (imageCapture)="handleImage($event)"
-                          [switchCamera]="nextWebcamObservable"
-                          [imageQuality]="1"
-                          (cameraSwitched)="cameraSwitched($event)"
-                          (initError)="handleInitError($event)"
-                        ></webcam>
+                    <div class="col-lg-12">
+                      <div class="d-flex justify-content-center mb-2">
+                        <img
+                          style="border: 1px solid; color: greenyellow"
+                          class="img-fluid rounded"
+                          height="40%"
+                          width="30%"
+                          [src]="croppedResult"
+                          alt="User avatar"
+                        />
                       </div>
                     </div>
-                    <div
-                      class="col-lg-12"
-                      *ngIf="showCapture == true || croppedResult"
-                    >
-                      <div class="d-flex justify-content-center mb-5">
-                        <div class="row">
-                          <table class="table">
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <div class="col-lg-9">
-                                    <strong> Imágen previa </strong>
-                                    <angular-cropper
-                                      #angularCropper
-                                      [cropperOptions]="{
-                                        checkCrossOrigin: true
-                                      }"
-                                      [imageUrl]="imagenWebcam.imageAsDataUrl"
-                                    ></angular-cropper>
-                                  </div>
-                                </td>
-                                <td *ngIf="croppedResult">
-                                  <div class="col-lg-6">
-                                    <strong> Imágen final </strong>
-                                    <img
-                                      width="350px"
-                                      height="300px"
-                                      [src]="croppedResult"
-                                    />
-                                  </div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-
                     <div class="col-lg-12">
                       <div class="d-flex justify-content-center">
-                        <div class="px-2" *ngIf="showCapture == true">
-                          <button
-                            class="btn btn-danger mb-5"
-                            (click)="getCroppedImage()"
-                          >
-                            Recortar
-                          </button>
-                        </div>
-                        <div
-                          class="px-2"
-                          *ngIf="mostrarWebcam == true && showCapture == false"
+                        <button
+                          class="btn btn-primary mb-2"
+                          (click)="modalCamera()"
                         >
-                          <button
-                            class="btn btn-success mb-5"
-                            (click)="triggerCaptura()"
-                          >
-                            Tomar foto
-                          </button>
-                        </div>
-                        <div>
-                          <button
-                            class="btn btn-primary mb-2"
-                            (click)="toggleWebcam()"
-                          >
-                            {{ titleCamera }}
-                          </button>
-                        </div>
+                          Cámara
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -240,6 +176,7 @@
                             ),
                             'is-valid': isControlValid('type_identification')
                           }"
+                          (change)="setType($event)"
                         >
                           <ng-template
                             ng-option-tmp
@@ -280,39 +217,71 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <label for="identificator">Identificación</label>
-                        <input
-                          type="text"
-                          id="identificator"
-                          class="form-control"
-                          placeholder="Identificador"
-                          formControlName="identification"
-                          name="identificator-customer"
-                          [ngClass]="{
-                            'is-invalid': isControlInvalid('identification'),
-                            'is-valid': isControlValid('identification')
-                          }"
-                        />
-                        <div
-                          class="valid-feedback"
-                          *ngIf="isControlValid('identification')"
-                        >
-                          Identificación ingresada correctamente
-                        </div>
-                        <div
-                          class="invalid-feedback"
-                          *ngIf="controlHasError('required', 'identification')"
-                        >
-                          {{ "El elemento es requerido" }}
-                        </div>
-                        <div
-                          class="invalid-feedback"
-                          *ngIf="
-                            editForm.get('identification')?.errors?.serverError
-                          "
-                        >
-                          {{
-                            editForm.get("identification")?.errors?.serverError
-                          }}
+
+                        <div class="input-group">
+                          <input
+                            type="text"
+                            id="identificator"
+                            class="form-control"
+                            placeholder="Identificador"
+                            formControlName="identification"
+                            name="identificator-customer"
+                            [ngClass]="{
+                              'is-invalid': isControlInvalid('identification'),
+                              'is-valid': isControlValid('identification')
+                            }"
+                          />
+
+                          <div class="input-group-append">
+                            <button
+                              (click)="validateCustomer()"
+                              [disabled]="loadingValidate"
+                              type="button"
+                              class="btn btn-outline-primary"
+                              [disabled]="disableBtnIdentifier"
+                              rippleEffect
+                            >
+                              <span
+                                *ngIf="loadingValidate"
+                                class="spinner-border spinner-border-sm mr-1"
+                              ></span>
+                              Buscar
+                            </button>
+                          </div>
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('identification')"
+                          >
+                            Identificación ingresada correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('required', 'identification')
+                            "
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              controlHasError('maxlength', 'identification')
+                            "
+                          >
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('identification')?.errors
+                                ?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("identification")?.errors
+                                ?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -386,6 +355,13 @@
                         </div>
                         <div
                           class="invalid-feedback"
+                          *ngIf="controlHasError('maxlength', 'firstname')"
+                        >
+                          {{ "Máximo: " }} 100
+                        </div>
+
+                        <div
+                          class="invalid-feedback"
                           *ngIf="editForm.get('firstname')?.errors?.serverError"
                         >
                           {{ editForm.get("firstname")?.errors?.serverError }}
@@ -422,6 +398,12 @@
                         </div>
                         <div
                           class="invalid-feedback"
+                          *ngIf="controlHasError('maxlength', 'lastname')"
+                        >
+                          {{ "Máximo: " }} 100
+                        </div>
+                        <div
+                          class="invalid-feedback"
                           *ngIf="editForm.get('name')?.errors?.serverError"
                         >
                           {{ editForm.get("name")?.errors?.serverError }}
@@ -452,20 +434,28 @@
                               >Edad: {{ myYear }} años
                             </span>
                           </div>
-                        </div>
-                        <div
-                          class="valid-feedback"
-                          *ngIf="isControlValid('started_at')"
-                        >
-                          Fecha ingresada correctamente
-                        </div>
-                        <div
-                          class="invalid-feedback"
-                          *ngIf="
-                            editForm.get('started_at')?.errors?.serverError
-                          "
-                        >
-                          {{ editForm.get("started_at")?.errors?.serverError }}
+                          <div
+                            class="valid-feedback"
+                            *ngIf="isControlValid('started_at')"
+                          >
+                            Fecha ingresada correctamente
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="controlHasError('required', 'started_at')"
+                          >
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div
+                            class="invalid-feedback"
+                            *ngIf="
+                              editForm.get('started_at')?.errors?.serverError
+                            "
+                          >
+                            {{
+                              editForm.get("started_at")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -525,6 +515,10 @@
                           class="form-control"
                           placeholder="Dirección"
                           name="address"
+                          [ngClass]="{
+                            'is-invalid': isControlInvalid('address'),
+                            'is-valid': isControlValid('address')
+                          }"
                         />
                         <div
                           class="valid-feedback"
@@ -533,6 +527,18 @@
                           Dirección ingresada correctamente
                         </div>
 
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'address')"
+                        >
+                          {{ "El elemento es requerido" }}
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('maxlength', 'address')"
+                        >
+                          {{ "Máximo: " }} 100
+                        </div>
                         <div
                           class="invalid-feedback"
                           *ngIf="editForm.get('address')?.errors?.serverError"
@@ -679,6 +685,12 @@
                           *ngIf="controlHasError('maxlength', 'email')"
                         >
                           {{ "Máximo: " }} 100
+                        </div>
+                        <div
+                          class="invalid-feedback"
+                          *ngIf="controlHasError('required', 'email')"
+                        >
+                          {{ "El elemento es requerido" }}
                         </div>
                         <div
                           class="invalid-feedback"
@@ -1004,17 +1016,15 @@
               </form>
             </div>
             <div id="customer-files" class="content">
-              <app-customer-documentation
-                (nextStep)="nextStep()"
-                [customerId]="itemModel.id"
-              ></app-customer-documentation>
-            </div>
-            <div id="address" class="content">
-              <form>
+              <div *ngIf="itemModel.id">
+                <app-customer-documentation
+                  (nextStep)="nextStep()"
+                  [customerId]="itemModel.id"
+                ></app-customer-documentation>
                 <div class="d-flex justify-content-end">
                   <button
                     class="btn btn-primary btn-next"
-                    (click)="submit(false, true)"
+                    (click)="getValidateFile()"
                     rippleEffect
                   >
                     <span class="align-middle d-sm-inline-block d-none"
@@ -1026,12 +1036,53 @@
                     ></i>
                   </button>
                 </div>
-              </form>
+              </div>
             </div>
             <div id="customer-contacts" class="content">
-              <app-customer-contact
-                [customerId]="itemModel.id"
-              ></app-customer-contact>
+              <div *ngIf="itemModel.id">
+                <app-customer-contact
+                  type="CRE"
+                  [customerId]="itemModel.id"
+                ></app-customer-contact>
+                <div class="d-flex justify-content-end">
+                  <button
+                    class="btn btn-primary btn-next"
+                    (click)="getValidateContact()"
+                    rippleEffect
+                  >
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Siguiente</span
+                    >
+                    <i
+                      data-feather="arrow-right"
+                      class="align-middle ml-sm-25 ml-0"
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="notes" class="content">
+              <div *ngIf="itemModel.id">
+                <app-note-list
+                  [referenceId]="itemModel.id"
+                  type="CUR"
+                ></app-note-list>
+                <div class="d-flex justify-content-end">
+                  <button
+                    class="btn btn-danger btn-next"
+                    (click)="goBackWithout()"
+                    rippleEffect
+                  >
+                    <span class="align-middle d-sm-inline-block d-none"
+                      >Finalizar</span
+                    >
+                    <i
+                      data-feather="save"
+                      class="align-middle ml-sm-25 ml-0"
+                    ></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </form>
         </div>

@@ -36,7 +36,7 @@ class IspSector extends Model
         'deleted_by'
     ];
 
-    public function location()
+    public function getLocation()
     {
         return $this->belongsTo(IspLocation::class, 'location_id');
     }

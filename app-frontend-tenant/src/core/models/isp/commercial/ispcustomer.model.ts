@@ -25,20 +25,20 @@ export class IspCustomer {
     contacts!: [];
 
     clear(): void {
-        this.id = null;
+        this.id = undefined;
         this.type_people = null;
         this.type_identification = null;
         this.identification = '';
         this.name_company = '';
         this.firstname = '';
         this.lastname = '';
-        this.started_at = null;
+        this.started_at = undefined;
         this.type_gender = null;
         this.address = '';
         this.type_number = null;
         this.phone = '0';
         //this.phone_fixed = null;
-        this.email = '';
+        this.email = undefined;
         this.is_accounting = false;
         this.is_disability = false;
         this.is_old = false;

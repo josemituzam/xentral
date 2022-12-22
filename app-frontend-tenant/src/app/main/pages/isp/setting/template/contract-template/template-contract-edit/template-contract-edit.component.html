@@ -1,0 +1,389 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-body">
+          <!-- users edit media object ends -->
+          <!-- users edit account form start -->
+          <form class="form-validate" [formGroup]="editForm">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Nombre</label>
+                  <input
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    formControlName="name"
+                    name="name-customer"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('name'),
+                      'is-valid': isControlValid('name')
+                    }"
+                  />
+                  <div class="valid-feedback" *ngIf="isControlValid('name')">
+                    Nombre ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'name')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'name')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('name')?.errors?.serverError"
+                  >
+                    {{ editForm.get("name")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Tamaño</label>
+                  <ng-select
+                    [items]="getTypeSize"
+                    [clearable]="false"
+                    name="selecttypesize"
+                    formControlName="size"
+                    bindLabel="name"
+                    bindValue="id"
+                    placeholder="Seleccione"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('size'),
+                      'is-valid': isControlValid('size')
+                    }"
+                    (change)="setMargin($event)"
+                  >
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      {{ item.name }}
+                    </ng-template>
+                  </ng-select>
+                  <div class="valid-feedback" *ngIf="isControlValid('size')">
+                    Tamaño ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'size')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('size')?.errors?.serverError"
+                  >
+                    {{ editForm.get("size")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Orientacion</label>
+                  <ng-select
+                    [items]="getTypeOrientation"
+                    [clearable]="false"
+                    name="selecttypeorientation"
+                    formControlName="orientation"
+                    bindLabel="name"
+                    bindValue="id"
+                    placeholder="Seleccione"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('orientation'),
+                      'is-valid': isControlValid('orientation')
+                    }"
+                  >
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      {{ item.name }}
+                    </ng-template>
+                  </ng-select>
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('orientation')"
+                  >
+                    Orientación ingresada correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'orientation')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('orientation')?.errors?.serverError"
+                  >
+                    {{ editForm.get("orientation")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Código</label>
+                  <input
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    formControlName="template_code"
+                    name="name-customer"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('template_code'),
+                      'is-valid': isControlValid('template_code')
+                    }"
+                  />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('template_code')"
+                  >
+                    Código ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'template_code')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('template_code')?.errors?.serverError"
+                  >
+                    {{ editForm.get("template_code")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Márgen superior</label>
+                  <input
+                    type="number"
+                    id="name"
+                    class="form-control"
+                    formControlName="margin_top"
+                    placeholder="(px)"
+                    name="name-customer"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('margin_top'),
+                      'is-valid': isControlValid('margin_top')
+                    }"
+                  />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('margin_top')"
+                  >
+                    Márgen superior ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'margin_top')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'margin_top')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('margin_top')?.errors?.serverError"
+                  >
+                    {{ editForm.get("margin_top")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Márgen inferior</label>
+                  <input
+                    type="number"
+                    id="name"
+                    class="form-control"
+                    formControlName="margin_bottom"
+                    placeholder="(px)"
+                    name="name-customer"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('margin_bottom'),
+                      'is-valid': isControlValid('margin_bottom')
+                    }"
+                  />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('margin_bottom')"
+                  >
+                    Márgen inferior ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'margin_bottom')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'margin_bottom')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('margin_bottom')?.errors?.serverError"
+                  >
+                    {{ editForm.get("margin_bottom")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Márgen izquierdo</label>
+                  <input
+                    type="number"
+                    id="name"
+                    class="form-control"
+                    formControlName="margin_left"
+                    placeholder="(px)"
+                    name="name-customer"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('margin_left'),
+                      'is-valid': isControlValid('margin_left')
+                    }"
+                  />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('margin_left')"
+                  >
+                    Márgen izquierdo ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'margin_left')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'margin_left')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('margin_left')?.errors?.serverError"
+                  >
+                    {{ editForm.get("margin_left")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name">Márgen derecho</label>
+                  <input
+                    type="number"
+                    id="name"
+                    class="form-control"
+                    formControlName="margin_right"
+                    placeholder="(px)"
+                    name="name-customer"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('margin_right'),
+                      'is-valid': isControlValid('margin_right')
+                    }"
+                  />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('margin_right')"
+                  >
+                    Márgen derecho ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'margin_right')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'margin_right')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('margin_right')?.errors?.serverError"
+                  >
+                    {{ editForm.get("margin_right")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="name">Contenido</label>
+                  <ckeditor
+                    name="myckeditor"
+                    required
+                    [config]="ckeConfig"
+                    debounce="500"
+                    formControlName="html"
+                    (ngModelChange)="onChange($event)"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('margin_right'),
+                      'is-valid': isControlValid('margin_right')
+                    }"
+                  >
+                  </ckeditor>
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('margin_right')"
+                  >
+                    Contenido ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'margin_right')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('margin_right')?.errors?.serverError"
+                  >
+                    {{ editForm.get("margin_right")?.errors?.serverError }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 d-flex flex-row-reverse flex-column mt-2">
+              <button
+                (click)="submit()"
+                [disabled]="loading"
+                type="submit"
+                class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                rippleEffect
+              >
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm mr-1"
+                ></span>
+                Guardar
+              </button>
+            </div>
+          </form>
+          <!-- users edit account form ends -->
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="myModalLabel1">Cámara</h4>
+  <button
+    type="button"
+    class="close"
+    (click)="modal.dismiss('Cross click')"
+    aria-label="Close"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" tabindex="0" ngbAutofocus>
+  <form>
+    <div class="row">
+      <div
+        *ngIf="mostrarWebcam == true && showCapture == false"
+        class="col-lg-12 col-md-12 col-sm-12"
+      >
+        <div class="d-flex justify-content-center mb-2">
+          <webcam
+            [height]="hexp"
+            [width]="wexp"
+            [trigger]="triggerObservable"
+            (imageCapture)="handleImage($event)"
+            [switchCamera]="nextWebcamObservable"
+            [imageQuality]="1"
+            (cameraSwitched)="cameraSwitched($event)"
+            (initError)="handleInitError($event)"
+          ></webcam>
+        </div>
+      </div>
+      <div
+        class="col-lg-12 col-md-6"
+        *ngIf="showCapture == true || croppedResult"
+      >
+        <div class="d-flex justify-content-center mb-2">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <strong> Imágen previa </strong>
+              <angular-cropper
+                #angularCropper
+                [cropperOptions]="{
+                  checkCrossOrigin: true
+                }"
+                [imageUrl]="imagenWebcam.imageAsDataUrl"
+              ></angular-cropper>
+            </div>
+            <div *ngIf="croppedResult" class="col-lg-6 col-md-6 col-sm-6">
+              <strong> Imágen final </strong>
+              <img width="350px" height="300px" [src]="croppedResult" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-md-6">
+        <div class="d-flex justify-content-center">
+          <div class="px-2">
+            <button
+              *ngIf="showCapture == true"
+              class="btn btn-danger"
+              (click)="getCroppedImage()"
+            >
+              Recortar
+            </button>
+          </div>
+          <div>
+            <button
+              *ngIf="mostrarWebcam == true && showCapture == false"
+              class="btn btn-success"
+              (click)="triggerCaptura()"
+            >
+              Tomar foto
+            </button>
+          </div>
+          <div class="px-2">
+            <button
+              *ngIf="showCapture == true"
+              class="btn btn-success"
+              (click)="showCamera()"
+            >
+              Tomar nuevamente
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-light" (click)="modal.close()">
+    Cancelar
+  </button>
+  <button
+    [disabled]="!croppedResult"
+    type="submit"
+    class="btn btn-primary mr-1"
+    (click)="submit()"
+    rippleEffect
+  >
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span
+    >Guardar
+  </button>
+</div>

@@ -10,6 +10,7 @@ import { IspContract } from 'core/models/isp/commercial/ispcontract.model';
 export class IspContractService {
     API: string;
     API_SERVICE_URL: string;
+    API_EXTERNAL_SERVICE_URL: string;
     /**
      *
      * @param {HttpClient} _http
@@ -19,6 +20,7 @@ export class IspContractService {
 
     constructor(private _http: HttpClient) {
         this.API_SERVICE_URL = `${this.REST_API}/ispcontract`;
+        this.API_EXTERNAL_SERVICE_URL = `${this.REST_API}/contract`;
     }
 
     getContractId(id: string): Observable<any> {
@@ -64,6 +66,14 @@ export class IspContractService {
         );
     }
 
+    getBreakDay(): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/breakday`).pipe(
+            mergeMap(res => {
+                return of(res.obj);
+            })
+        );
+    }
+
 
     getPlans(last_mile_id: string): Observable<any> {
         return this._http.get<any>(`${this.API_SERVICE_URL}/plan/${last_mile_id}`).pipe(
@@ -89,6 +99,14 @@ export class IspContractService {
         );
     }
 
+    getContractTemplateSignature(templateId: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/templates/signature/${templateId}`).pipe(
+            mergeMap(res => {
+                return of(res.obj);
+            })
+        );
+    }
+
     getAnotherProviders(): Observable<any> {
         return this._http.get<any>(`${this.API_SERVICE_URL}/anotherprovider`).pipe(
             mergeMap(res => {
@@ -97,5 +115,90 @@ export class IspContractService {
         );
     }
 
+
+    getContactContract(customerId: string, contractId: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/contact/${customerId}/${contractId}/edit`);
+    }
+
+    createContactContract(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+        return this._http.post<any>(`${this.API_SERVICE_URL}/contact/store`, data, {
+            headers: httpHeaders,
+        });
+    }
+
+    putSignatureActive(obj: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set('Content-Type', 'application/json');
+        return this._http.put(this.API_SERVICE_URL + `/signature/active/${obj.id}`, obj, { headers: httpHeaders });
+    }
+
+    putSignatureRequired(obj: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set('Content-Type', 'application/json');
+        return this._http.put(this.API_SERVICE_URL + `/signature/required/${obj.id}`, obj, { headers: httpHeaders });
+    }
+
+    generateContract(obj: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set('Content-Type', 'application/json');
+        return this._http.put(this.API_SERVICE_URL + `/generate/contract/${obj.contract_template_id}`, obj, { headers: httpHeaders });
+    }
+
+    getLinkGenerated(contractId: any, contractTemplateId: any): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/generate/link/${contractId}/${contractTemplateId}`).pipe(
+            mergeMap(res => {
+                return of(res.obj);
+            })
+        );
+    }
+
+    getContractSignedCustomer(contractId: string, contractTemplateId: string, tokenId: string, expire: string, signature: string): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set('Content-Type', 'application/json');
+        return this._http.post<any>(`${this.API_EXTERNAL_SERVICE_URL}/signed/${contractId}` + `/${contractTemplateId}` + `/${tokenId}` + `/?expires=${expire}&signature=${signature}`, { 'contractId': contractId, 'contractTemplateId': contractTemplateId, 'tokenId': tokenId, headers: httpHeaders });
+    }
+
+    downloadPdf(contractId: any, contractTemplateId: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set('Accept', `application/octet-stream`);
+        return this._http.get(`${this.API_SERVICE_URL}/pdf/${contractTemplateId}`, { headers: httpHeaders, responseType: "blob" }).pipe(
+            map((report: any) => {
+                const a = document.createElement('a');
+                document.body.appendChild(a);
+                const blob: any = new Blob([report], { type: 'octet/stream' });
+                const url = URL.createObjectURL(blob);
+                a.href = url;
+                a.download = `${contractId}.pdf`;
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                return url;
+            })
+        );
+    }
+
+    saveSignature(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        return this._http.post<any>(`${this.API_EXTERNAL_SERVICE_URL}/signature/save`, data);
+    }
+
+    finishSignature(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        return this._http.post<any>(`${this.API_EXTERNAL_SERVICE_URL}/signature/finish`, data);
+    }
+
+    getContractSigned(id: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/pdf/signed/${id}`);
+    }
+
+    uploadContract(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+        return this._http.post<any>(`${this.API_SERVICE_URL}/updload/contract`, data, {
+            headers: httpHeaders,
+        });
+    }
 
 }

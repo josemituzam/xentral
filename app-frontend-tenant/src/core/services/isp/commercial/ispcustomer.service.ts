@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from 'environments/environment';
-import { Observable } from "rxjs";
+import { catchError, map, mergeMap, expand, switchMap, tap } from 'rxjs/operators';
+import { concat, Observable, of, Subject, throwError } from 'rxjs';
 import { IspCustomer } from 'core/models/isp/commercial/ispcustomer.model';
 
 
@@ -32,11 +33,14 @@ export class IspCustomerService {
         });
     }
 
-    uploadContent(data: any): Observable<any> {
-        // Note: Add headers if needed (tokens/bearer)
+    update(data: IspCustomer): Observable<any> {
         const httpHeaders = new HttpHeaders();
-        httpHeaders.set('Content-Type', 'multipart/form-data');
-        return this._http.post<any>(`${this.API_SERVICE_URL}/documents`, data, { headers: httpHeaders });
+        httpHeaders.set("Content-Type", "application/json");
+        return this._http.put(
+            `${this.API_SERVICE_URL}/${data.id}/update`,
+            data,
+            { headers: httpHeaders }
+        );
     }
 
     /**
@@ -56,5 +60,42 @@ export class IspCustomerService {
     getContactCustomer(id: string): Observable<any> {
         return this._http.get<any>(`${this.API_SERVICE_URL}/contact/${id}/edit`);
     }
+    getFiles(customerId: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/files/${customerId}`);
+    }
 
+
+    updateFiles(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+        return this._http.post<any>(`${this.API_SERVICE_URL}/files/update`, data, {
+            headers: httpHeaders,
+        });
+    }
+
+
+    validateFile(customerId: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/files/${customerId}/validate`);
+    }
+
+    validateContact(customerId: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/contact/${customerId}/validate`);
+    }
+
+    validateCustomer(ide: string, type: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/customer/${ide}/${type}/validate`);
+    }
+
+    /*  validateCustomer(term: string = null, type: string): Observable<any> {
+          return this._http
+              .get<any>(`${this.API_SERVICE_URL}/customer/validate?q=` + term + '&type=' + type)
+              .pipe(map(resp => {
+                  if (resp.Error) {
+                      throwError(resp.Error);
+                  } else {
+                      return resp;
+                  }
+              })
+              );
+      }*/
 }

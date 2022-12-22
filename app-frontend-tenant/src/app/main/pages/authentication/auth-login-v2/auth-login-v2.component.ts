@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 import { CoreConfigService } from '@core/services/config.service';
 import { AuthenticationService } from 'app/auth/service';
 import { User } from 'app/auth/models';
-
+import { CoreMenuService } from '@core/components/core-menu/core-menu.service';
+import { menu } from 'app/menu/menu';
 
 @Component({
   selector: 'app-auth-login-v2',
@@ -43,7 +44,8 @@ export class AuthLoginV2Component implements OnInit {
     private _authService: AuthenticationService,
     private _formBuilder: UntypedFormBuilder,
     private _route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private _coreMenuService: CoreMenuService,
   ) {
     this._unsubscribeAll = new Subject();
 
@@ -96,10 +98,9 @@ export class AuthLoginV2Component implements OnInit {
         return of(null);
       }))
       .subscribe((user: User) => {
-
         if (user) {
-          this._router.navigate(['/manager/user/list']);
-          //this._router.navigate(['/request-domain/list']);
+          this._coreMenuService.setCurrentMenu('main');
+          this._router.navigate(['/manager/service']);
         }
       });
 

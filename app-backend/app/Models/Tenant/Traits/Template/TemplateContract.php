@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant\Traits\Template;
 
+use App\Models\Tenant\Traits\Template\Traits\TemplateContractRules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
@@ -13,6 +14,7 @@ use Spatie\Activitylog\Traits\CausesActivity;
 class TemplateContract extends Model
 {
     use
+        TemplateContractRules,
         HasFactory,
         Notifiable,
         Uuids,
@@ -22,6 +24,7 @@ class TemplateContract extends Model
 
     protected $fillable = [
         'name',
+        'path',
         'template_code',
         'orientation',
         'html',
@@ -30,6 +33,9 @@ class TemplateContract extends Model
         'margin_top',
         'margin_right',
         'size',
-        'orderBy'
+        'orderBy',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 }

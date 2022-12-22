@@ -12,8 +12,6 @@ use Spatie\Activitylog\Traits\CausesActivity;
 
 class IspLocation extends Model
 {
-    use HasFactory;
-
     use
         HasFactory,
         Notifiable,

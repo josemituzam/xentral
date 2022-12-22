@@ -103,12 +103,12 @@
           [rowHeight]="75"
           class="bootstrap core-bootstrap"
           [limit]="selectedOption"
-          [columnMode]="ColumnMode.force"
+          columnMode="force"
           [headerHeight]="50"
           [footerHeight]="50"
           [scrollbarH]="true"
         >
-          <ngx-datatable-column name="Name" [width]="200">
+          <ngx-datatable-column name="Name" prop="fullname" [width]="300">
             <ng-template let-column="column" ngx-datatable-header-template>
               Cliente
             </ng-template>
@@ -142,7 +142,7 @@
                 </button>
               </span>
               <span *ngIf="row.type_people == 'PJ'">
-                {{ row.name_company }}
+                {{ row.fullname }}
                 <ng-template #infoCompany>
                   <table>
                     <tr>
@@ -223,7 +223,11 @@
               </div>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Acciones" [width]="40" [sortable]="false">
+          <ngx-datatable-column
+            name="Acciones"
+            [width]="100"
+            [sortable]="false"
+          >
             <ng-template ngx-datatable-cell-template let-row="row">
               <div ngbDropdown container="body">
                 <button

@@ -56,7 +56,7 @@ class IspSectorController extends Controller
                 $param = array(0 => '=');
                 $type = 0;
             }
-            $sector = IspSector::with(['location'])->where('deleted_at', '=', null);
+            $sector = IspSector::with(['getLocation'])->where('deleted_at', '=', null);
             $Filtred = $helpers->filter($sector, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
                     return $query->when($request->filled('q'), function ($query) use ($request) {
@@ -157,7 +157,7 @@ class IspSectorController extends Controller
      */
     public function edit($id)
     {
-        $objPlan = IspSector::with('location')->find($id);
+        $objPlan = IspSector::with('getLocation')->find($id);
 
         return response()->json([
             'objSector'  => $objPlan,

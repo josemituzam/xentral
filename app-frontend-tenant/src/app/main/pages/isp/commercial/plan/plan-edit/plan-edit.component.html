@@ -26,7 +26,32 @@
                     class="form-control"
                     formControlName="name"
                     name="website"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('name'),
+                      'is-valid': isControlValid('name')
+                    }"
                   />
+                  <div class="valid-feedback" *ngIf="isControlValid('name')">
+                    Nombre ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'name')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'name')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('name')?.errors?.serverError"
+                  >
+                    {{ editForm.get("name")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-12 col-md-12">
@@ -38,7 +63,29 @@
                       id="basicTextarea"
                       formControlName="description"
                       rows="3"
+                      [ngClass]="{
+                        'is-invalid': isControlInvalid('description'),
+                        'is-valid': isControlValid('description')
+                      }"
                     ></textarea>
+                    <div
+                      class="valid-feedback"
+                      *ngIf="isControlValid('description')"
+                    >
+                      Descripción ingresada correctamente
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="controlHasError('maxlength', 'description')"
+                    >
+                      {{ "Máximo: " }} 299
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="editForm.get('description')?.errors?.serverError"
+                    >
+                      {{ editForm.get("description")?.errors?.serverError }}
+                    </div>
                   </fieldset>
                 </div>
               </div>
@@ -53,11 +100,33 @@
                     bindLabel="name"
                     bindValue="id"
                     placeholder="Seleccione"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('last_mile_id'),
+                      'is-valid': isControlValid('last_mile_id')
+                    }"
                   >
                     <ng-template ng-option-tmp ng-label-tmp let-item="item">
                       {{ item.name }}
                     </ng-template>
                   </ng-select>
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('last_mile_id')"
+                  >
+                    Última milla ingresada correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'last_mile_id')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('last_mile_id')?.errors?.serverError"
+                  >
+                    {{ editForm.get("last_mile_id")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-2 col-md-6">
@@ -65,11 +134,39 @@
                   <label for="website">Subida</label>
                   <input
                     id="website"
-                    type="text"
+                    type="number"
                     class="form-control"
                     formControlName="increase"
                     name="website"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('increase'),
+                      'is-valid': isControlValid('increase')
+                    }"
                   />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('increase')"
+                  >
+                    Subida ingresada correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'increase')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'increase')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('increase')?.errors?.serverError"
+                  >
+                    {{ editForm.get("increase")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-2 col-md-6">
@@ -83,11 +180,33 @@
                     formControlName="type_increase"
                     bindValue="id"
                     placeholder="Seleccione"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('type_increase'),
+                      'is-valid': isControlValid('type_increase')
+                    }"
                   >
                     <ng-template ng-option-tmp ng-label-tmp let-item="item">
                       {{ item.name }}
                     </ng-template>
                   </ng-select>
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('type_increase')"
+                  >
+                    Tipo ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'type_increase')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('type_increase')?.errors?.serverError"
+                  >
+                    {{ editForm.get("type_increase")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-2 col-md-6">
@@ -95,11 +214,39 @@
                   <label for="website">Bajada</label>
                   <input
                     id="website"
-                    type="text"
+                    type="number"
                     class="form-control"
                     formControlName="downfall"
                     name="website"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('downfall'),
+                      'is-valid': isControlValid('downfall')
+                    }"
                   />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('downfall')"
+                  >
+                    Bajada ingresada correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'downfall')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'downfall')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('downfall')?.errors?.serverError"
+                  >
+                    {{ editForm.get("downfall")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-2 col-md-6">
@@ -113,11 +260,33 @@
                     formControlName="type_downfall"
                     bindValue="id"
                     placeholder="Seleccione"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('type_downfall'),
+                      'is-valid': isControlValid('type_downfall')
+                    }"
                   >
                     <ng-template ng-option-tmp ng-label-tmp let-item="item">
                       {{ item.name }}
                     </ng-template>
                   </ng-select>
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('type_downfall')"
+                  >
+                    Tipo ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'type_downfall')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('type_downfall')?.errors?.serverError"
+                  >
+                    {{ editForm.get("type_downfall")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
 
@@ -132,11 +301,33 @@
                     formControlName="compartition"
                     bindValue="id"
                     placeholder="Seleccione"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('compartition'),
+                      'is-valid': isControlValid('compartition')
+                    }"
                   >
                     <ng-template ng-option-tmp ng-label-tmp let-item="item">
                       {{ item.name }}
                     </ng-template>
                   </ng-select>
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('compartition')"
+                  >
+                    Compartición ingresada correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'compartition')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('compartition')?.errors?.serverError"
+                  >
+                    {{ editForm.get("compartition")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
 
@@ -155,12 +346,42 @@
                   <label for="address-1">Costo de instalación</label>
                   <input
                     id="address-1"
-                    type="text"
+                    type="number"
                     class="form-control"
                     formControlName="installation_cost"
                     placeholder="($)"
                     name="address"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('installation_cost'),
+                      'is-valid': isControlValid('installation_cost')
+                    }"
                   />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('installation_cost')"
+                  >
+                    Costo de instalación ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'installation_cost')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'installation_cost')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      editForm.get('installation_cost')?.errors?.serverError
+                    "
+                  >
+                    {{ editForm.get("installation_cost")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
 
@@ -169,12 +390,40 @@
                   <label for="address-1">Costo mensual</label>
                   <input
                     id="address-1"
-                    type="text"
+                    type="number"
                     class="form-control"
                     formControlName="month_cost"
                     placeholder="($)"
                     name="address"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('month_cost'),
+                      'is-valid': isControlValid('month_cost')
+                    }"
                   />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('month_cost')"
+                  >
+                    Costo de instalación ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'month_cost')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'month_cost')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('month_cost')?.errors?.serverError"
+                  >
+                    {{ editForm.get("month_cost")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
 
@@ -183,12 +432,40 @@
                   <label for="address-1">Monto de penalidad</label>
                   <input
                     id="address-1"
-                    type="text"
+                    type="number"
                     class="form-control"
                     formControlName="penalty_amount"
                     placeholder="($)"
                     name="address"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('penalty_amount'),
+                      'is-valid': isControlValid('penalty_amount')
+                    }"
                   />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('penalty_amount')"
+                  >
+                    Costo de instalación ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'penalty_amount')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'penalty_amount')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('penalty_amount')?.errors?.serverError"
+                  >
+                    {{ editForm.get("penalty_amount")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
 
@@ -197,12 +474,46 @@
                   <label for="address-1">Costo de metro adicional</label>
                   <input
                     id="address-1"
-                    type="text"
+                    type="number"
                     class="form-control"
                     formControlName="additional_meter_cost"
                     placeholder="($)"
                     name="address"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('additional_meter_cost'),
+                      'is-valid': isControlValid('additional_meter_cost')
+                    }"
                   />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('additional_meter_cost')"
+                  >
+                    Costo de metro adicional ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'additional_meter_cost')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      controlHasError('maxlength', 'additional_meter_cost')
+                    "
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      editForm.get('additional_meter_cost')?.errors?.serverError
+                    "
+                  >
+                    {{
+                      editForm.get("additional_meter_cost")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
 
@@ -221,34 +532,77 @@
                   <label for="address-1">Metros gratis</label>
                   <input
                     id="address-1"
-                    type="text"
+                    type="number"
                     class="form-control"
                     formControlName="meters_free"
                     name="address"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('meters_free'),
+                      'is-valid': isControlValid('meters_free')
+                    }"
                   />
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('meters_free')"
+                  >
+                    Metros gratis ingresado correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('maxlength', 'meters_free')"
+                  >
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="editForm.get('meters_free')?.errors?.serverError"
+                  >
+                    {{ editForm.get("meters_free")?.errors?.serverError }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-6 col-md-6">
                 <div class="form-group">
                   <label for="address-2">Permanencia mínima</label>
                   <ng-select
-                  [items]="minimunPermanenceList"
-                  [clearable]="false"
-                  name="selectminimun"
-                  bindLabel="name"
-                  formControlName="minimun_permanence_id"
-                  bindValue="id"
-                  placeholder="Seleccione"
-                >
-                  <ng-template
-                    ng-option-tmp
-                    ng-label-tmp
-                    let-item="item"
+                    [items]="minimunPermanenceList"
+                    [clearable]="false"
+                    name="selectminimun"
+                    bindLabel="name"
+                    formControlName="minimun_permanence_id"
+                    bindValue="id"
+                    placeholder="Seleccione"
+                    [ngClass]="{
+                      'is-invalid': isControlInvalid('minimun_permanence_id'),
+                      'is-valid': isControlValid('minimun_permanence_id')
+                    }"
                   >
-                    {{ item.name }}
-                  </ng-template>
-                </ng-select>
-
+                    <ng-template ng-option-tmp ng-label-tmp let-item="item">
+                      {{ item.name }}
+                    </ng-template>
+                  </ng-select>
+                  <div
+                    class="valid-feedback"
+                    *ngIf="isControlValid('minimun_permanence_id')"
+                  >
+                    Compartición ingresada correctamente
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="controlHasError('required', 'minimun_permanence_id')"
+                  >
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      editForm.get('minimun_permanence_id')?.errors?.serverError
+                    "
+                  >
+                    {{
+                      editForm.get("minimun_permanence_id")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
               <div class="col-12 flex-column mt-2">

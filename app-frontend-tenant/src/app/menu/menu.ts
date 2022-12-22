@@ -16,28 +16,28 @@ export const menu: CoreMenu[] = [
   {
     id: 'apps',
     type: 'section',
-    title: 'Apps & Pages',
+    title: 'Configuraciones',
     translate: 'MENU.APPS.SECTION',
     icon: 'package',
     children: [
       {
         id: 'companies',
-        title: 'Company',
+        title: 'Empresa',
         translate: 'MENU.APPS.COMPANY.COLLAPSIBLE',
         type: 'collapsible',
         icon: 'briefcase',
         children: [
           {
             id: 'edit',
-            title: 'Edit',
+            title: 'Datos',
             translate: 'MENU.APPS.COMPANY.EDIT',
             type: 'item',
             icon: 'circle',
-            url: 'manager/company'
+            url: 'manager/company/index'
           },
           {
             id: 'branch',
-            title: 'Branch',
+            title: 'Sucursales',
             translate: 'MENU.APPS.COMPANY.BRANCH',
             type: 'item',
             icon: 'circle',
@@ -45,7 +45,7 @@ export const menu: CoreMenu[] = [
           },
           {
             id: 'sales',
-            title: 'Sales',
+            title: 'Puntos de venta',
             translate: 'MENU.APPS.COMPANY.SALES',
             type: 'item',
             icon: 'circle',
@@ -53,17 +53,17 @@ export const menu: CoreMenu[] = [
           }
         ]
       },
-      /*{
-        id: 'companies',
-        title: 'Company',
-        translate: 'MENU.APPS.COMPANY',
+      {
+        id: 'zonessales',
+        title: 'Zonas comerciales',
+        translate: 'MENU.APPS.ZONESALE',
         type: 'item',
-        icon: 'user',
-        url: 'apps/user/user-list'
-      }, */
+        icon: 'framer',
+        url: 'manager/zone-sale/list'
+      },
       {
         id: 'users',
-        title: 'User',
+        title: 'Usuarios',
         translate: 'MENU.APPS.USER',
         type: 'item',
         icon: 'user',

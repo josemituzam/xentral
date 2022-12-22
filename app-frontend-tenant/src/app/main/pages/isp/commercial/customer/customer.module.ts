@@ -33,6 +33,8 @@ import { NoteListComponent } from 'app/main/pages/trait/note/note-list/note-list
 import { NoteEditComponent } from 'app/main/pages/trait/note/note-edit/note-edit-modal.component';
 import { DocumentListComponent } from 'app/main/pages/trait/document/document-list/document-list.component';
 import { DocumentEditComponent } from 'app/main/pages/trait/document/document-edit/document-edit.component';
+import { CustomerCameraComponent } from './customer-camera/customer-camera.component';
+import { FileModalComponent } from './customer-documentation/file-modal/file-modal.component';
 
 // routing
 const routes: Routes = [
@@ -51,7 +53,7 @@ const routes: Routes = [
 ];
 export const options: Partial<null | IConfig> | (() => Partial<IConfig>) = null;
 @NgModule({
-  declarations: [CustomerDocumentationComponent, CustomerListComponent, CustomerEditComponent, NoteListComponent, NoteEditComponent, DocumentListComponent, DocumentEditComponent, CustomerContactsComponent, CustomerCreateComponent],
+  declarations: [FileModalComponent, CustomerCameraComponent, CustomerDocumentationComponent, CustomerListComponent, CustomerEditComponent, NoteListComponent, NoteEditComponent, DocumentListComponent, DocumentEditComponent, CustomerContactsComponent, CustomerCreateComponent],
   imports: [
     NgxIntlTelInputModule,
     NgxMaskModule.forRoot(),

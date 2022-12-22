@@ -17,8 +17,6 @@ class ApiR2 extends Model
         'account_id',
         'access_key_id',
         'access_key_secret',
-        'key_image_name',
-        'key_file_name',
         'short_code',
         'long_code',
     ];

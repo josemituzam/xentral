@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant\File;
 
+use App\Models\Tenant\Traits\Status\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
@@ -13,6 +14,7 @@ class File extends Model
         Uuids;
 
     protected $fillable = [
+        'name',
         'contextable_id',
         'filename',
         'path',
@@ -20,5 +22,11 @@ class File extends Model
         'type',
         'short_code',
         'long_code',
+        'status_id'
     ];
+
+    public function getStatus()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
 }

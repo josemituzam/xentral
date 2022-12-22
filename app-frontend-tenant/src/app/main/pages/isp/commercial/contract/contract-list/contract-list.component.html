@@ -92,55 +92,110 @@
           [footerHeight]="50"
           [scrollbarH]="true"
         >
-          <ngx-datatable-column
-            name="Fecha"
-            [width]="100"
-          ></ngx-datatable-column>
-
-          <ngx-datatable-column
-            name="General"
-            [width]="100"
-          ></ngx-datatable-column>
-
-          <ngx-datatable-column
-            name="Plan"
-            [width]="100"
-          ></ngx-datatable-column>
-
-          <ngx-datatable-column
-            name="Estado"
-            [width]="100"
-          ></ngx-datatable-column>
-
-          <ngx-datatable-column name="Activo" prop="is_active" [width]="50">
+          <ngx-datatable-column name="General" [width]="50">
             <ng-template
-              ngx-datatable-cell-template
               let-rowIndex="rowIndex"
               let-value="value"
               let-row="row"
+              ngx-datatable-cell-template
             >
-              <div class="custom-control custom-switch custom-switch-success">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="customSwitch{{ rowIndex }}"
-                  [checked]="row.is_active == 1 ? true : false"
-                  (change)="onCheckboxChange($event, row.id)"
-                />
-                <label
-                  class="custom-control-label"
-                  for="customSwitch{{ rowIndex }}"
-                >
-                  <span class="switch-icon-left"
-                    ><i data-feather="check"></i
-                  ></span>
-                  <span class="switch-icon-right"
-                    ><i data-feather="x"></i
-                  ></span>
-                </label>
-              </div>
+              <table>
+                <tr>
+                  <td>
+                    <strong> Cliente:</strong>
+                    {{ row?.get_customer?.fullname }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong> Identificación: </strong
+                    >{{ row?.get_customer?.identification }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong> Sector: </strong>{{ row?.get_sector?.sector }}
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong> IPV4:</strong> No asignada</td>
+                </tr>
+              </table>
             </ng-template>
           </ngx-datatable-column>
+          <ngx-datatable-column name="Plan" [width]="200">
+            <ng-template
+              let-rowIndex="rowIndex"
+              let-value="value"
+              let-row="row"
+              ngx-datatable-cell-template
+            >
+              <table>
+                <tr>
+                  <td>
+                    <strong
+                      >{{
+                        row?.get_contract_plan?.get_plan?.get_last_mile?.name
+                      }}:</strong
+                    >
+                    {{ row?.get_contract_plan?.get_plan?.name }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong> Subida: </strong
+                    >{{ row?.get_contract_plan?.get_plan?.increase }}
+                    {{ row?.get_contract_plan?.get_plan?.type_increase }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong> Bajada: </strong
+                    >{{ row?.get_contract_plan?.get_plan?.downfall }}
+                    {{ row?.get_contract_plan?.get_plan?.type_downfall }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong> Compartición:</strong>
+                    {{ row?.get_contract_plan?.compartition }}
+                  </td>
+                </tr>
+              </table>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Detalles" [width]="50">
+            <ng-template
+              let-rowIndex="rowIndex"
+              let-value="value"
+              let-row="row"
+              ngx-datatable-cell-template
+            >
+              <table>
+                <tr>
+                  <td>
+                    <strong> Dia de corte: </strong>
+                    <div
+                      *ngFor="let item of hack(row?.break_day); let i = index"
+                      [ngClass]="'badge badge-warning'"
+                    >
+                      {{ item?.name }}
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong> Estado: </strong>
+                    <div [ngClass]="'badge badge-' + row?.get_status?.class">
+                      {{ row?.get_status?.name }}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </ng-template>
+          </ngx-datatable-column>
+
           <ngx-datatable-column name="Acciones" [width]="40" [sortable]="false">
             <ng-template ngx-datatable-cell-template let-row="row">
               <div ngbDropdown container="body">
@@ -156,25 +211,47 @@
                   ></span>
                 </button>
                 <div ngbDropdownMenu>
-                  <!-- <a
-                    routerLink="/apps/user/user-view/{{ row.id }}"
+                  <a
                     ngbDropdownItem
-                    ><span
-                      [data-feather]="'file-text'"
-                      [size]="16"
-                      [class]="'mr-50'"
-                    ></span>
-                    Detalles</a
-                  > --><a
-                    ngbDropdownItem
-                    routerLink="/isp/plan/edit/{{ row.id }}"
+                    routerLink="/isp/contract/edit/{{ row.id }}"
                     ><span
                       [data-feather]="'edit'"
                       [size]="16"
                       [class]="'mr-50'"
                     ></span>
                     Editar</a
-                  ><a (click)="delete(row.id)" ngbDropdownItem
+                  >
+                  <a
+                    ngbDropdownItem
+                    *ngIf="row?.get_customer_contract_template?.is_signed == 0"
+                    (click)="contractSigned(row.id, 'uploadContract')"
+                    ><span
+                      [data-feather]="'file-text'"
+                      [size]="16"
+                      [class]="'mr-50'"
+                    ></span>
+                    Firmar
+                  </a>
+                  <a
+                    ngbDropdownItem
+                    *ngIf="row?.get_customer_contract_template?.is_signed == 1"
+                    (click)="contractSigned(row.id, 'viewContract')"
+                    ><span
+                      [data-feather]="'eye'"
+                      [size]="16"
+                      [class]="'mr-50'"
+                    ></span>
+                    Ver contrato</a
+                  >
+                  <a ngbDropdownItem
+                    ><span
+                      [data-feather]="'info'"
+                      [size]="16"
+                      [class]="'mr-50'"
+                    ></span>
+                    Auditoría</a
+                  >
+                  <a (click)="delete(row.id)" ngbDropdownItem
                     ><span
                       [data-feather]="'trash'"
                       [size]="16"

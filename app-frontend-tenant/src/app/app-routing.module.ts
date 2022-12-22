@@ -27,9 +27,15 @@ export const routes: Routes = [
   },
 
   {
+    path: 'ext',
+    loadChildren: () => import('./main/pages/isp/commercial/contract/contract-signed/contract-signed.module').then(m => m.ContractSignedModule)
+  },
+
+  {
     path: 'isp',
     loadChildren: () => import('./main/pages/isp/isp.module').then(m => m.IspModule)
   },
+  
   /* {
      path: 'service',
      // canActivate: [AuthGuard],

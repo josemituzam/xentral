@@ -8,20 +8,19 @@ import {
 } from '@angular/forms';
 import Stepper from 'bs-stepper';
 import { DatePipe } from '@angular/common';
-import { Subject, of, Subscription, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, of, Subscription, Observable, concat, throwError } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, tap, map, filter } from 'rxjs/operators';
 import { FlatpickrOptions } from 'ng2-flatpickr';
 import { cloneDeep } from 'lodash';
-import { catchError, delay, finalize, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { IspCustomerService } from 'core/services/isp/commercial/ispcustomer.service';
 import { IspCustomer } from 'core/models/isp/commercial/ispcustomer.model';
-import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { CropperComponent } from 'angular-cropperjs';
-
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { CustomerCameraComponent } from '../customer-camera/customer-camera.component';
 @Component({
   selector: 'app-customer-create',
   templateUrl: './customer-create.component.html',
@@ -33,10 +32,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
-
-  public hexp = 500;
-  public wexp = 500;
-
 
   preferredCountries: CountryISO[] = [CountryISO.UnitedStates,
   CountryISO.UnitedKingdom];
@@ -57,91 +52,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   private modernVerticalWizardStepper: Stepper;
   private bsStepper;
 
-  public croppedResult: string;
-
-
-  @ViewChild('angularCropper') angularCrooper: CropperComponent;
-
-  // Hacer Toogle on/off
-  //  public loadingCamera = null;
-  public mostrarWebcam = false;
-  public permitirCambioCamara = true;
-  public multiplesCamarasDisponibles = false;
-  public dispositivoId: string;
-  public opcionesVideo: MediaTrackConstraints = {
-    //width: {ideal: 1024};
-    //height: {ideal: 576}
-  }
-  public titleCamera = 'Mostrar cámara';
-  // Errores al iniciar la cámara 
-  public errors: WebcamInitError[] = [];
-
-  // Ultima captura o foto 
-  public imagenWebcam: WebcamImage = null;
-
-  // Cada Trigger para una nueva captura o foto 
-  public trigger: Subject<void> = new Subject<void>();
-
-  // Cambiar a la siguiente o anterior cámara 
-  private siguienteWebcam: Subject<boolean | string> = new Subject<boolean | string>();
-
-  public showCapture = false;
-  public triggerCaptura(): void {
-    //this.imagenWebcam = null;
-    //this.mostrarWebcam = false;
-    this.showCapture = true;
-    this.trigger.next();
-  }
-
-  public toggleWebcam(): void {
-    // this.loadingCamera = false;
-    this.mostrarWebcam = !this.mostrarWebcam;
-    //this.imagenWebcam = null;
-    this.showCapture = false;
-
-    if (!this.mostrarWebcam) {
-      this.titleCamera = 'Mostrar cámara';
-    } else {
-      this.titleCamera = 'Ocultar cámara';
-    }
-
-    this.showCapture = false;
-    this.croppedResult = null;
-    //this.mostrarWebcam = false;
-  }
-
-  public getCroppedImage() {
-    this.croppedResult = this.angularCrooper.cropper.getCroppedCanvas().toDataURL();
-    this.titleCamera = "Tomar nuevamente"
-    this.editForm.get("contentFile").setValue(this.croppedResult);
-  }
-
-  public handleInitError(error: WebcamInitError): void {
-    this.errors.push(error);
-  }
-
-  public showNextWebcam(directionOnDeviceId: boolean | string): void {
-    this.siguienteWebcam.next(directionOnDeviceId);
-  }
-
-  public handleImage(imagenWebcam: WebcamImage): void {
-    console.info('Imagen de la webcam recibida: ', imagenWebcam);
-    this.imagenWebcam = imagenWebcam;
-  }
-
-  public cameraSwitched(dispositivoId: string): void {
-    console.log('Dispositivo Actual: ' + dispositivoId);
-    this.dispositivoId = dispositivoId;
-  }
-
-  public get triggerObservable(): Observable<void> {
-    return this.trigger.asObservable();
-  }
-
-  public get nextWebcamObservable(): Observable<boolean | string> {
-    return this.siguienteWebcam.asObservable();
-  }
-
+  public croppedResult = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 
   /**
    * Horizontal Wizard Stepper Next
@@ -225,10 +136,105 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
    * @param {Router} router
    * @param {UserEditService} _userEditService
    */
-  constructor(private datePipe: DatePipe, private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
+  constructor(private modalService: NgbModal, private datePipe: DatePipe, private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef, private _service: IspCustomerService) {
     this._unsubscribeAll = new Subject();
     this.urlLastValue = this.url.substr(this.url.lastIndexOf('/') + 1);
   }
+
+
+  ///////////////////////////////////////////////////////////
+  public loadingValidate = false;
+  public disableBtnIdentifier = false;
+  setType($event) {
+    if ($event.id == 'PTE') {
+      this.disableBtnIdentifier = true;
+    } else {
+      this.disableBtnIdentifier = false;
+    }
+    this.cdr.detectChanges();
+  }
+
+
+  validateCustomer() {
+    this.loadingValidate = true;
+    const ide = this.editForm.get('identification').value;
+    const type = this.editForm.get('type_identification').value;
+    const typePeople = this.editForm.get('type_people').value;
+    if (!ide) {
+
+      Swal.fire({
+        icon: 'error',
+        title: `No se ha digitado nada en el campo de identificación`,
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.loadingValidate = false;
+      this.cdr.detectChanges();
+      return;
+
+    }
+    this._service.validateCustomer(ide, type).subscribe(res => {
+      if (res) {
+        if (typePeople == 'PN') {
+
+          if (type == 'IDE') {
+            if (!res?.data?.error) {
+              var fullname = res?.data?.Nombres_y_apellidos;
+              var lastnameSplit = fullname?.split(' ', 2)
+              var lastname = lastnameSplit.join(' ');
+              this.editForm.get("lastname").setValue(lastname);
+
+              var firstnametArray = [];
+              var firstnameSplit = fullname?.split(' ');
+              for (let i = 2; i < firstnameSplit.length; i++) {
+                firstnametArray.push(firstnameSplit[i]);
+              }
+
+              var firstname = firstnametArray.join(' ');
+              this.editForm.get("firstname").setValue(firstname);
+            }
+          } else {
+            if (!res?.data?.error) {
+              var company = res?.data?.main[0];
+
+              var fullname = company?.agenteRepresentante;
+              var lastnameSplit = fullname?.split(' ', 2)
+              var lastname = lastnameSplit.join(' ');
+              this.editForm.get("lastname").setValue(lastname);
+
+              var firstnametArray = [];
+              var firstnameSplit = fullname?.split(' ');
+              for (let i = 2; i < firstnameSplit.length; i++) {
+                firstnametArray.push(firstnameSplit[i]);
+              }
+
+              var firstname = firstnametArray.join(' ');
+              this.editForm.get("firstname").setValue(firstname);
+
+            }
+          }
+
+
+        } else {
+
+        }
+
+
+
+        this.loadingValidate = false;
+        this.cdr.detectChanges();
+      }
+    }
+      , err => {
+        console.log("Estatus: ", err);
+        this.loadingValidate = false;
+        this.cdr.detectChanges();
+      }
+    );
+
+  }
+
+  ///////////////////////////////////////////////////////
 
   initForm() {
     if (this.activeField == false) {
@@ -243,25 +249,27 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         ],
         identification: [
           this.itemModel.identification,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         firstname: [
           this.itemModel.firstname,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         lastname: [
           this.itemModel.lastname,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         started_at: [
-          this.itemModel.started_at
+          this.itemModel.started_at,
+          Validators.compose([Validators.required]),
         ],
         type_gender: [
           this.itemModel.type_gender,
           Validators.compose([Validators.required]),
         ],
         address: [
-          this.itemModel.address
+          this.itemModel.address,
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         type_number: [
           this.itemModel.type_number,
@@ -269,11 +277,11 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         ],
         phone: [
           this.itemModel.phone,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         email: [
           this.itemModel.email,
-          Validators.compose([Validators.maxLength(100), Validators.email]),
+          Validators.compose([Validators.maxLength(100), Validators.required, Validators.email]),
         ],
         is_accounting: [
           this.itemModel.is_accounting
@@ -301,15 +309,16 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         ],
         identification: [
           this.itemModel.identification,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         name_company: [
           this.itemModel.name_company,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
 
         started_at: [
-          this.itemModel.started_at
+          this.itemModel.started_at,
+          Validators.compose([Validators.required]),
         ],
         address: [
           this.itemModel.address,
@@ -321,31 +330,46 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         ],
         phone: [
           this.itemModel.phone,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         email: [
           this.itemModel.email,
-          Validators.compose([Validators.maxLength(100), Validators.email]),
+          Validators.compose([Validators.maxLength(100), Validators.required, Validators.email]),
         ],
         is_accounting: [
           this.itemModel.is_accounting
         ],
         firstname_representative: [
           this.itemModel.firstname_representative,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
 
         lastname_representative: [
           this.itemModel.lastname_representative,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         phone_representative: [
           this.itemModel.phone_representative,
-          Validators.compose([Validators.required]),
+          Validators.compose([Validators.required, Validators.maxLength(100)]),
         ],
         contentFile: [""],
       });
     }
+  }
+
+  modalCamera() {
+    const modalRef = this.modalService.open(CustomerCameraComponent, {
+      centered: true,
+      backdrop: 'static',
+      size: 'lg' // size: 'xs' | 'sm' | 'lg' | 'xl'
+    });
+
+    modalRef.result.then((result) => {
+      if (result) {
+        this.croppedResult = result;
+        this.editForm.get("contentFile").setValue(result);
+      }
+    });
   }
 
 
@@ -445,6 +469,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       this.getTypeIdentification.push({ id: 'RUC', name: 'RUC' });
       this.activeField = true;
     }
+    this.croppedResult = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
     this.initForm();
     setTimeout(() => this.refresh = false, 1500);
     this.cdr.detectChanges();
@@ -486,7 +511,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   }
 
   nextStep() {
-    console.log("Holaa");
     this.horizontalWizardStepper.next();
   }
 
@@ -514,12 +538,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       })
     ).subscribe((res: any) => {
       if (res) {
-        console.log(res);
         this.itemModel = res.obj;
+        console.log(this.itemModel);
         this.loading = false;
         this.loadingWith = false;
         this.horizontalWizardStepper.next();
         this.setMessageSuccess("Guardado Correctamente")
+        this.cdr.detectChanges();
       }
     });
     this.subscriptions.push(sbCreate);
@@ -553,26 +578,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
-    WebcamUtil.getAvailableVideoInputs()
-      .then((mediaDevices: MediaDeviceInfo[]) => {
-        this.multiplesCamarasDisponibles = mediaDevices && mediaDevices.length > 1;
-      });
     this.horizontalWizardStepper = new Stepper(document.querySelector('#stepper1'), {});
-
-    /* this.verticalWizardStepper = new Stepper(document.querySelector('#stepper2'), {
-       linear: false,
-       animation: true
-     });
- 
-     this.modernWizardStepper = new Stepper(document.querySelector('#stepper3'), {
-       linear: false,
-       animation: true
-     });
- 
-     this.modernVerticalWizardStepper = new Stepper(document.querySelector('#stepper4'), {
-       linear: false,
-       animation: true
-     });*/
 
     this.bsStepper = document.querySelectorAll('.bs-stepper');
     this.contentHeader = {
@@ -596,6 +602,50 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     this.itemModel.clear();
     this.initForm();
   }
+
+  getValidateContact() {
+    this._service.validateContact(this.itemModel.id).subscribe(res => {
+      if (res) {
+        if (res.msg == '0') {
+          Swal.fire({
+            icon: 'error',
+            title: `Debe tener al menos un contacto`,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        } else {
+          this.horizontalWizardStepper.next();
+        }
+      }
+    }
+      , err => {
+        console.log("Estatus: ", err);
+      }
+    );
+  }
+
+
+  getValidateFile() {
+    this._service.validateFile(this.itemModel.id).subscribe(res => {
+      if (res) {
+        if (res.msg == '0') {
+          Swal.fire({
+            icon: 'error',
+            title: `Debe subir al menos un archivo`,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        } else {
+          this.horizontalWizardStepper.next();
+        }
+      }
+    }
+      , err => {
+        console.log("Estatus: ", err);
+      }
+    );
+  }
+
 
   getDate(): void {
     var started_at = this.editForm.get('started_at').value;
