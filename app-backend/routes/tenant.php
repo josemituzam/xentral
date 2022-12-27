@@ -46,7 +46,7 @@ Route::middleware([
 
 
     Route::group([
-        'prefix' => 'api/v1/client'
+        'prefix' => 'v1/client'
     ], function () {
         Route::post('auth/login', [AuthController::class, 'loginInTenant']);
         Route::post('contract/signed/{contract_id}/{contract_template_id}/{token_id}', [IspContractController::class, 'getCustomerContract'])->name('contractLink')->middleware('signed');
