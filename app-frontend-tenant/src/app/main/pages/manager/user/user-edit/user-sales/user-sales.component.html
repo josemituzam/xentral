@@ -1,31 +1,61 @@
+<form class="form-validate" [formGroup]="editForm">
+  <div class="row mt-1  d-flex justify-content-center">
+    <div class="col-lg-6 col-md-6">
+      <div class="form-group">
+        <label for="birth">Punto de venta</label>
+        <ng-select [items]="saleList" [clearable]="false" name="selectsale" formControlName="sale_id" bindLabel="name"
+          bindValue="id" placeholder="Seleccione">
+          <ng-template ng-option-tmp ng-label-tmp let-item="item">
+            {{ item?.get_branch?.name }}
+          </ng-template>
+        </ng-select>
+        <div class="valid-feedback" *ngIf="isControlValid('sale_id')">
+          Tipo de identificación ingresada correctamente
+        </div>
+        <div class="invalid-feedback" *ngIf="
+            controlHasError('required', 'sale_id')
+          ">
+          {{ "El elemento es requerido" }}
+        </div>
+        <div class="invalid-feedback" *ngIf="
+            editForm.get('sale_id')?.errors
+              ?.serverError
+          ">
+          {{
+          editForm.get("sale_id")?.errors
+          ?.serverError
+          }}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 d-flex align-items-center">
+      <button (click)="submit()" [disabled]="loading" type="submit" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+        rippleEffect>
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        Asignar
+      </button>
+    </div>
+  </div>
+</form>
+
+
+
 <div class="table-responsive">
   <table class="table">
     <thead>
       <tr>
         <th class="py-1">Punto de venta</th>
         <th class="py-1">Descripción</th>
-        <th class="py-1">Asignar</th>
+        <th class="py-1">Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of saleList; let i = index">
-        <td class="py-1">{{ item.branch_id }}</td>
-        <td class="py-1">{{ item.description }}</td>
+      <tr *ngFor="let item of userSaleList; let i = index">
+        <td class="py-1">{{ item.get_sale?.get_branch?.name }}</td>
+        <td class="py-1">{{ item.get_sale?.description }}</td>
         <td class="py-1">
-          <div class="custom-control custom-switch custom-switch-success">
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="customSwitch{{ i * 2 }}"
-              [checked]="item.is_active == 1 ? true : false"
-              (change)="setUserSale($event, item.id)"
-              [disabled]="isGenerated == 0 ? false : true"
-            />
-            <label class="custom-control-label" for="customSwitch{{ i * 2 }}">
-              <span class="switch-icon-left"><i data-feather="check"></i></span>
-              <span class="switch-icon-right"><i data-feather="x"></i></span>
-            </label>
-          </div>
+          <button type="button" (click)="deleteUserSale(item.id)" class="btn btn-icon btn-danger" rippleEffect>
+            <span [data-feather]="'trash'"></span></button>
         </td>
       </tr>
     </tbody>

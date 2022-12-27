@@ -54,5 +54,33 @@ export class UserDetailService {
         );
     }
 
+    getUserSales(user_id: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/user/sales/${user_id}`).pipe(
+            mergeMap(res => {
+                return of(res.obj);
+            })
+        );
+    }
+
+    createUserSale(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+        return this._http.post<any>(`${this.API_SERVICE_URL}/sale/store`, data, {
+            headers: httpHeaders,
+        });
+    } 
+
+    getZoneSale(): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/zonesales`).pipe(
+            mergeMap(res => {
+                return of(res.obj);
+            })
+        );
+    }
+
+    deleteUserSale(id: string): Observable<any> {
+        return this._http.delete<any>(`${this.API_SERVICE_URL}/user/sales/${id}/delete`);
+      }
+
 
 }

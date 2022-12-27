@@ -310,7 +310,7 @@ class RequestDomainController extends Controller
     protected function createBucketS3($objRequestDomain)
     {
         $objR2 = ApiR2::where('short_code', '=', 'PRO')->first();
-        $bucket_name = $objRequestDomain->domain_name;
+        /*$bucket_name = $objRequestDomain->domain_name;
         $account_id         = $objR2->account_id;
         $access_key_id      = $objR2->access_key_id;
         $access_key_secret  = $objR2->access_key_secret;
@@ -329,7 +329,7 @@ class RequestDomainController extends Controller
         $s3_client->createBucket(array(
             'Bucket' => $bucket_name,
         ));
-        $s3_client->waitUntil('BucketExists', array('Bucket' => $bucket_name));
+        $s3_client->waitUntil('BucketExists', array('Bucket' => $bucket_name)); */
 
       /*  $s3_client->putObject(array(
             'Bucket' => $bucket_name,

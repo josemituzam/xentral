@@ -3,6 +3,7 @@
 namespace App\Models\Tenant\Setting\Company;
 
 use App\Models\Tenant\Setting\Company\Traits\SaleRules;
+use App\Models\Tenant\Setting\Company\Branch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
@@ -35,4 +36,9 @@ class Sale extends Model
         'updated_by',
         'deleted_by'
     ];
+
+    public function getBranch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 }

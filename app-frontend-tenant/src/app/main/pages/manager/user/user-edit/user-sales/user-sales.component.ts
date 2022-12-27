@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ZoneSale } from 'core/models/manager/zone-sale.model';
@@ -30,6 +30,8 @@ export class UserSalesComponent implements OnInit, OnDestroy {
   loading = false;
   subscriptions: Subscription[] = [];
   saleList: any[];
+  userSaleList: any[];
+  @Input() userId: string;
   /**
    * Constructor
    *
@@ -45,8 +47,14 @@ export class UserSalesComponent implements OnInit, OnDestroy {
   // -----------------------------------------------------------------------------------------------------
 
   initForm() {
-
+    this.editForm = this.fb.group({
+      sale_id: [
+        null,
+        Validators.compose([Validators.required]),
+      ],
+    });
   }
+
 
   // Lifecycle Hooks
   // -----------------------------------------------------------------------------------------------------
@@ -54,20 +62,11 @@ export class UserSalesComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
+    this.initForm();
+    this.getUserSales(this.userId);
     this.getSales();
   }
 
-  setUserSale($event, id) {
-    var band = 0;
-    if ($event.target.checked == true) {
-      band = 1;
-    }
-    var obj = {
-      id: id,
-      is_active: band,
-    };
-    this.cdr.detectChanges();
-  }
 
   getSales() {
     this._service.getSales().subscribe(
@@ -82,13 +81,103 @@ export class UserSalesComponent implements OnInit, OnDestroy {
     );
   }
 
+  getUserSales(user_id: string) {
+    this._service.getUserSales(user_id).subscribe(
+      (item: any) => {
+        if (item) {
+          this.userSaleList = item;
+          this.cdr.detectChanges();
+        }
+      },
+      (error) => { console.log(error) },
+      () => { }
+    );
+  }
+
   /**
   * Submit
   *
   * @param form
   */
   submit() {
+    this.loading = true;
 
+    const controls = this.editForm.controls;
+    /** check form */
+    if (this.editForm.invalid) {
+      Object.keys(controls).forEach((controlName) => {
+        console.log(
+          "invalid editForm " + controlName + " = ",
+          controls[controlName].status
+        );
+        controls[controlName].markAsTouched();
+      });
+      this.loading = false;
+      this.cdr.detectChanges();
+      return;
+    }
+    let item = {
+      sale_id: controls["sale_id"].value,
+      user_id: this.userId
+    }
+    this.addItem(item);
+  }
+
+  addItem(_item: any) {
+    const sbCreate = this._service.createUserSale(_item).pipe(
+      catchError((errorMessage) => {
+        console.log(errorMessage);
+        if (errorMessage.status == 422) {
+          Swal.fire("Acción no válida!", errorMessage.error.msg, "error");
+        }
+        this.loading = false;
+        this.cdr.detectChanges();
+        return of(null);
+      })
+    ).subscribe((res: any) => {
+      if (res) {
+        this.loading = false;
+        this.getUserSales(res.user_id);
+        this.setMessageSuccess("Guardado Correctamente");
+
+      }
+    });
+    this.subscriptions.push(sbCreate);
+  }
+
+  deleteUserSale(id: string) {
+    Swal.fire({
+      title: '¿Desea eliminar el registro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._service
+          .deleteUserSale(id).subscribe({
+            next: (res) => {
+              Swal.fire(
+                'Eliminado!',
+                'Tu registro ha sido eliminado.',
+                'success'
+              )
+              this.getUserSales(this.userId);
+            }
+          })
+      }
+    })
+  }
+
+  setMessageSuccess(message: string) {
+    Swal.fire({
+      icon: 'success',
+      title: `${message}`,
+      showConfirmButton: false,
+      timer: 1500
+    })
   }
 
   /*
@@ -98,5 +187,28 @@ export class UserSalesComponent implements OnInit, OnDestroy {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+
+
+  // helpers for View
+  isControlValid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.valid && (control.dirty || control.touched);
+  }
+
+  isControlInvalid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.invalid && (control.dirty || control.touched);
+  }
+
+  controlHasError(validation: string, controlName: string) {
+    const control = this.editForm.controls[controlName];
+    return control.hasError(validation) && (control.dirty || control.touched);
+  }
+
+  isControlTouched(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.dirty || control.touched;
   }
 }

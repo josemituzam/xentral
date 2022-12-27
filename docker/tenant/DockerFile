@@ -1,0 +1,9 @@
+FROM node:14
+
+RUN mkdir /usr/src/app && mkdir /usr/src/app/app-frontend-tenant
+ 
+WORKDIR /usr/src/app/app-frontend-tenant
+
+RUN npm install -g @angular/cli 
+
+COPY . .

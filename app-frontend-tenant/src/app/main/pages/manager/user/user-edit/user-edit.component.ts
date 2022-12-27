@@ -180,8 +180,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
       })
     ).subscribe((res: any) => {
       if (res) {
-        this.goBackWithout();
+        this.router.navigate(["/manager/user/edit/", res?.obj?.id], {
+          relativeTo: this.activatedRoute,
+        });
         this.setMessageSuccess("Guardado Correctamente")
+        this.cdr.detectChanges();
+
+        // this.goBackWithout();
+
       }
     });
     this.subscriptions.push(sbCreate);
@@ -248,6 +254,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.itemModel = new UserDetail();
     this.itemModel.clear();
     this.initForm();
+    this.getZoneSale();
     this.setHeader("Nuevo", '../../user/list');
     this.activatedRoute.params.subscribe((params) => {
       const id = params.id;
@@ -257,6 +264,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
           (item: any) => {
             if (item) {
               this.itemModel = item;
+              this.itemModel.email = item?.get_user.email;
               this.initForm();
               this.cdr.detectChanges();
             }
@@ -283,6 +291,19 @@ export class UserEditComponent implements OnInit, OnDestroy {
         ],
       },
     };
+  }
+
+  zoneSaleList: any[];
+  getZoneSale() {
+    this._service.getZoneSale().subscribe(res => {
+      if (res) {
+        this.zoneSaleList = res;
+      }
+    }
+      , err => {
+        console.log("Estatus: ", err);
+      }
+    );
   }
 
   /**

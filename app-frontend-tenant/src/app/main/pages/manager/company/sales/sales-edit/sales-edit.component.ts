@@ -27,6 +27,7 @@ export class SalesEditComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any>;
   loading = false;
   subscriptions: Subscription[] = [];
+  branchList: any[];
   /**
    * Constructor
    *
@@ -75,6 +76,7 @@ export class SalesEditComponent implements OnInit, OnDestroy {
     this.itemModel = new Sales();
     this.itemModel.clear();
     this.initForm();
+    this.getBranch();
     this.setHeader("Nueva", '../../sale/list');
     this.activatedRoute.params.subscribe((params) => {
       const id = params.id;
@@ -228,6 +230,19 @@ export class SalesEditComponent implements OnInit, OnDestroy {
     return _item;
 
   }
+
+  getBranch() {
+    this._service.getBranch().subscribe(res => {
+      if (res) {
+        this.branchList = res;
+      }
+    }
+      , err => {
+        console.log("Estatus: ", err);
+      }
+    );
+  }
+
 
   /**
    * On destroy

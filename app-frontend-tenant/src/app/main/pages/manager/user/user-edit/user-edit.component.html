@@ -5,67 +5,35 @@
     <section class="app-user-edit">
       <div class="card">
         <div class="card-body">
-          <ul
-            ngbNav
-            #navWithIcons="ngbNav"
-            [(activeId)]="active"
-            (navChange)="onNavChange($event)"
-            class="nav-tabs"
-          >
+          <ul ngbNav #navWithIcons="ngbNav" [(activeId)]="active" (navChange)="onNavChange($event)" class="nav-tabs">
             <li [ngbNavItem]="1">
               <a ngbNavLink><span [data-feather]="'info'"></span> General</a>
               <ng-template ngbNavContent>
-                <div
-                  class="tab-pane"
-                  id="information"
-                  aria-labelledby="information-tab"
-                  role="tabpanel"
-                >
+                <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
                   <!-- users edit Info form start  -->
                   <form class="form-validate" [formGroup]="editForm">
                     <div class="row mt-1">
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="firstname">Nombres</label>
-                          <input
-                            type="text"
-                            id="firstname"
-                            class="form-control"
-                            formControlName="firstname"
-                            name="firstname"
-                          />
+                          <input type="text" id="firstname" class="form-control" formControlName="firstname"
+                            name="firstname" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="firstname">Apellidos</label>
-                          <input
-                            type="text"
-                            id="firstname"
-                            class="form-control"
-                            name="firstname"
-                            formControlName="lastname"
-                          />
+                          <input type="text" id="firstname" class="form-control" name="firstname"
+                            formControlName="lastname" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Tipo de identificación</label>
-                          <ng-select
-                            [(ngModel)]="typeIdentificator"
-                            [items]="getTypeIdentification"
-                            [clearable]="false"
-                            name="selecttypeidentification"
-                            bindValue="id"
-                            bindLabel="name"
-                            placeholder="Seleccione de la lista"
-                            formControlName="type_identification"
-                          >
-                            <ng-template
-                              ng-option-tmp
-                              ng-label-tmp
-                              let-item="item"
-                            >
+                          <ng-select [(ngModel)]="typeIdentificator" [items]="getTypeIdentification" [clearable]="false"
+                            name="selecttypeidentification" bindValue="id" bindLabel="name"
+                            placeholder="Seleccione de la lista" formControlName="type_identification">
+                            <ng-template ng-option-tmp ng-label-tmp let-item="item">
                               {{ item.name }}
                             </ng-template>
                           </ng-select>
@@ -74,105 +42,59 @@
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Identificador</label>
-                          <input
-                            type="text"
-                            id="identificator"
-                            class="form-control"
-                            name="identificator-customer"
-                            formControlName="identification"
-                          />
+                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                            formControlName="identification" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Fecha de nacimiento</label>
-                          <input
-                            type="date"
-                            id="f-created"
-                            class="form-control"
-                            name="f-created"
-                            formControlName="birthday_at"
-                          />
+                          <input type="date" id="f-created" class="form-control" name="f-created"
+                            formControlName="birthday_at" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Email</label>
-                          <input
-                            type="text"
-                            id="identificator"
-                            class="form-control"
-                            name="identificator-customer"
-                            formControlName="email"
-                          />
+                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                            formControlName="email" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Dirección</label>
-                          <input
-                            type="text"
-                            id="identificator"
-                            class="form-control"
-                            name="identificator-customer"
-                            formControlName="address"
-                          />
+                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                            formControlName="address" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Teléfono</label>
-                          <input
-                            type="text"
-                            id="identificator"
-                            class="form-control"
-                            name="identificator-customer"
-                            formControlName="phone"
-                          />
+                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                            formControlName="phone" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
-                          <label for="website"
-                            >Cantidad de prórrogas máximas</label
-                          >
-                          <input
-                            type="text"
-                            id="identificator"
-                            class="form-control"
-                            name="identificator-customer"
-                            formControlName="cant_extra_time"
-                          />
+                          <label for="website">Cantidad de prórrogas máximas</label>
+                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                            formControlName="cant_extra_time" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Días máximos de prórrogas</label>
-                          <input
-                            type="text"
-                            id="identificator"
-                            class="form-control"
-                            name="identificator-customer"
-                            formControlName="day_extra_time"
-                          />
+                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                            formControlName="day_extra_time" />
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <div class="form-group">
                             <label for="website">Zonas comerciales</label>
-                            <ng-select
-                              name="selecttypeidentification"
-                              bindValue="id"
-                              bindLabel="name"
-                              placeholder="Seleccione de la lista"
-                              formControlName="zone_sale_id"
-                            >
-                              <ng-template
-                                ng-option-tmp
-                                ng-label-tmp
-                                let-item="item"
-                              >
+                            <ng-select [items]="zoneSaleList" [clearable]="false" name="selectzonesale"
+                              formControlName="zone_sale_id" bindLabel="name" bindValue="id" placeholder="Seleccione">
+                              <ng-template ng-option-tmp ng-label-tmp let-item="item">
                                 {{ item.name }}
                               </ng-template>
                             </ng-select>
@@ -182,29 +104,15 @@
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Descripción</label>
-                          <textarea
-                            class="form-control"
-                            id="basicTextarea"
-                            formControlName="description"
-                            rows="2"
-                          ></textarea>
+                          <textarea class="form-control" id="basicTextarea" formControlName="description"
+                            rows="2"></textarea>
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="col-12 d-flex flex-row-reverse flex-column mt-2"
-                    >
-                      <button
-                        (click)="submit()"
-                        [disabled]="loading"
-                        type="submit"
-                        class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
-                        rippleEffect
-                      >
-                        <span
-                          *ngIf="loading"
-                          class="spinner-border spinner-border-sm mr-1"
-                        ></span>
+                    <div class="col-12 d-flex flex-row-reverse flex-column mt-2">
+                      <button (click)="submit()" [disabled]="loading" type="submit"
+                        class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1" rippleEffect>
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         Guardar
                       </button>
                     </div>
@@ -213,20 +121,16 @@
                 </div>
               </ng-template>
             </li>
-            <li [ngbNavItem]="2">
-              <a ngbNavLink
-                ><span [data-feather]="'map-pin'"></span> Puntos de venta</a
-              >
+            <li [ngbNavItem]="2" [disabled]="!itemModel.id">
+              <a ngbNavLink><span [data-feather]="'map-pin'"></span> Puntos de venta</a>
               <ng-template ngbNavContent>
                 <!-- Information Tab starts -->
-                <app-user-sales></app-user-sales>
+                <app-user-sales [userId]="itemModel.id"></app-user-sales>
                 <!-- Information Tab ends -->
               </ng-template>
             </li>
-            <li [ngbNavItem]="3">
-              <a ngbNavLink
-                ><span [data-feather]="'key'"></span> Permisos ISP</a
-              >
+            <li [ngbNavItem]="3" [disabled]="!itemModel.id">
+              <a ngbNavLink><span [data-feather]="'key'"></span> Permisos ISP</a>
               <ng-template ngbNavContent>
                 <div class="col-12">
                   <div class="table-responsive border rounded mt-1">
@@ -249,55 +153,26 @@
                           <td>Clientes</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-read"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-read" checked />
+                              <label class="custom-control-label" for="admin-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-write" />
+                              <label class="custom-control-label" for="admin-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-create" />
+                              <label class="custom-control-label" for="admin-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-delete" />
+                              <label class="custom-control-label" for="admin-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -305,55 +180,26 @@
                           <td>Contratos</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-read" />
+                              <label class="custom-control-label" for="staff-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-write"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-write" checked />
+                              <label class="custom-control-label" for="staff-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-create" />
+                              <label class="custom-control-label" for="staff-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-delete" />
+                              <label class="custom-control-label" for="staff-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -361,56 +207,26 @@
                           <td>Planes</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-read"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-read" checked />
+                              <label class="custom-control-label" for="author-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-write" />
+                              <label class="custom-control-label" for="author-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-create"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-create" checked />
+                              <label class="custom-control-label" for="author-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-delete" />
+                              <label class="custom-control-label" for="author-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -418,54 +234,26 @@
                           <td>Sectores</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-read" />
+                              <label class="custom-control-label" for="contributor-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-write" />
+                              <label class="custom-control-label" for="contributor-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-create" />
+                              <label class="custom-control-label" for="contributor-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-delete" />
+                              <label class="custom-control-label" for="contributor-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -475,10 +263,8 @@
                 </div>
               </ng-template>
             </li>
-            <li [ngbNavItem]="4">
-              <a ngbNavLink
-                ><span [data-feather]="'key'"></span> Permisos OLT</a
-              >
+            <li [ngbNavItem]="4" [disabled]="!itemModel.id">
+              <a ngbNavLink><span [data-feather]="'key'"></span> Permisos OLT</a>
               <ng-template ngbNavContent>
                 <div class="col-12">
                   <div class="table-responsive border rounded mt-1">
@@ -501,55 +287,26 @@
                           <td>Admin</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-read"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-read" checked />
+                              <label class="custom-control-label" for="admin-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-write" />
+                              <label class="custom-control-label" for="admin-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-create" />
+                              <label class="custom-control-label" for="admin-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-delete" />
+                              <label class="custom-control-label" for="admin-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -557,55 +314,26 @@
                           <td>Staff</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-read" />
+                              <label class="custom-control-label" for="staff-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-write"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-write" checked />
+                              <label class="custom-control-label" for="staff-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-create" />
+                              <label class="custom-control-label" for="staff-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-delete" />
+                              <label class="custom-control-label" for="staff-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -613,56 +341,26 @@
                           <td>Author</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-read"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-read" checked />
+                              <label class="custom-control-label" for="author-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-write" />
+                              <label class="custom-control-label" for="author-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-create"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-create" checked />
+                              <label class="custom-control-label" for="author-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-delete" />
+                              <label class="custom-control-label" for="author-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -670,54 +368,26 @@
                           <td>Contributor</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-read" />
+                              <label class="custom-control-label" for="contributor-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-write" />
+                              <label class="custom-control-label" for="contributor-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-create" />
+                              <label class="custom-control-label" for="contributor-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-delete" />
+                              <label class="custom-control-label" for="contributor-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -725,67 +395,37 @@
                           <td>User</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-read" />
+                              <label class="custom-control-label" for="user-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-create" />
+                              <label class="custom-control-label" for="user-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-write" />
+                              <label class="custom-control-label" for="user-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-delete"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-delete" checked />
+                              <label class="custom-control-label" for="user-delete"></label>
                             </div>
                           </td>
                         </tr>
                       </tbody>
                     </table>
-                  </div></div
-              ></ng-template>
+                  </div>
+                </div>
+              </ng-template>
             </li>
-            <li [ngbNavItem]="5">
-              <a ngbNavLink
-                ><span [data-feather]="'key'"></span> Permisos CONTABLE</a
-              >
+            <li [ngbNavItem]="5" [disabled]="!itemModel.id">
+              <a ngbNavLink><span [data-feather]="'key'"></span> Permisos CONTABLE</a>
               <ng-template ngbNavContent>
                 <div class="col-12">
                   <div class="table-responsive border rounded mt-1">
@@ -808,55 +448,26 @@
                           <td>Admin</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-read"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-read" checked />
+                              <label class="custom-control-label" for="admin-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-write" />
+                              <label class="custom-control-label" for="admin-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-create" />
+                              <label class="custom-control-label" for="admin-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="admin-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="admin-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="admin-delete" />
+                              <label class="custom-control-label" for="admin-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -864,55 +475,26 @@
                           <td>Staff</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-read" />
+                              <label class="custom-control-label" for="staff-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-write"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-write" checked />
+                              <label class="custom-control-label" for="staff-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-create" />
+                              <label class="custom-control-label" for="staff-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="staff-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="staff-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="staff-delete" />
+                              <label class="custom-control-label" for="staff-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -920,56 +502,26 @@
                           <td>Author</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-read"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-read" checked />
+                              <label class="custom-control-label" for="author-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-write" />
+                              <label class="custom-control-label" for="author-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-create"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-create" checked />
+                              <label class="custom-control-label" for="author-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="author-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="author-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="author-delete" />
+                              <label class="custom-control-label" for="author-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -977,54 +529,26 @@
                           <td>Contributor</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-read" />
+                              <label class="custom-control-label" for="contributor-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-write" />
+                              <label class="custom-control-label" for="contributor-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-create" />
+                              <label class="custom-control-label" for="contributor-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="contributor-delete"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="contributor-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="contributor-delete" />
+                              <label class="custom-control-label" for="contributor-delete"></label>
                             </div>
                           </td>
                         </tr>
@@ -1032,62 +556,34 @@
                           <td>User</td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-read"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-read"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-read" />
+                              <label class="custom-control-label" for="user-read"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-create"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-create"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-create" />
+                              <label class="custom-control-label" for="user-create"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-write"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-write"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-write" />
+                              <label class="custom-control-label" for="user-write"></label>
                             </div>
                           </td>
                           <td>
                             <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="user-delete"
-                                checked
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="user-delete"
-                              ></label>
+                              <input type="checkbox" class="custom-control-input" id="user-delete" checked />
+                              <label class="custom-control-label" for="user-delete"></label>
                             </div>
                           </td>
                         </tr>
                       </tbody>
                     </table>
-                  </div></div
-              ></ng-template>
+                  </div>
+                </div>
+              </ng-template>
             </li>
           </ul>
           <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>

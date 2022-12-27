@@ -4,29 +4,72 @@ namespace App\Http\Controllers\Tenant\Setting\UserDetail;
 
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Helpers;
+use App\Models\Core\Auth\Tenant\User;
+use App\Models\Core\Auth\Role;
 use App\Models\Tenant\Setting\Company\Sale;
 use App\Models\Tenant\Setting\UserDetail\UserDetail;
+use App\Models\Tenant\Setting\UserDetail\UserSale;
+use App\Models\Tenant\Setting\ZoneSale\ZoneSale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserDetailController extends Controller
 {
 
-    public function getSales(){
-        $obj = Sale::where('deleted_at', '=', null)->where('is_active', '=', 1)->get();
+    public function getUserSales($userId)
+    {
+        $obj = UserSale::with('getSale.getBranch')->where('user_id', '=', $userId)->get();
 
         return response()->json([
             'obj' => $obj,
         ]);
     }
-   /**
+
+    public function storeUserSale(Request $request)
+    {
+        $objCount =  UserSale::with('getSale.getBranch')
+            ->where('user_id', '=', $request->user_id)
+            ->where('sale_id', '=', $request->sale_id)
+            ->count();
+
+        if ($objCount > 0) {
+            return response()->json([
+                'msg' => 'Ya se ha asignado este punto de venta'
+            ], 422);
+        }
+
+        $input['user_id'] = $request->user_id;
+        $input['sale_id'] = $request->sale_id;
+        $obj = UserSale::create($input);
+        return response()->json([
+            'obj'  => $obj
+        ]);
+    }
+
+    public function getZoneSales()
+    {
+        $obj = ZoneSale::where('deleted_at', '=', null)->where('is_active', '=', 1)->get();
+
+        return response()->json([
+            'obj' => $obj,
+        ]);
+    }
+    public function getSales()
+    {
+        $obj = Sale::with('getBranch')->where('deleted_at', '=', null)->where('is_active', '=', 1)->get();
+
+        return response()->json([
+            'obj' => $obj,
+        ]);
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-       
+
         if (auth('apiTenant')->user()->hasrole('Root')) {
             if (\Request::exists('all')) {
             }
@@ -46,7 +89,7 @@ class UserDetailController extends Controller
                 $param = array(0 => '=');
                 $type = 0;
             }
-            $service = UserDetail::where('deleted_at', '=', null);
+            $service = UserDetail::with('getUser')->where('deleted_at', '=', null);
 
             $Filtred = $helpers->filter($service, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
@@ -71,7 +114,7 @@ class UserDetailController extends Controller
     }
 
 
-      /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -92,18 +135,25 @@ class UserDetailController extends Controller
         $input['birthday_at'] = $request->birthday_at;
         $input['phone'] = $request->phone;
         $input['address'] = $request->address;
-        $input['email'] = $request->email;
+        //$input['email'] = $request->email;
         $input['cant_extra_time'] = $request->cant_extra_time;
         $input['day_extra_time'] = $request->day_extra_time;
         $input['zone_sale_id'] = $request->zone_sale_id;
         $input['description'] = $request->description;
+        $objUser = User::create([
+            'email' => $request->email,
+            'password' =>  null,
+        ]);
+        $objGeneral = Role::findByName('Supervisor', 'apiTenant');
+        $objUser->assignRole($objGeneral);
+        $input['user_id'] = $objUser->id;
         $obj = UserDetail::create($input);
         return response()->json([
             'obj'  => $obj
         ]);
     }
 
-     /**
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\ZoneSale  $zoneSale
@@ -111,7 +161,7 @@ class UserDetailController extends Controller
      */
     public function edit($id)
     {
-        $obj = UserDetail::find($id);
+        $obj = UserDetail::with('getUser')->find($id);
 
         return response()->json([
             'obj'  => $obj,
@@ -140,7 +190,9 @@ class UserDetailController extends Controller
         $obj->birthday_at = $request->birthday_at;
         $obj->phone  = $request->phone;
         $obj->address = $request->address;
-        $obj->email = $request->email;
+        User::where('id', $obj->getUser->id)->update([
+            'email' => $request->email,
+        ]);
         $obj->cant_extra_time = $request->cant_extra_time;
         $obj->day_extra_time = $request->day_extra_time;
         $obj->zone_sale_id = $request->zone_sale_id;
@@ -151,7 +203,7 @@ class UserDetailController extends Controller
         ]);
     }
 
-    
+
     public function activeRecord(Request $request, $id)
     {
         $obj = UserDetail::find($id);
@@ -159,13 +211,19 @@ class UserDetailController extends Controller
         $obj->save();
         return response()->json(['success' => true]);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\IspPlan  $ispPlan
      * @return \Illuminate\Http\Response
      */
+    public function destroyUserSales($id)
+    {
+        UserSale::where('id', $id)->delete();
+        return response()->json(['success' => true]);
+    }
+
     public function destroy($id)
     {
         $objFound = UserDetail::find($id);

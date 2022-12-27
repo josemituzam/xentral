@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant\Setting\UserDetail;
 
+use App\Models\Core\Auth\Tenant\User;
 use App\Models\Tenant\Setting\UserDetail\Traits\UserDetailRules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,4 +32,9 @@ class UserDetail extends Model
         'updated_by',
         'deleted_by'
     ];
+
+    public function getUser()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

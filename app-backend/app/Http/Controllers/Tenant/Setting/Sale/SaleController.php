@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant\Setting\Sale;
 
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Helpers;
+use App\Models\Tenant\Setting\Company\Branch;
 use App\Models\Tenant\Setting\Company\Sale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,7 +37,7 @@ class SaleController extends Controller
                 $param = array(0 => '=');
                 $type = 0;
             }
-            $service = Sale::where('deleted_at', '=', null);
+            $service = Sale::with('getBranch')->where('deleted_at', '=', null);
 
             $Filtred = $helpers->filter($service, $columns, $param, $request, $type)
                 ->where(function ($query) use ($request) {
@@ -70,6 +71,14 @@ class SaleController extends Controller
         //
     }
 
+    public function getBranch()
+    {
+        $obj = Branch::where('deleted_at', '=', null)->where('is_active', '=', 1)->get();
+        return response()->json([
+            'obj'  => $obj,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -81,7 +90,7 @@ class SaleController extends Controller
         $validator = Sale::createdRules($request->all());
         if ($validator->fails()) {
             return response()->json(['isvalid' => false, 'errors' => $validator->messages()], 422);
-        } 
+        }
 
         $input['branch_id'] = $request->branch_id;
         $input['description'] = $request->description;
@@ -113,14 +122,14 @@ class SaleController extends Controller
      */
     public function edit($id)
     {
-        $obj = Sale::find($id);
+        $obj = Sale::with('getBranch')->find($id);
 
         return response()->json([
             'obj'  => $obj,
         ]);
     }
 
-     /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -146,7 +155,7 @@ class SaleController extends Controller
         ]);
     }
 
-    
+
     public function activeRecord(Request $request, $id)
     {
         $obj = Sale::find($id);
@@ -154,7 +163,7 @@ class SaleController extends Controller
         $obj->save();
         return response()->json(['success' => true]);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

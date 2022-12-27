@@ -160,6 +160,8 @@ Route::middleware([
             Route::put('sales/{id}/update', [SaleController::class, 'update']);
             Route::delete('sales/{id}', [SaleController::class, 'destroy']);
             Route::put('sales/active/{id}', [SaleController::class, 'activeRecord']);
+            Route::get('sales/branch', [SaleController::class, 'getBranch']);
+            
 
             //Compañía
             Route::get('company/edit', [CompanyController::class, 'edit']);
@@ -173,6 +175,10 @@ Route::middleware([
             Route::delete('user-detail/{id}', [UserDetailController::class, 'destroy']);
             Route::put('user-detail/active/{id}', [UserDetailController::class, 'activeRecord']);
             Route::get('user-detail/sales', [UserDetailController::class, 'getSales']);
+            Route::get('user-detail/zonesales', [UserDetailController::class, 'getZoneSales']);
+            Route::post('user-detail/sale/store', [UserDetailController::class, 'storeUserSale']);
+            Route::get('user-detail/user/sales/{user_id}', [UserDetailController::class, 'getUserSales']);
+            Route::delete('user-detail/user/sales/{id}/delete', [UserDetailController::class, 'destroyUserSales']);
         });
     });
 });

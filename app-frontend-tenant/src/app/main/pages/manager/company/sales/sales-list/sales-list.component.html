@@ -98,11 +98,23 @@
             prop="code"
             [width]="300"
           ></ngx-datatable-column>
-          <ngx-datatable-column
-            name="Sucursal"
-            prop="branch_id"
-            [width]="100"
-          ></ngx-datatable-column>
+          <ngx-datatable-column name="Sucursal" prop="get_branch" [width]="200">
+            <ng-template
+              let-rowIndex="rowIndex"
+              let-value="value"
+              let-row="row"
+              ngx-datatable-cell-template
+            >
+            <table>
+              <tr>
+                <td>
+                  {{ row?.get_branch?.name }}
+                </td>
+              </tr>
+            </table>
+            </ng-template>
+          </ngx-datatable-column>
+
           <ngx-datatable-column
             name="Secuencial inicial"
             prop="sequential_init"

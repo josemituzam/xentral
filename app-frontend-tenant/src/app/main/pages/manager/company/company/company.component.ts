@@ -198,15 +198,15 @@ export class CompanyComponent implements OnInit, OnDestroy, AfterViewInit {
       ],
       break_day: [
         this.itemModel?.break_day,
-        Validators.compose([Validators.required, Validators.maxLength(100)]),
+        Validators.compose([Validators.required]),
       ],
       decimal: [
         this.itemModel?.decimal,
-        Validators.compose([Validators.required, Validators.maxLength(100)]),
+        Validators.compose([Validators.required]),
       ],
       google_key: [
         this.itemModel?.google_key,
-        Validators.compose([Validators.required, Validators.maxLength(100)]),
+        Validators.compose([Validators.required]),
       ],
     });
   }
