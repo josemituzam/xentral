@@ -16,96 +16,329 @@
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="firstname">Nombres</label>
-                          <input type="text" id="firstname" class="form-control" formControlName="firstname"
-                            name="firstname" />
+                          <input type="text" [ngClass]="{
+                            'is-invalid': isControlInvalid('firstname'),
+                            'is-valid': isControlValid('firstname')
+                          }" id="firstname" class="form-control" formControlName="firstname" name="firstname" />
+                          <div class="valid-feedback" *ngIf="isControlValid('firstname')">
+                            Nombre ingresado correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'firstname')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'firstname')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                    editForm.get('firstname')?.errors?.serverError
+                                  ">
+                            {{
+                            editForm.get("firstname")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="firstname">Apellidos</label>
-                          <input type="text" id="firstname" class="form-control" name="firstname"
-                            formControlName="lastname" />
+                          <input type="text" [ngClass]="{
+                            'is-invalid': isControlInvalid('lastname'),
+                            'is-valid': isControlValid('lastname')
+                          }" id="firstname" class="form-control" name="firstname" formControlName="lastname" />
+                          <div class="valid-feedback" *ngIf="isControlValid('lastname')">
+                            Apellido ingresado correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'lastname')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'lastname')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                      editForm.get('lastname')?.errors?.serverError
+                                    ">
+                            {{
+                            editForm.get("lastname")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Tipo de identificación</label>
-                          <ng-select [(ngModel)]="typeIdentificator" [items]="getTypeIdentification" [clearable]="false"
+                          <ng-select [ngClass]="{
+                            'is-invalid': isControlInvalid('type_identification'),
+                            'is-valid': isControlValid('type_identification')
+                          }" [(ngModel)]="typeIdentificator" [items]="getTypeIdentification" [clearable]="false"
                             name="selecttypeidentification" bindValue="id" bindLabel="name"
                             placeholder="Seleccione de la lista" formControlName="type_identification">
                             <ng-template ng-option-tmp ng-label-tmp let-item="item">
                               {{ item.name }}
                             </ng-template>
                           </ng-select>
+                          <div class="valid-feedback" *ngIf="isControlValid('type_identification')">
+                            Tipo de identificación ingresada correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'type_identification')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'type_identification')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                      editForm.get('type_identification')?.errors?.serverError
+                                    ">
+                            {{
+                            editForm.get("type_identification")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Identificador</label>
-                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                          <input [ngClass]="{
+                            'is-invalid': isControlInvalid('identification'),
+                            'is-valid': isControlValid('identification')
+                          }" type="text" id="identificator" class="form-control" name="identificator-customer"
                             formControlName="identification" />
+                          <div class="valid-feedback" *ngIf="isControlValid('identification')">
+                            Identificador ingresado correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'identification')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'identification')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                        editForm.get('identification')?.errors?.serverError
+                                      ">
+                            {{
+                            editForm.get("identification")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Fecha de nacimiento</label>
-                          <input type="date" id="f-created" class="form-control" name="f-created"
+                          <input [ngClass]="{
+                            'is-invalid': isControlInvalid('birthday_at'),
+                            'is-valid': isControlValid('birthday_at')
+                          }" type="date" id="f-created" class="form-control" name="f-created"
                             formControlName="birthday_at" />
+                          <div class="valid-feedback" *ngIf="isControlValid('birthday_at')">
+                            Fecha de nacimiento ingresada correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'birthday_at')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'birthday_at')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                          editForm.get('birthday_at')?.errors?.serverError
+                                        ">
+                            {{
+                            editForm.get("birthday_at")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Email</label>
-                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
-                            formControlName="email" />
+                          <input type="email" id="email" class="form-control" formControlName="email"
+                            placeholder="Email" name="email" [ngClass]="{
+                            'is-invalid': isControlInvalid('email'),
+                            'is-valid': isControlValid('email')
+                          }" />
+                          <div class="valid-feedback" *ngIf="isControlValid('email')">
+                            Email ingresado correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'email')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'email')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('email', 'email')">
+                            El correo ingresado no es válido
+                          </div>
+                          <div class="invalid-feedback" *ngIf="editForm.get('email')?.errors?.serverError">
+                            {{ editForm.get("email")?.errors?.serverError }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Dirección</label>
-                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                          <input [ngClass]="{
+                            'is-invalid': isControlInvalid('address'),
+                            'is-valid': isControlValid('address')
+                          }" type="text" id="identificator" class="form-control" name="identificator-customer"
                             formControlName="address" />
+                          <div class="valid-feedback" *ngIf="isControlValid('address')">
+                            Dirección ingresada correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'address')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                            editForm.get('address')?.errors?.serverError
+                                          ">
+                            {{
+                            editForm.get("address")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Teléfono</label>
-                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
-                            formControlName="phone" />
+                          <ngx-intl-tel-input [cssClass]="'custom form-control'"
+                            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true"
+                            [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[
+                          SearchCountryField.Iso2,
+                          SearchCountryField.Name
+                        ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Ecuador"
+                            [phoneValidation]="true" [separateDialCode]="separateDialCode"
+                            [numberFormat]="PhoneNumberFormat.National" name="phone-movil" formControlName="phone"
+                            [ngClass]="{
+                          'is-invalid': isControlInvalid('phone'),
+                          'is-valid': isControlValid('phone')
+                        }">
+                          </ngx-intl-tel-input>
+                          <div class="valid-feedback" *ngIf="isControlValid('phone')">
+                            Teléfono ingresado correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                          controlHasError('maxlength', 'phone')
+                        ">
+                            {{ "Máximo: " }} 10
+                          </div>
+                          <div *ngIf="
+                          !editForm.controls['phone'].invalid ==
+                          false
+                        " class="invalid-feedback">
+                            El teléfono ingresado no es correcto
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                          editForm.get('phone')?.errors
+                            ?.serverError
+                        ">
+                            {{
+                            editForm.get("phone")?.errors
+                            ?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Cantidad de prórrogas máximas</label>
-                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                          <input [ngClass]="{
+                            'is-invalid': isControlInvalid('cant_extra_time'),
+                            'is-valid': isControlValid('cant_extra_time')
+                          }" type="text" id="identificator" class="form-control" name="identificator-customer"
                             formControlName="cant_extra_time" />
+                          <div class="valid-feedback" *ngIf="isControlValid('cant_extra_time')">
+                            Cantidad ingresada correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'cant_extra_time')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'cant_extra_time')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                      editForm.get('cant_extra_time')?.errors?.serverError
+                                    ">
+                            {{
+                            editForm.get("cant_extra_time")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Días máximos de prórrogas</label>
-                          <input type="text" id="identificator" class="form-control" name="identificator-customer"
+                          <input [ngClass]="{
+                            'is-invalid': isControlInvalid('day_extra_time'),
+                            'is-valid': isControlValid('day_extra_time')
+                          }" type="text" id="identificator" class="form-control" name="identificator-customer"
                             formControlName="day_extra_time" />
+                          <div class="valid-feedback" *ngIf="isControlValid('day_extra_time')">
+                            Días ingresados correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('required', 'day_extra_time')">
+                            {{ "El elemento es requerido" }}
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'day_extra_time')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                        editForm.get('day_extra_time')?.errors?.serverError
+                                      ">
+                            {{
+                            editForm.get("day_extra_time")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <div class="form-group">
                             <label for="website">Zonas comerciales</label>
-                            <ng-select [items]="zoneSaleList" [clearable]="false" name="selectzonesale"
+                            <ng-select [ngClass]="{
+                              'is-invalid': isControlInvalid('zone_sale_id'),
+                              'is-valid': isControlValid('zone_sale_id')
+                            }" [items]="zoneSaleList" [clearable]="false" name="selectzonesale"
                               formControlName="zone_sale_id" bindLabel="name" bindValue="id" placeholder="Seleccione">
                               <ng-template ng-option-tmp ng-label-tmp let-item="item">
                                 {{ item.name }}
                               </ng-template>
                             </ng-select>
+                            <div class="valid-feedback" *ngIf="isControlValid('zone_sale_id')">
+                              Zona comercial ingresada correctamente
+                            </div>
+                            <div class="invalid-feedback" *ngIf="controlHasError('required', 'zone_sale_id')">
+                              {{ "El elemento es requerido" }}
+                            </div>
+                            <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'zone_sale_id')">
+                              {{ "Máximo: " }} 100
+                            </div>
+                            <div class="invalid-feedback" *ngIf="
+                                        editForm.get('zone_sale_id')?.errors?.serverError
+                                      ">
+                              {{
+                              editForm.get("zone_sale_id")?.errors?.serverError
+                              }}
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                           <label for="website">Descripción</label>
-                          <textarea class="form-control" id="basicTextarea" formControlName="description"
-                            rows="2"></textarea>
+                          <textarea [ngClass]="{
+                            'is-invalid': isControlInvalid('description'),
+                            'is-valid': isControlValid('description')
+                          }" class="form-control" id="basicTextarea" formControlName="description" rows="2"></textarea>
+                          <div class="valid-feedback" *ngIf="isControlValid('description')">
+                            Descripción ingresada correctamente
+                          </div>
+                          <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'description')">
+                            {{ "Máximo: " }} 100
+                          </div>
+                          <div class="invalid-feedback" *ngIf="
+                                      editForm.get('description')?.errors?.serverError
+                                    ">
+                            {{
+                            editForm.get("description")?.errors?.serverError
+                            }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -132,135 +365,7 @@
             <li [ngbNavItem]="3" [disabled]="!itemModel.id">
               <a ngbNavLink><span [data-feather]="'key'"></span> Permisos ISP</a>
               <ng-template ngbNavContent>
-                <div class="col-12">
-                  <div class="table-responsive border rounded mt-1">
-                    <h6 class="py-1 mx-1 mb-0 font-medium-2">
-                      <i data-feather="briefcase" [size]="20" class="mr-25"></i>
-                      <span class="align-middle">Comercial</span>
-                    </h6>
-                    <table class="table table-striped table-borderless">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>Módulos</th>
-                          <th>Leer</th>
-                          <th>Crear</th>
-                          <th>Editar</th>
-                          <th>Eliminar</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Clientes</td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="admin-read" checked />
-                              <label class="custom-control-label" for="admin-read"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="admin-write" />
-                              <label class="custom-control-label" for="admin-write"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="admin-create" />
-                              <label class="custom-control-label" for="admin-create"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="admin-delete" />
-                              <label class="custom-control-label" for="admin-delete"></label>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Contratos</td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="staff-read" />
-                              <label class="custom-control-label" for="staff-read"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="staff-write" checked />
-                              <label class="custom-control-label" for="staff-write"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="staff-create" />
-                              <label class="custom-control-label" for="staff-create"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="staff-delete" />
-                              <label class="custom-control-label" for="staff-delete"></label>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Planes</td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="author-read" checked />
-                              <label class="custom-control-label" for="author-read"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="author-write" />
-                              <label class="custom-control-label" for="author-write"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="author-create" checked />
-                              <label class="custom-control-label" for="author-create"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="author-delete" />
-                              <label class="custom-control-label" for="author-delete"></label>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Sectores</td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="contributor-read" />
-                              <label class="custom-control-label" for="contributor-read"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="contributor-write" />
-                              <label class="custom-control-label" for="contributor-write"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="contributor-create" />
-                              <label class="custom-control-label" for="contributor-create"></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="contributor-delete" />
-                              <label class="custom-control-label" for="contributor-delete"></label>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                <app-user-isp-permissions [userId]="itemModel.id"></app-user-isp-permissions>
               </ng-template>
             </li>
             <li [ngbNavItem]="4" [disabled]="!itemModel.id">

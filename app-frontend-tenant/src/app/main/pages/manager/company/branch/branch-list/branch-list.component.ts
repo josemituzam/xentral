@@ -176,6 +176,12 @@ export class BranchListComponent implements OnInit {
     });
   }
 
+  hack(val) {
+    var phone = JSON.parse(val);
+    let phones = typeof JSON.parse(val) !== "string" ? phone?.number : phone;
+    return phones;
+  }
+  
   getRowData() {
     this._service.getDataTableRows(this.searchValue, this.selectedOption, this.curPages, this.sortBy, this.isActive).subscribe(res => {
       if (res) {

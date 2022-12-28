@@ -86,7 +86,7 @@ class BranchController extends Controller
         $input['description'] = $request->description;
         $input['code'] = $request->code;
         $input['address'] = $request->address;
-        $input['phone'] = $request->phone;
+        $input['phone'] = json_encode($request->phone);
         $input['extention'] = $request->extention;
         $input['email'] = $request->email;
         $obj = Branch::create($input);

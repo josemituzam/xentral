@@ -1,0 +1,218 @@
+<div class="col-12">
+  <div class="table-responsive border rounded mt-1">
+    <h6 class="py-1 mx-1 mb-0 font-medium-2">
+      <i data-feather="briefcase" [size]="20" class="mr-25"></i>
+      <span class="align-middle">Comercial</span>
+    </h6>
+    <table class="table table-striped table-borderless">
+      <thead class="thead-light">
+        <tr>
+          <th>Módulos</th>
+          <th>Leer</th>
+          <th>Crear</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Clientes</td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('customer_read')" value="customer_read" type="checkbox"
+                class="custom-control-input" id="admin-read" />
+              <label class="custom-control-label" for="admin-read"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('customer_create')" value="customer_create" type="checkbox"
+                class="custom-control-input" id="admin-write" />
+              <label class="custom-control-label" for="admin-write"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('customer_edit')" value="customer_edit" type="checkbox"
+                class="custom-control-input" id="admin-create" />
+              <label class="custom-control-label" for="admin-create"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('customer_destroy')" value="customer_destroy" type="checkbox"
+                class="custom-control-input" id="admin-delete" />
+              <label class="custom-control-label" for="admin-delete"></label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Contratos</td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('contract_read')" value="contract_read" type="checkbox"
+                class="custom-control-input" id="staff-read" />
+              <label class="custom-control-label" for="staff-read"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('contract_create')" value="contract_create" type="checkbox"
+                class="custom-control-input" id="staff-write" />
+              <label class="custom-control-label" for="staff-write"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('contract_edit')" value="contract_edit" type="checkbox"
+                class="custom-control-input" id="staff-create" />
+              <label class="custom-control-label" for="staff-create"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('contract_destroy')" value="contract_destroy" type="checkbox"
+                class="custom-control-input" id="staff-delete" />
+              <label class="custom-control-label" for="staff-delete"></label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Planes</td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('plan_read')" value="plan_read" type="checkbox" class="custom-control-input"
+                id="author-read" checked />
+              <label class="custom-control-label" for="author-read"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('plan_create')" value="plan_create" type="checkbox"
+                class="custom-control-input" id="author-write" />
+              <label class="custom-control-label" for="author-write"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('plan_edit')" value="plan_edit" type="checkbox" class="custom-control-input"
+                id="author-create" />
+              <label class="custom-control-label" for="author-create"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('plan_destroy')" value="plan_destroy" type="checkbox"
+                class="custom-control-input" id="author-delete" />
+              <label class="custom-control-label" for="author-delete"></label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Sectores</td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('sector_read')" value="sector_read" type="checkbox"
+                class="custom-control-input" id="contributor-read" />
+              <label class="custom-control-label" for="contributor-read"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('sector_create')" value="sector_create" type="checkbox"
+                class="custom-control-input" id="contributor-write" />
+              <label class="custom-control-label" for="contributor-write"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('sector_edit')" value="sector_edit" type="checkbox"
+                class="custom-control-input" id="contributor-create" />
+              <label class="custom-control-label" for="contributor-create"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input (change)="cbxUserPermission($event.target.value, $event.target.checked)"
+                [checked]="hasPermission('sector_destroy')" value="sector_destroy" type="checkbox"
+                class="custom-control-input" id="contributor-delete" />
+              <label class="custom-control-label" for="contributor-delete"></label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--<div class="col-12">
+  <div class="table-responsive border rounded mt-1">
+    <h6 class="py-1 mx-1 mb-0 font-medium-2">
+      <i data-feather="slack" [size]="20" class="mr-25"></i>
+      <span class="align-middle">Mesa de servicios</span>
+    </h6>
+    <table class="table table-striped table-borderless">
+      <thead class="thead-light">
+        <tr>
+          <th>Módulos</th>
+          <th>Leer</th>
+          <th>Crear</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ticket</td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="admin-read" checked />
+              <label class="custom-control-label" for="admin-read"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="admin-write" />
+              <label class="custom-control-label" for="admin-write"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="admin-create" />
+              <label class="custom-control-label" for="admin-create"></label>
+            </div>
+          </td>
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="admin-delete" />
+              <label class="custom-control-label" for="admin-delete"></label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+
+<div class="col-12 d-flex flex-row-reverse flex-column mt-2">
+  <button (click)="submit()" [disabled]="loading" type="submit" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+    rippleEffect>
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+    Guardar
+  </button>
+</div>

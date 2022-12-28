@@ -8,6 +8,7 @@ import { catchError, delay, finalize, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2'
 import { BranchService } from 'core/services/manager/branch.service';
 import { Branch } from 'core/models/manager/branch.model';
+import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 @Component({
   selector: 'app-branch-edit',
   templateUrl: './branch-edit.component.html',
@@ -27,6 +28,14 @@ export class BranchEditComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any>;
   loading = false;
   subscriptions: Subscription[] = [];
+
+  separateDialCode = true;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+
+  preferredCountries: CountryISO[] = [CountryISO.UnitedStates,
+  CountryISO.UnitedKingdom];
   /**
    * Constructor
    *
@@ -49,7 +58,7 @@ export class BranchEditComponent implements OnInit, OnDestroy {
       ],
       description: [
         this.itemModel.description,
-        Validators.compose([Validators.required, Validators.maxLength(100)]),
+        Validators.compose([Validators.maxLength(250)]),
       ],
       code: [
         this.itemModel.code,
@@ -61,16 +70,14 @@ export class BranchEditComponent implements OnInit, OnDestroy {
       ],
       phone: [
         this.itemModel.phone,
-        Validators.compose([Validators.required, Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(10)]),
       ],
       extention: [
         this.itemModel.extention,
         Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
-      email: [
-        this.itemModel.email,
-        Validators.compose([Validators.required, Validators.maxLength(100)]),
-      ],
+      email: [this.itemModel.email,
+      Validators.compose([Validators.maxLength(100), Validators.email])],
     });
   }
 
@@ -92,6 +99,7 @@ export class BranchEditComponent implements OnInit, OnDestroy {
           (item: any) => {
             if (item) {
               this.itemModel = item;
+              this.itemModel.phone = JSON.parse(item.phone)?.nationalNumber;
               this.initForm();
               this.cdr.detectChanges();
             }
@@ -245,5 +253,27 @@ export class BranchEditComponent implements OnInit, OnDestroy {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+
+  // helpers for View
+  isControlValid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.valid && (control.dirty || control.touched);
+  }
+
+  isControlInvalid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.invalid && (control.dirty || control.touched);
+  }
+
+  controlHasError(validation: string, controlName: string) {
+    const control = this.editForm.controls[controlName];
+    return control.hasError(validation) && (control.dirty || control.touched);
+  }
+
+  isControlTouched(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.dirty || control.touched;
   }
 }

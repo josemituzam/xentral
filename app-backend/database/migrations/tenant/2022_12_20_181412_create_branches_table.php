@@ -19,7 +19,7 @@ class CreateBranchesTable extends Migration
             $table->string('description', 300)->nullable(true);
             $table->string('code', 100)->nullable(true);
             $table->string('address', 100)->nullable(true);
-            $table->string('phone', 100)->nullable(true);
+            $table->longText('phone')->nullable(true);
             $table->string('extention', 100)->nullable(true);
             $table->string('email', 100)->nullable(true);
             //

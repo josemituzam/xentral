@@ -205,28 +205,18 @@ export class CustomerListComponent implements OnInit {
       }
     });
   }
-
+  
+  hack(val) {
+    var phone = JSON.parse(val);
+    let phones = typeof JSON.parse(val) !== "string" ? phone?.number : phone;
+    return phones;
+  }
 
   getRowData() {
     this._service.getDataTableRows(this.searchValue, this.selectedOption, this.curPages, this.sortBy, this.isActive, this.typePeople).subscribe(res => {
       this.rows = [];
       if (res) {
-        for (let item of res['data']) {
-          var phone = JSON.parse(item.phone)
-          let obj = {
-            id: item.id,
-            fullname: item.fullname,
-            name_company: item.name_company,
-            identification: item.identification,
-            address: item.address,
-            type_people: item.type_people,
-            phone: typeof JSON.parse(item?.phone) !== "string" ? phone?.internationalNumber : phone,
-            email: item.email,
-            is_active: item.is_active,
-          }
-          this.rows.push(obj);
-        }
-        this.activeTable = true;
+        this.rows = res['data'];
         this.pageSizes = res['last_page'];
         this.curPages = res['current_page'];
         this.rowCounts = res['total'];

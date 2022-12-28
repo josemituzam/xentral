@@ -10,41 +10,59 @@
               <div class="col-lg-6 col-md-6">
                 <div class="form-group">
                   <label for="birth">Nombre</label>
-                  <input
-                    id="website"
-                    type="text"
-                    class="form-control"
-                    formControlName="name"
-                    placeholder=""
-                    name="website"
-                  />
+                  <input id="website" type="text" class="form-control" formControlName="name" placeholder=""
+                    name="website" [ngClass]="{
+                      'is-invalid': isControlInvalid('name'),
+                      'is-valid': isControlValid('name')
+                    }" />
+                  <div class="valid-feedback" *ngIf="isControlValid('name')">
+                    Nombre ingresado correctamente
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('required', 'name')">
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'name')">
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div class="invalid-feedback" *ngIf="
+                          editForm.get('name')?.errors?.serverError
+                        ">
+                    {{
+                    editForm.get("name")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-6 col-md-6">
                 <div class="form-group">
                   <label for="birth">Código</label>
-                  <input
-                    id="website"
-                    type="text"
-                    class="form-control"
-                    formControlName="code"
-                    placeholder=""
-                    name="website"
-                  />
+                  <input id="website" type="text" class="form-control" formControlName="code" placeholder=""
+                    name="website" [ngClass]="{
+                      'is-invalid': isControlInvalid('code'),
+                      'is-valid': isControlValid('code')
+                    }" />
+                  <div class="valid-feedback" *ngIf="isControlValid('code')">
+                    Código ingresado correctamente
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('required', 'code')">
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'code')">
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div class="invalid-feedback" *ngIf="
+                          editForm.get('code')?.errors?.serverError
+                        ">
+                    {{
+                    editForm.get("code")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
               <div class="col-12 d-flex flex-row-reverse flex-column mt-2">
-                <button
-                  (click)="submit()"
-                  [disabled]="loading"
-                  type="submit"
-                  class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
-                  rippleEffect
-                >
-                  <span
-                    *ngIf="loading"
-                    class="spinner-border spinner-border-sm mr-1"
-                  ></span>
+                <button (click)="submit()" [disabled]="loading" type="submit"
+                  class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1" rippleEffect>
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                   Guardar
                 </button>
               </div>

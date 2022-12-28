@@ -19,6 +19,8 @@ import { ContentHeaderModule } from 'app/layout/components/content-header/conten
 import { UserListService } from './user-list/user-list.service';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserSalesComponent } from './user-edit/user-sales/user-sales.component';
+import { UserIspPermissionsComponent } from './user-edit/user-isp-permissions/user-isp-permissions';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 // routing
 const routes: Routes = [
@@ -37,8 +39,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [UserListComponent, UserEditComponent, UserSalesComponent],
+  declarations: [UserListComponent, UserEditComponent, UserSalesComponent, UserIspPermissionsComponent],
   imports: [
+    NgxIntlTelInputModule,
     CommonModule,
     RouterModule.forChild(routes),
     CoreCommonModule,

@@ -220,4 +220,25 @@ export class ZoneSaleEditComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
+
+    // helpers for View
+    isControlValid(controlName: string): boolean {
+      const control = this.editForm.controls[controlName];
+      return control.valid && (control.dirty || control.touched);
+    }
+  
+    isControlInvalid(controlName: string): boolean {
+      const control = this.editForm.controls[controlName];
+      return control.invalid && (control.dirty || control.touched);
+    }
+  
+    controlHasError(validation: string, controlName: string) {
+      const control = this.editForm.controls[controlName];
+      return control.hasError(validation) && (control.dirty || control.touched);
+    }
+  
+    isControlTouched(controlName: string): boolean {
+      const control = this.editForm.controls[controlName];
+      return control.dirty || control.touched;
+    }
 }

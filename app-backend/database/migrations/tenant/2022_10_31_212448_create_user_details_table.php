@@ -33,7 +33,7 @@ class CreateUserDetailsTable extends Migration
             $table->string('description', 300)->nullable(true);
 
             $table->string('address', 100)->nullable(true);
-            $table->string('phone', 100)->nullable(true);
+            $table->longText('phone')->nullable(true);
             //
             $table->uuid('zone_sale_id')->nullable(true);
             //

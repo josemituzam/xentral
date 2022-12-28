@@ -68,7 +68,7 @@ export class UserDetailService {
         return this._http.post<any>(`${this.API_SERVICE_URL}/sale/store`, data, {
             headers: httpHeaders,
         });
-    } 
+    }
 
     getZoneSale(): Observable<any> {
         return this._http.get<any>(`${this.API_SERVICE_URL}/zonesales`).pipe(
@@ -80,7 +80,22 @@ export class UserDetailService {
 
     deleteUserSale(id: string): Observable<any> {
         return this._http.delete<any>(`${this.API_SERVICE_URL}/user/sales/${id}/delete`);
-      }
+    }
 
+    userPermission(data: any): Observable<any> {
+        const httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+        return this._http.post<any>(`${this.API_SERVICE_URL}/user/permission`, data, {
+            headers: httpHeaders,
+        });
+    }
+
+    getUserPermission(userId: string): Observable<any> {
+        return this._http.get<any>(`${this.API_SERVICE_URL}/user/permission/${userId}`).pipe(
+            mergeMap(res => {
+                return of(res.obj);
+            })
+        );
+    }
 
 }

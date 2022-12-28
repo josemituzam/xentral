@@ -47,6 +47,7 @@ Route::middleware([
 
     Route::group([
         'prefix' => 'v1/client'
+        //'prefix' => 'api/v1/client'
     ], function () {
         Route::post('auth/login', [AuthController::class, 'loginInTenant']);
         Route::post('contract/signed/{contract_id}/{contract_template_id}/{token_id}', [IspContractController::class, 'getCustomerContract'])->name('contractLink')->middleware('signed');
@@ -179,6 +180,8 @@ Route::middleware([
             Route::post('user-detail/sale/store', [UserDetailController::class, 'storeUserSale']);
             Route::get('user-detail/user/sales/{user_id}', [UserDetailController::class, 'getUserSales']);
             Route::delete('user-detail/user/sales/{id}/delete', [UserDetailController::class, 'destroyUserSales']);
+            Route::post('user-detail/user/permission', [UserDetailController::class, 'userPermission']);
+            Route::get('user-detail/user/permission/{user_id}', [UserDetailController::class, 'getuserPermission']);
         });
     });
 });

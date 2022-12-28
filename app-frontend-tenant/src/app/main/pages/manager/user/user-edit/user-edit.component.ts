@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserDetailService } from 'core/services/manager/user-detail.service';
 import { catchError, delay, finalize, tap } from 'rxjs/operators';
 import { Subject, of, Subscription, Observable } from 'rxjs';
+import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import Swal from 'sweetalert2'
 @Component({
   selector: 'app-user-edit',
@@ -35,7 +36,13 @@ export class UserEditComponent implements OnInit, OnDestroy {
   // Private
   private _unsubscribeAll: Subject<any>;
   subscriptions: Subscription[] = [];
+  separateDialCode = true;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
 
+  preferredCountries: CountryISO[] = [CountryISO.UnitedStates,
+  CountryISO.UnitedKingdom];
   /**
    * Constructor
    *
@@ -66,19 +73,19 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.editForm = this.fb.group({
       firstname: [
         this.itemModel.firstname,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
       lastname: [
         this.itemModel.lastname,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
       type_identification: [
         this.itemModel.type_identification,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
       identification: [
         this.itemModel.identification,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
       birthday_at: [
         this.itemModel.birthday_at,
@@ -86,23 +93,21 @@ export class UserEditComponent implements OnInit, OnDestroy {
       ],
       phone: [
         this.itemModel.phone,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
       address: [
         this.itemModel.address,
         Validators.compose([Validators.maxLength(100)]),
       ],
-      email: [
-        this.itemModel.email,
-        Validators.compose([Validators.maxLength(100)]),
-      ],
+      email: [this.itemModel.email,
+      Validators.compose([Validators.required, Validators.maxLength(100), Validators.email])],
       cant_extra_time: [
         this.itemModel.cant_extra_time,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
       day_extra_time: [
         this.itemModel.day_extra_time,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
       zone_sale_id: [
         this.itemModel.zone_sale_id,
@@ -110,7 +115,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
       ],
       description: [
         this.itemModel.description,
-        Validators.compose([Validators.maxLength(100)]),
+        Validators.compose([Validators.maxLength(250)]),
       ],
     });
   }
@@ -264,6 +269,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
           (item: any) => {
             if (item) {
               this.itemModel = item;
+              this.itemModel.phone = JSON.parse(item.phone)?.nationalNumber;
               this.itemModel.email = item?.get_user.email;
               this.initForm();
               this.cdr.detectChanges();
@@ -313,5 +319,26 @@ export class UserEditComponent implements OnInit, OnDestroy {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+  // helpers for View
+  isControlValid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.valid && (control.dirty || control.touched);
+  }
+
+  isControlInvalid(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.invalid && (control.dirty || control.touched);
+  }
+
+  controlHasError(validation: string, controlName: string) {
+    const control = this.editForm.controls[controlName];
+    return control.hasError(validation) && (control.dirty || control.touched);
+  }
+
+  isControlTouched(controlName: string): boolean {
+    const control = this.editForm.controls[controlName];
+    return control.dirty || control.touched;
   }
 }

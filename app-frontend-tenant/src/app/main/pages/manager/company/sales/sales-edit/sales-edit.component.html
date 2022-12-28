@@ -10,33 +10,102 @@
               <div class="col-lg-4 col-md-4">
                 <div class="form-group">
                   <label for="birth">Sucursal</label>
-                  <ng-select [items]="branchList" [clearable]="false" name="selectbranch"
-                    formControlName="branch_id" bindLabel="name" bindValue="id" placeholder="Seleccione">
+                  <ng-select [items]="branchList" [ngClass]="{
+                    'is-invalid': isControlInvalid('branch_id'),
+                    'is-valid': isControlValid('branch_id')
+                  }" [clearable]="false" name="selectbranch" formControlName="branch_id" bindLabel="name"
+                    bindValue="id" placeholder="Seleccione">
                     <ng-template ng-option-tmp ng-label-tmp let-item="item">
                       {{ item.name }}
                     </ng-template>
                   </ng-select>
+                  <div class="valid-feedback" *ngIf="isControlValid('branch_id')">
+                    Sucursal ingresada correctamente
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('required', 'branch_id')">
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="
+                        editForm.get('branch_id')?.errors?.serverError
+                      ">
+                    {{
+                    editForm.get("branch_id")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-4 col-md-4">
                 <div class="form-group">
                   <label for="birth">Código</label>
-                  <input id="website" type="text" class="form-control" formControlName="code" placeholder=""
-                    name="website" />
+                  <input id="website" [ngClass]="{
+                    'is-invalid': isControlInvalid('code'),
+                    'is-valid': isControlValid('code')
+                  }" type="text" class="form-control" formControlName="code" placeholder="" name="website" />
+                  <div class="valid-feedback" *ngIf="isControlValid('code')">
+                    Código ingresado correctamente
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('required', 'code')">
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'code')">
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div class="invalid-feedback" *ngIf="
+                          editForm.get('code')?.errors?.serverError
+                        ">
+                    {{
+                    editForm.get("code")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-4 col-md-4">
                 <div class="form-group">
                   <label for="birth">Secuencial inicial</label>
-                  <input id="website" type="text" class="form-control" formControlName="sequential_init" placeholder=""
+                  <input [ngClass]="{
+                    'is-invalid': isControlInvalid('sequential_init'),
+                    'is-valid': isControlValid('sequential_init')
+                  }" id="website" type="text" class="form-control" formControlName="sequential_init" placeholder=""
                     name="website" />
+                  <div class="valid-feedback" *ngIf="isControlValid('sequential_init')">
+                    Código ingresado correctamente
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('required', 'sequential_init')">
+                    {{ "El elemento es requerido" }}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'sequential_init')">
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div class="invalid-feedback" *ngIf="
+                            editForm.get('sequential_init')?.errors?.serverError
+                          ">
+                    {{
+                    editForm.get("sequential_init")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
 
               <div class="col-lg-6 col-md-6">
                 <div class="form-group">
                   <label for="website">Descripción</label>
-                  <textarea class="form-control" id="basicTextarea" formControlName="description" rows="3"></textarea>
+                  <textarea [ngClass]="{
+                    'is-invalid': isControlInvalid('description'),
+                    'is-valid': isControlValid('description')
+                  }" class="form-control" id="basicTextarea" formControlName="description" rows="3"></textarea>
+                  <div class="valid-feedback" *ngIf="isControlValid('description')">
+                    Código ingresado correctamente
+                  </div>
+                  <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'description')">
+                    {{ "Máximo: " }} 100
+                  </div>
+                  <div class="invalid-feedback" *ngIf="
+                            editForm.get('description')?.errors?.serverError
+                          ">
+                    {{
+                    editForm.get("description")?.errors?.serverError
+                    }}
+                  </div>
                 </div>
               </div>
               <div class="col-lg-6 col-md-6 d-flex align-items-center">

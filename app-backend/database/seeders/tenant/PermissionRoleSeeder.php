@@ -24,30 +24,56 @@ class PermissionRoleSeeder extends Seeder
         Role::create(['guard_name' => 'apiTenant', 'name' => 'Root', 'description' => 'Rol root', 'icon' => 'ServerIcon', 'class' => 'warning']);
 
         $permissions = [
-            'company_index',
+            'company_read',
             'company_create',
             'company_edit',
             'company_destroy',
 
-            'dashboard_index',
+            'dashboard_read',
             'dashboard_create',
             'dashboard_edit',
             'dashboard_destroy',
 
-            'permission_index',
+            'permission_read',
             'permission_create',
             'permission_edit',
             'permission_destroy',
 
-            'role_index',
+            'role_read',
             'role_create',
             'role_edit',
             'role_destroy',
 
-            'user_index',
+            'user_read',
             'user_create',
             'user_edit',
             'user_destroy',
+
+            //ISP 
+
+            //Customer
+            'customer_read',
+            'customer_create',
+            'customer_edit',
+            'customer_destroy',
+
+            //Contract
+            'contract_read',
+            'contract_create',
+            'contract_edit',
+            'contract_destroy',
+
+            //Plan
+            'plan_read',
+            'plan_create',
+            'plan_edit',
+            'plan_destroy',
+
+            //Sector
+            'sector_read',
+            'sector_create',
+            'sector_edit',
+            'sector_destroy',
         ];
 
         foreach ($permissions as $permission) {
@@ -57,15 +83,15 @@ class PermissionRoleSeeder extends Seeder
             ]);
         }
 
-        $supervisor = Role::create(['guard_name' => 'apiTenant', 'name' => 'Administrador', 'description' => 'Rol supervisor', 'icon' => 'DatabaseIcon', 'class' => 'primary']);
+        Role::create(['guard_name' => 'apiTenant', 'name' => 'Administrador', 'description' => 'Rol supervisor', 'icon' => 'DatabaseIcon', 'class' => 'primary']);
 
-        $supervisorPermissions = [
-            'company_index',
+        /*    $supervisorPermissions = [
+            'company_read',
             'company_create',
             'company_edit',
             'company_destroy',
 
-            'dashboard_index',
+            'dashboard_read',
             'dashboard_create',
             'dashboard_edit',
             'dashboard_destroy',
@@ -73,13 +99,13 @@ class PermissionRoleSeeder extends Seeder
 
         foreach ($supervisorPermissions as $permission) {
             $supervisor->givePermissionTo($permission);
-        }
+        } */
 
 
-        $general = Role::create(['guard_name' => 'apiTenant', 'name' => 'Supervisor', 'description' => 'Rol general', 'icon' => 'UserIcon', 'class' => 'success']);
+        Role::create(['guard_name' => 'apiTenant', 'name' => 'Supervisor', 'description' => 'Rol supervisor', 'icon' => 'UserIcon', 'class' => 'success']);
 
-        $generalPermissions = [
-            'dashboard_index',
+        /*  $generalPermissions = [
+            'dashboard_read',
             'dashboard_create',
             'dashboard_edit',
             'dashboard_destroy',
@@ -87,6 +113,6 @@ class PermissionRoleSeeder extends Seeder
 
         foreach ($generalPermissions as $permission) {
             $general->givePermissionTo($permission);
-        }
+        }*/
     }
 }

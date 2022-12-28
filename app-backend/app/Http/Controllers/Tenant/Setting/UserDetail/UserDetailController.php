@@ -12,9 +12,32 @@ use App\Models\Tenant\Setting\UserDetail\UserSale;
 use App\Models\Tenant\Setting\ZoneSale\ZoneSale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\Permission\PermissionRegistrar;
 
 class UserDetailController extends Controller
 {
+
+    public function userPermission(Request $request)
+    {
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        $objUser = User::find(UserDetail::where('id', $request->userId)->first()->user_id);
+        $objUser->syncPermissions($request->permission);
+
+        return $objUser;
+    }
+
+    public function getuserPermission($userId)
+    {
+        $objUser = User::find(UserDetail::where('id', $userId)->first()->user_id);
+        $permissions = [];
+        foreach ($objUser->permissions as $value) {
+            array_push($permissions, $value->name);
+        }
+
+        return response()->json([
+            'obj' => $permissions
+        ]);
+    }
 
     public function getUserSales($userId)
     {
@@ -133,7 +156,7 @@ class UserDetailController extends Controller
         $input['type_identification'] = $request->type_identification;
         $input['identification'] = $request->identification;
         $input['birthday_at'] = $request->birthday_at;
-        $input['phone'] = $request->phone;
+        $input['phone'] = json_encode($request->phone);
         $input['address'] = $request->address;
         //$input['email'] = $request->email;
         $input['cant_extra_time'] = $request->cant_extra_time;
