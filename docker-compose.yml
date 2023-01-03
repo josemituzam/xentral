@@ -18,7 +18,7 @@ services:
 
     # ? Bring up Mysql and configure the Database
     database:
-      image: mariadb:10.6
+      image: mysql:5.7
       container_name: "${PROJECT_NAME}_database"
       tty: true
       restart: 'always'
@@ -27,18 +27,16 @@ services:
       ports:
         - '3306:3306'
       environment:
-        MYSQL_USER: ${USER_MYSQL}
-        MYSQL_PASSWORD: ${PASS_MYSQL}
         MYSQL_DATABASE: ${MYSQL_DB}
+        MYSQL_ALLOW_EMPTY_PASSWORD: 1
         MYSQL_ROOT_PASSWORD: ${PASS_ROOT_MYSQL}
         SERVICE_TAG: dev
         SERVICE_NAME: database
       volumes:
-        - ./docker/mariadb/dbdata/:/var/lib/mysql-files/
-        - ./docker/mariadb/my.cnf:/etc/mariadb/my.cnf
+        - ./docker/mysqldb/dbdata/:/var/lib/mysql-files/
+        - ./docker/mysqldb/my.cnf:/etc/mysqldb/my.cnf
       networks:
         - private
-
     # ? Build, Bring up Backend Container
     backend:
       build:
@@ -55,7 +53,6 @@ services:
       working_dir: /var/www/app-backend
       networks:
         - private
-
     # Frontend Service
     landlord:
       build:
@@ -71,7 +68,6 @@ services:
         bash -c "npm install && ng serve --host 0.0.0.0 --port 4000"
       networks:
         - private
-
     tenant:
       build:
         context: .

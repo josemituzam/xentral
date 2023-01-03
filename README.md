@@ -1,63 +1,91 @@
-# Docker
-
-This template has been designed to meet the following requirements:
-
-A backend container with official dockerhub image php: 7.4-fpm PHP version 7.4 and Supervisor with php command artisan queue: work
-
-A frontend container with the official dockerhub node image: latest and angular CLI
-
-A mysql container with official mysql: latest dockerhub image
-
-A phpmyadmin container with the official dockerhub image phpmyadmin / phpmyadmin, linked to the mysql container in order to access the DB
-
-A webserver container with the official image of the dockerhub nginx: alpine
-
-## Init Docker
 
 
-The /docker/backend/supervisor/supervisord.conf file is linked in the backend container. Editing that file is instantly replicated to the container
+# Proyecto Xentral
 
-First installation
+Recomendación
 
-Proceed with the copy of the .env.example file for setting the project and user name to be created for DB mysql
+Para una mejor estabilidad en cuanto al uso del docker y las consultar, es necesario tener una sistema operativo linux
+e instalar Docker. 
+
+Se ha configurado el siguiente proyecto:
+
+1) Un contenedor de back-end con la imagen oficial de dockerhub php: 7.4-fpm PHP versión 7.4 y Supervisor con el comando php artisan queue: trabajo.
+
+2) Un contenedor front-end para el cliente con la imagen de node oficial de dockerhub: CLI más reciente y angular.
+
+3) Un contenedor front-end para el administrador con la imagen de node oficial de dockerhub: CLI más reciente y angular.
+
+4) Un contenedor mysql con mysql oficial: 5.7 imagen de dockerhub.
+
+6) Un contenedor de servidor web con la imagen oficial de dockerhub nginx: alpine
+
+## Inicializar el Docker
+
+
+El archivo /docker/app-backend/supervisor/supervisord.conf está vinculado en el contenedor de backend. La edición de ese archivo se replica instantáneamente en el contenedor.
+
+Primera instalación
+
+Hacer una copia del archivo .env.example para configurar el proyecto y el nombre de usuario que se creará para DB mysql
 
 `cp .env.example .env`
 
-then:
+Después:
 
 `docker-compose build`
 
-Wait for everything to be configured
+Esperar a que todo esté configurado
 
-Then:
+Después:
 
 `docker-compose up -d`
 
-Once all the containers are initialized, you need to connect to the backend container:
+Una vez que se inicializan todos los contenedores, debe conectarse al contenedor backend:
 
 `docker exec -t -i backend / bin / bash`
 
-we will find ourselves already in the folder / var / www / backend
+ya nos encontraremos en la carpeta / var / www / app-backend
 
-Proceed with the copy of the .env.example file ( Change only mysql db name, user and password with the same .env docker istance)
+Continúe con la copia del archivo .env.example (cambie solo el nombre, el usuario y la contraseña de mysql db con la misma instancia de .env docker)
 
 `cp .env.example .env`
 
-we install all the dependencies:
+Instalamos todas las dependencias del laravel:
 
 `composer install`
 
-For the backend it is not necessary to execute the command php artisan because the nginx container is linked on the public laraver folder
+Para el backend no es necesario ejecutar el comando php artisan porque el contenedor nginx está vinculado en la carpeta pública laraver
 
-As for the frontend (Angular) I made sure to expose the 4200, in this way you edit the file locally but links it on the docker instantly and angular cli does the rest on the docker.
+En cuanto a la interfaz (Angular), me aseguré de exponer el 4100 para el administrador y el 4200 para el cliente, de esta manera edita el archivo localmente pero lo vincula en la ventana acoplable al instante y angular cli hace el resto en la ventana acoplable.
 
-So here are the links currently configured:
+Así que aquí están los enlaces actualmente configurados:
 
-backend: `localhost:8000`
+Backend: `localhost:8080`
 
-tenant: `localhost:4100`
+Cliente: `localhost:4100`
 
-landlord: `localhost:4200`
+Landlord: `localhost:4200`
+
+# Proyecto Xentral
+
+Ambiente Local - Backend con Docker
+
+Para ejecutar solo el backend con docker y docker-compose se ha creado un dockerfile y un docker-compose.
+
+1) Un contenedor de back-end con la imagen oficial de dockerhub php: 7.4-fpm PHP versión 7.4.
+
+2) Un contenedor mysql con mysql oficial: 5.7 imagen de dockerhub.
+
+Backend: `localhost:8080`
+
+Ambiente Local - Frontend
+
+Para ejecutar el frontend tanto del cliente como el administador es necesario tener instalado npm versión 14 y angular cli. 
+
+Inicializar con el comando
+`npm run star o ng serve`
+
+
 
 
 
