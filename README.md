@@ -85,6 +85,13 @@ Para ejecutar el frontend tanto del cliente como el administador es necesario te
 Inicializar con el comando
 `npm run star o ng serve`
 
+# Proyecto Xentral
+
+Las API de consulta y validación de datos se encuentran el código correspondiente. 
+
+1) https://webservices.ec/ API para validar cédulas en Ecuador.
+
+2) Las API de cloudfare se encuetran en el código además existe una tabla master que indica las credenciales del API. 
 
 
 
